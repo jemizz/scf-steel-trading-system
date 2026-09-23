@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact - SCF Steel Trading</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+  <!-- Page CSS -->
+  <link rel="stylesheet" href="contact.css">
+
+  <!-- Shared CSS (same as products.html) -->
+  <link rel="stylesheet" href="navbar.css">
+  <link rel="stylesheet" href="footer.css">
+</head>
+
+<body>
+  <!-- Navbar -->
+  <div id="navbar"></div>
+
+  <!-- HERO -->
+  <header class="contact-hero">
+    <div class="container">
+      <h1>Contact Us</h1>
+      <p>Questions About Our Products? We're Here to Help!</p>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <main class="contact-page">
+    <div class="container contact-grid">
+
+      <!-- LEFT -->
+      <section class="panel">
+        <h2>Send an Inquiry</h2>
+
+        <div class="note">
+          <strong>Note:</strong> This is an inquiry form only. We do not accept online orders or
+          payments. Our team will contact you regarding your inquiry.
+        </div>
+
+        <form class="inquiry-form" action="#" method="post">
+          <div class="row two">
+            <div class="field">
+              <label for="name">NAME <span>*</span></label>
+              <input id="name" type="text" placeholder="Your full name" required>
+            </div>
+
+            <div class="field">
+              <label for="contact">CONTACT NUMBER <span>*</span></label>
+              <input id="contact" type="tel" placeholder="09XX-XXX-XXXX" required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="interest">PRODUCT/SERVICE OF INTEREST <span>*</span></label>
+              <input id="interest" type="text" placeholder="e.g. Steel Angle Bar, etc..." required>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="message">PRODUCT/SERVICE OF INTEREST <span>*</span></label>
+              <textarea id="message" rows="6" placeholder="Describe your inquiry or requirements..." required></textarea>
+            </div>
+          </div>
+
+          <button class="send-btn" type="submit">Send Inquiry</button>
+        </form>
+      </section>
+
+      <!-- RIGHT -->
+      <aside class="panel">
+        <h2>Contact Information</h2>
+
+        <div class="info-list">
+          <div class="info-item">
+            <div class="info-icon">📍</div>
+            <div class="info-text">
+              <div class="info-label">ADDRESS</div>
+              <div class="info-value">8 Corumi St Brgy Masambong, Quezon City, Metro Manila, Philippines</div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">📞</div>
+            <div class="info-text">
+              <div class="info-label">PHONE</div>
+              <div class="info-value">0915-217-4817</div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">✉️</div>
+            <div class="info-text">
+              <div class="info-label">EMAIL</div>
+              <div class="info-value">scfsteeltrading@gmail.com</div>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-icon">🕒</div>
+            <div class="info-text">
+              <div class="info-label">BUSINESS HOURS</div>
+              <div class="info-value">Monday–Saturday: 8AM - 5PM, Sunday: 8AM - 1PM</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer"></div>
+
+  <!-- Shared JavaScript -->
+  <script src="navbar.js"></script>
+  <script src="footer.js"></script>
+</body>
+</html>

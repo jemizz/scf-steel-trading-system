@@ -1,0 +1,260 @@
+/* Page reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Geologica", sans-serif;
+}
+
+:root{
+  --line: #e5e7eb;
+  --muted: #6b7280;
+}
+
+body{
+  margin: 0;
+  background: #f3f4f6;
+}
+
+/* Keep same container width like products/contact */
+.container{
+  width: min(1100px, calc(100% - 100px)); /* 50px left + 50px right */
+  margin-inline: auto;
+}
+
+.page{
+  padding: 18px 0 40px;
+  background: #f3f4f6;
+}
+
+.back-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #111827;
+  text-decoration: none;
+  font-size: 13px;
+  margin: 10px 0 16px;
+}
+.back-link:hover{ text-decoration: underline; }
+.back-arrow{ font-size: 16px; line-height: 1; }
+
+/* Top section */
+.product-top{
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1.1fr .9fr;
+  gap: 18px;
+}
+
+/* Image card */
+.product-image{
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fff;
+}
+.product-image img{
+  width: 100%;
+  height: 270px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Info */
+.product-info{ padding: 6px 6px; }
+
+.product-category{
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.product-title{
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #111827;
+}
+
+.product-desc{
+  font-size: 13px;
+  color: #374151;
+  margin-bottom: 14px;
+}
+
+/* Options area */
+.product-options{
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.option{
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  background: #fafafa;
+}
+
+.option label{
+  display: block;
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.option select{
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 12px;
+  background: #fff;
+  outline: none;
+}
+
+/* Inquiry box */
+.inquiry-box{
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+}
+
+.inquiry-row{
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.phone-icon{
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: #fff5f5;
+  border: 1px solid #ffd2d2;
+  display: grid;
+  place-items: center;
+  flex: 0 0 30px;
+}
+.phone-icon svg{
+  width: 16px;
+  height: 16px;
+  fill: #e11d48;
+}
+
+.inquiry-title{
+  font-size: 12px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.inquiry-sub{
+  font-size: 11px;
+  color: #ef4444;
+  margin-top: 2px;
+}
+
+.inquiry-btn{
+  display: block;
+  width: 100%;
+  text-align: center;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: #3a3d40;
+  color: #fff;
+  text-decoration: none;
+  font-size: 12px;
+}
+.inquiry-btn:hover{ background: #2f3235; }
+
+/* Related section */
+.related{
+  margin-top: 18px;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.related h2{
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: #111827;
+}
+
+.related-grid{
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.card{
+  background:#fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow:hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+}
+
+.card img{
+  width:100%;
+  height: 120px;
+  object-fit: cover;
+}
+
+.card-body{ padding: 12px; }
+
+.meta{
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.card h3{
+  margin: 0 0 6px;
+  font-size: 13px;
+}
+
+.card p{
+  margin: 0 0 10px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* View Details button */
+.btn{
+  display: block;
+  width: 85%;
+  margin: 0 auto;
+  text-align: center;
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 10.5px;
+  background: #e5e7eb;
+  color: #111827;
+  text-decoration: none;
+}
+.btn:hover{ background:#d1d5db; }
+
+/* Responsive */
+@media (max-width: 900px){
+  .container{ width: min(1100px, calc(100% - 32px)); }
+
+  .product-top{ grid-template-columns: 1fr; }
+
+  .product-image img{ height: 260px; }
+
+  .related-grid{ grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 620px){
+  .product-options{ grid-template-columns: 1fr; }
+  .related-grid{ grid-template-columns: 1fr; }
+}

@@ -1,0 +1,129 @@
+/* =========================
+   NAVIGATION BAR
+========================= */
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 18px 50px;
+
+    background-color: #272829;
+}
+
+
+/* Logo */
+
+.logo {
+    display: flex;
+    align-items: center;
+
+    gap: 4px;
+    height: 45px;
+
+    color: #ffffff;
+}
+
+
+.logo img {
+    width: 60px;
+    height: 60px;
+
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+
+    font-family: "Orbitron", sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+
+    line-height: 1.1;
+    letter-spacing: 1px;
+}
+
+
+.logo-text span {
+    font-family: "Orbitron", sans-serif;
+}
+
+
+/* Navigation Links */
+
+.nav-links {
+    display: flex;
+
+    gap: 50px;
+
+    list-style: none;
+
+    margin: 0 100px;
+    padding: 0;
+}
+
+
+.nav-links a {
+    position: relative;
+
+    color: #ffffff;
+
+    font-size: 15px;
+
+    padding: 5px 0;
+
+    text-decoration: none;
+}
+
+
+/* Underline */
+
+.nav-links a::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    bottom: 0;
+
+    width: 0;
+    height: 2px;
+
+    background-color: #696969;
+
+    transition: width 0.3s ease;
+}
+
+
+/* Hover */
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+
+/* Current Page */
+
+.nav-links a.active::after {
+    width: 100%;
+}
+
+
+/* Responsive */
+
+@media (max-width: 750px) {
+
+    .navbar {
+        padding: 15px 25px;
+    }
+
+    .nav-links {
+        gap: 20px;
+        margin: 0;
+    }
+
+}
