@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sales - SCF Steel Trading</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="sales.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         SIDEBAR
+    ========================== -->
+    <div id="sidebar"></div>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+    <main class="sales-main">
+
+
+        <!-- TOP BAR -->
+        <header class="sales-topbar">
+
+            <h1>Sales</h1>
+
+            <div class="sales-datetime">
+                <span id="currentDate"></span>
+                <span id="currentTime"></span>
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             CONTENT
+        ========================== -->
+        <div class="sales-content">
+
+
+            <!-- PAGE HEADER -->
+            <section class="sales-header">
+
+                <div>
+
+                    <h1>Sales Management</h1>
+
+                    <p>
+                        Wholesale and retail transaction tracking
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="add-sale-btn"
+                    id="addSaleBtn"
+                >
+                    <span class="plus">+</span>
+                    New Sale
+                </button>
+
+            </section>
+
+
+            <!-- =========================
+                 SALES SUMMARY
+            ========================== -->
+            <section class="sales-summary">
+
+
+                <!-- TODAY'S SALES -->
+                <div class="summary-card">
+
+                    <div class="summary-info">
+
+                        <p class="summary-title">
+                            TODAY'S SALES
+                        </p>
+
+                        <h2
+                            class="summary-number sales-amount"
+                            id="todaySales"
+                        >
+                            ₱0
+                        </h2>
+
+                        <p class="summary-subtext">
+                            <span id="todayTransactions">0</span>
+                            Transactions
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-icon sales-icon">
+
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="8"></circle>
+                            <path d="M9 8h4a3 3 0 0 1 0 6H9"></path>
+                            <path d="M9 6v12"></path>
+                            <path d="M7 10h7"></path>
+                        </svg>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TOTAL TRANSACTIONS -->
+                <div class="summary-card">
+
+                    <div class="summary-info">
+
+                        <p class="summary-title">
+                            TOTAL TRANSACTIONS
+                        </p>
+
+                        <h2
+                            class="summary-number"
+                            id="totalTransactions"
+                        >
+                            0
+                        </h2>
+
+                        <p class="summary-subtext">
+                            All time
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-icon transaction-icon">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 4h10v16H7z"></path>
+                            <path d="M9 8h6"></path>
+                            <path d="M9 11h6"></path>
+                            <path d="M9 14h6"></path>
+                            <path d="M9 17h4"></path>
+                            <path d="M4 7v12"></path>
+                        </svg>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PENDING PAYMENT -->
+                <div class="summary-card">
+
+                    <div class="summary-info">
+
+                        <p class="summary-title">
+                            PENDING PAYMENT
+                        </p>
+
+                        <h2
+                            class="summary-number"
+                            id="pendingPayment"
+                        >
+                            ₱0
+                        </h2>
+
+                        <p class="summary-subtext">
+                            <span id="pendingTransactions">0</span>
+                            Transactions
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-icon pending-icon">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M10.3 4.2L3.5 16a2 2 0 0 0 1.7 3h13.6a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0z"></path>
+                            <path d="M12 9v4"></path>
+                            <path d="M12 16h.01"></path>
+                        </svg>
+
+                    </div>
+
+                </div>
+
+
+                <!-- WHOLESALES -->
+                <div class="summary-card">
+
+                    <div class="summary-info">
+
+                        <p class="summary-title">
+                            WHOLESALES
+                        </p>
+
+                        <h2
+                            class="summary-number"
+                            id="totalWholesales"
+                        >
+                            0
+                        </h2>
+
+                        <p class="summary-subtext">
+                            Bulk Orders
+                        </p>
+
+                    </div>
+
+
+                    <div class="summary-icon wholesale-icon">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4 7l8-4 8 4-8 4-8-4z"></path>
+                            <path d="M4 7v10l8 4 8-4V7"></path>
+                            <path d="M12 11v10"></path>
+                        </svg>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 SALES PANEL
+            ========================== -->
+            <section class="sales-panel">
+
+
+                <!-- TOOLBAR -->
+                <div class="sales-toolbar">
+
+
+                    <!-- SEARCH -->
+                    <div class="search-box">
+
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <path d="M20 20l-4-4"></path>
+                        </svg>
+
+                        <input
+                            type="search"
+                            id="salesSearch"
+                            placeholder="Search sale, customer, reference..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <!-- FILTERS -->
+                    <div class="sales-filters">
+
+                        <select id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+
+
+                        <select id="paymentFilter">
+                            <option value="">All Payments</option>
+                            <option value="paid">Paid</option>
+                            <option value="partial">Partial</option>
+                            <option value="unpaid">Unpaid</option>
+                        </select>
+
+
+                        <input
+                            type="date"
+                            id="dateFilter"
+                            aria-label="Filter by date"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     TABLE
+                ========================== -->
+                <div class="table-wrapper">
+
+                    <table class="sales-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>SALE ID</th>
+                                <th>DATE</th>
+                                <th>CUSTOMER</th>
+                                <th>ITEMS</th>
+                                <th>TOTAL</th>
+                                <th>PAYMENT</th>
+                                <th>STATUS</th>
+                                <th class="actions-heading">ACTIONS</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <!-- SALES FROM DATABASE -->
+                        <tbody id="salesTableBody"></tbody>
+
+                    </table>
+
+
+                    <!-- EMPTY STATE -->
+                    <div
+                        class="sales-empty"
+                        id="salesEmptyState"
+                    >
+
+                        <div class="empty-icon">
+
+                            <svg viewBox="0 0 24 24">
+                                <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"></path>
+                                <path d="M9 8h6"></path>
+                                <path d="M9 12h6"></path>
+                            </svg>
+
+                        </div>
+
+                        <h3>No sales yet</h3>
+
+                        <p>
+                            Sales transactions will appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =========================
+                     TABLE FOOTER
+                ========================== -->
+                <div class="sales-table-footer">
+
+                    <p>
+                        Showing
+                        <strong id="visibleSaleCount">0</strong>
+                        of
+                        <strong id="totalSaleCount">0</strong>
+                        sales
+                    </p>
+
+
+                    <div class="pagination">
+
+                        <button
+                            type="button"
+                            id="previousPage"
+                            disabled
+                        >
+                            ‹
+                        </button>
+
+                        <span id="currentPage">1</span>
+
+                        <button
+                            type="button"
+                            id="nextPage"
+                            disabled
+                        >
+                            ›
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================
+         SCRIPTS
+    ========================== -->
+    <script src="sidebar.js"></script>
+    <script src="sales.js"></script>
+
+</body>
+
+</html>
