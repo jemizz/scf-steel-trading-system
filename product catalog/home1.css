@@ -29,7 +29,7 @@ body {
 
     padding: 70px 8%;
 
-    background-image: url("pictures/homebg.jpg");
+    background-image: url("../pictures/homebg.jpg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
