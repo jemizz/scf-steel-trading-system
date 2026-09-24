@@ -1,0 +1,377 @@
+/* =========================
+   GENERAL
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #f3f4f5;
+  color: #272829;
+  font-family: "Geologica", sans-serif;
+}
+
+/* =========================
+   MAIN
+========================= */
+.settings-main {
+  min-height: 100vh;
+  margin-left: 230px;
+  background-color: #f3f4f5;
+}
+
+/* =========================
+   CONTENT
+========================= */
+.settings-content {
+  width: 100%;
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 35px 32px 60px;
+}
+
+/* =========================
+   HEADER
+========================= */
+.settings-header {
+  margin-bottom: 16px;
+}
+
+.settings-header h1 {
+  margin-bottom: 4px;
+  color: #272829;
+  font-size: 27px;
+  font-weight: 600;
+}
+
+.settings-header p {
+  color: #7b7f83;
+  font-size: 10px;
+}
+
+/* =========================
+   TABS
+========================= */
+.settings-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.tab-btn {
+  height: 26px;
+  padding: 0 14px;
+
+  background-color: #ffffff;
+  color: #4c5053;
+
+  border: 1px solid #e0e1e2;
+  border-radius: 6px;
+
+  font-family: "Geologica", sans-serif;
+  font-size: 8px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.tab-btn:hover {
+  border-color: #cfd1d3;
+  background-color: #fafafa;
+}
+
+.tab-btn.active {
+  background-color: #272829;
+  border-color: #272829;
+  color: #ffffff;
+}
+
+/* =========================
+   PANELS
+========================= */
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.show {
+  display: block;
+}
+
+/* =========================
+   CARD
+========================= */
+.settings-card {
+  background-color: #ffffff;
+
+  border: 1px solid #d8dadd;
+  border-radius: 7px;
+
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.025);
+
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+
+.settings-card-header h2 {
+  margin: 0 0 12px;
+  color: #343638;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* =========================
+   ACCOUNT SUMMARY
+========================= */
+.account-summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.avatar {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background-color: #1f2225;
+  flex-shrink: 0;
+}
+
+.account-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.account-meta strong {
+  color: #272829;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.account-meta span {
+  color: #7b7f83;
+  font-size: 7.5px;
+}
+
+.role-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+  margin-top: 4px;
+
+  padding: 4px 8px;
+  border-radius: 20px;
+
+  background-color: #272829;
+  color: #ffffff;
+
+  font-size: 7px;
+  font-weight: 600;
+}
+
+/* =========================
+   FORM
+========================= */
+.settings-form .field {
+  margin-bottom: 10px;
+}
+
+.settings-form label {
+  display: block;
+  margin-bottom: 6px;
+
+  color: #6b6f73;
+  font-size: 7px;
+  font-weight: 600;
+}
+
+.settings-form input {
+  width: 100%;
+  height: 32px;
+
+  padding: 0 10px;
+
+  border: 1px solid #d5d7da;
+  border-radius: 5px;
+
+  font-family: "Geologica", sans-serif;
+  font-size: 9px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.settings-form input:focus {
+  border-color: #85898d;
+  box-shadow: 0 0 0 3px rgba(39, 40, 41, 0.05);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+/* =========================
+   NOTIFICATION SETTINGS LIST
+========================= */
+.notif-list {
+  border-top: 1px solid #eeeeee;
+  margin-top: 2px;
+}
+
+.notif-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
+
+  padding: 12px 0;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.notif-text {
+  min-width: 0;
+}
+
+.notif-text strong {
+  display: block;
+  margin-bottom: 3px;
+
+  color: #343638;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.notif-text p {
+  margin: 0;
+
+  color: #8b8f92;
+  font-size: 7px;
+  line-height: 1.5;
+}
+
+/* =========================
+   TOGGLE SWITCH
+========================= */
+.switch {
+  position: relative;
+  width: 38px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+
+  background-color: #d7dadc;
+  border-radius: 999px;
+
+  transition: background-color 0.2s ease;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+
+  width: 14px;
+  height: 14px;
+
+  left: 3px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  background-color: #ffffff;
+  border-radius: 50%;
+
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+
+  transition: transform 0.2s ease;
+}
+
+.switch input:checked + .slider {
+  background-color: #272829;
+}
+
+.switch input:checked + .slider::before {
+  transform: translate(18px, -50%);
+}
+
+/* =========================
+   SAVE BUTTON
+========================= */
+.save-settings-btn {
+  height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 14px;
+  padding: 0 16px;
+
+  background-color: #272829;
+  color: #ffffff;
+
+  border: none;
+  border-radius: 5px;
+
+  font-family: "Geologica", sans-serif;
+  font-size: 9px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.save-settings-btn:hover {
+  background-color: #3b3d40;
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 800px) {
+  .settings-main { margin-left: 200px; }
+  .settings-content { padding: 25px; }
+}
+
+@media (max-width: 600px) {
+  .settings-header h1 { font-size: 23px; }
+  .form-grid { grid-template-columns: 1fr; }
+}

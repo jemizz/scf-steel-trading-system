@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Product Analytics - SCF Steel Trading</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="topbar.css">
+  <link rel="stylesheet" href="product-analysis.css">
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar"></div>
+
+  <!-- MAIN -->
+  <main class="pa-main">
+
+    <!-- TOP BAR (component) -->
+    <div id="topbar" data-page-title="Product Analytics"></div>
+
+    <!-- CONTENT -->
+    <div class="pa-content">
+
+      <!-- HEADER -->
+      <section class="pa-header">
+        <div>
+          <h1>Product Recommendation Analytics</h1>
+          <p>Customer behavior insights based on views and search patterns</p>
+        </div>
+      </section>
+
+      <!-- TOP RECOMMENDATIONS SECTION (UI-only) -->
+      <section class="pa-reco-section">
+
+        <!-- (For later data) -->
+        <div class="pa-reco-grid" id="paRecoGrid"></div>
+
+        <!-- Empty state shown by default -->
+        <div class="pa-reco-empty" id="paRecoEmptyState">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </div>
+
+          <h3>No recommendations yet</h3>
+          <p>Top product recommendations will appear here once tracking is enabled.</p>
+        </div>
+
+      </section>
+
+      <!-- ALL PRODUCT ANALYTICS TABLE -->
+      <section class="pa-panel">
+
+        <div class="pa-panel-header">
+          <h2>All Product Analytics</h2>
+
+          <div class="pa-search">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="M20 20l-4-4"></path>
+            </svg>
+
+            <input
+              type="search"
+              id="paSearch"
+              placeholder="Search product..."
+              autocomplete="off"
+            >
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table class="pa-table">
+            <thead>
+              <tr>
+                <th>RANK</th>
+                <th>PRODUCT</th>
+                <th>VIEWS</th>
+                <th>SEARCH FREQUENCY</th>
+                <th>RELATED PRODUCTS</th>
+                <th>RECOMMENDATION SCORE</th>
+              </tr>
+            </thead>
+
+            <tbody id="paTableBody"></tbody>
+          </table>
+
+          <!-- EMPTY STATE -->
+          <div class="pa-empty" id="paEmptyState">
+            <div class="empty-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"></path>
+                <path d="M9 8h6"></path>
+                <path d="M9 12h6"></path>
+              </svg>
+            </div>
+
+            <h3>No analytics data yet</h3>
+            <p>Analytics will appear here once tracking is enabled.</p>
+          </div>
+        </div>
+
+        <div class="pa-table-footer">
+          <p>
+            Showing
+            <strong id="visibleCount">0</strong>
+            of
+            <strong id="totalCount">0</strong>
+            products
+          </p>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script src="sidebar.js"></script>
+  <script src="topbar.js"></script>
+  <script src="product-analysis.js"></script>
+</body>
+</html>

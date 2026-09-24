@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Purchase Orders - SCF Steel Trading</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="topbar.css">
+  <link rel="stylesheet" href="purchase-orders.css">
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar"></div>
+
+  <!-- MAIN -->
+  <main class="po-main">
+
+    <!-- TOP BAR (component) -->
+    <div id="topbar" data-page-title="Purchase Orders"></div>
+
+    <!-- CONTENT -->
+    <div class="po-content">
+
+      <!-- PAGE HEADER -->
+      <section class="po-header">
+        <div>
+          <h1>Purchase Orders</h1>
+          <p>Manage supplier procurements</p>
+        </div>
+
+        <button type="button" class="create-po-btn" id="createPoBtn">
+          Create PO
+        </button>
+      </section>
+
+      <!-- SUMMARY -->
+      <section class="po-summary-grid">
+        <div class="po-summary-card">
+          <p class="po-summary-label">PENDING</p>
+          <h2 id="pendingCount">0</h2>
+        </div>
+
+        <div class="po-summary-card">
+          <p class="po-summary-label">ORDERED</p>
+          <h2 id="orderedCount">0</h2>
+        </div>
+
+        <div class="po-summary-card">
+          <p class="po-summary-label">RECEIVED</p>
+          <h2 id="receivedCount">0</h2>
+        </div>
+
+        <div class="po-summary-card">
+          <p class="po-summary-label">CANCELLED</p>
+          <h2 id="cancelledCount">0</h2>
+        </div>
+      </section>
+
+      <!-- PANEL -->
+      <section class="po-panel">
+
+        <!-- TOOLBAR -->
+        <div class="po-toolbar">
+
+          <!-- SEARCH -->
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="M20 20l-4-4"></path>
+            </svg>
+
+            <input
+              type="search"
+              id="poSearch"
+              placeholder="Search transaction, supplier..."
+              autocomplete="off"
+            >
+          </div>
+
+          <!-- FILTERS -->
+          <div class="po-filters">
+            <select id="typeFilter">
+              <option value="">All Types</option>
+              <option value="local">Local</option>
+              <option value="international">International</option>
+            </select>
+
+            <select id="statusFilter">
+              <option value="">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="ordered">Ordered</option>
+              <option value="received">Received</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-wrapper">
+          <table class="po-table">
+            <thead>
+              <tr>
+                <th>PO NUMBER</th>
+                <th>SUPPLIER</th>
+                <th>ORDER DATE</th>
+                <th>ITEMS</th>
+                <th>TOTAL AMOUNT</th>
+                <th>PAYMENT</th>
+                <th>STATUS</th>
+                <th class="actions-heading">ACTIONS</th>
+              </tr>
+            </thead>
+
+            <!-- No rows yet -->
+            <tbody id="poTableBody"></tbody>
+          </table>
+
+          <!-- EMPTY STATE -->
+          <div class="po-empty" id="poEmptyState">
+            <div class="empty-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"></path>
+                <path d="M9 8h6"></path>
+                <path d="M9 12h6"></path>
+              </svg>
+            </div>
+
+            <h3>No purchase orders yet</h3>
+            <p>Purchase orders will appear here once created.</p>
+          </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="po-table-footer">
+          <p>
+            Showing
+            <strong id="visiblePoCount">0</strong>
+            of
+            <strong id="totalPoCount">0</strong>
+            purchase orders
+          </p>
+
+          <div class="pagination">
+            <button type="button" id="previousPage" disabled>‹</button>
+            <span id="currentPage">1</span>
+            <button type="button" id="nextPage" disabled>›</button>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script src="sidebar.js"></script>
+  <script src="topbar.js"></script>
+  <script src="purchase-orders.js"></script>
+</body>
+</html>

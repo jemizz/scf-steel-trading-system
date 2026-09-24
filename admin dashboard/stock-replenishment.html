@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Stock Replenishment - SCF Steel Trading</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="topbar.css">
+  <link rel="stylesheet" href="stock-replenishment.css">
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar"></div>
+
+  <!-- MAIN -->
+  <main class="sr-main">
+
+    <!-- TOP BAR (component) -->
+    <div id="topbar" data-page-title="Stock Replenishment"></div>
+
+    <!-- CONTENT -->
+    <div class="sr-content">
+
+      <!-- HEADER -->
+      <section class="sr-header">
+        <div>
+          <h1>Smart Stock Replenishment</h1>
+          <p>Algorithm-based restocking recommendations</p>
+        </div>
+      </section>
+
+      <!-- SUMMARY -->
+      <section class="sr-summary-grid">
+        <div class="sr-summary-card urgent">
+          <p class="sr-summary-label">URGENT STOCK</p>
+          <h2 id="urgentCount">0</h2>
+        </div>
+
+        <div class="sr-summary-card recommended">
+          <p class="sr-summary-label">RECOMMENDED</p>
+          <h2 id="recommendedCount">0</h2>
+        </div>
+
+        <div class="sr-summary-card monitor">
+          <p class="sr-summary-label">UNDER MONITOR</p>
+          <h2 id="monitorCount">0</h2>
+        </div>
+
+        <div class="sr-summary-card ok">
+          <p class="sr-summary-label">OK / SUFFICIENT</p>
+          <h2 id="okCount">0</h2>
+        </div>
+      </section>
+
+      <!-- RECOMMENDATION CARDS AREA -->
+      <section class="sr-reco-section">
+        <div class="sr-reco-grid" id="recoGrid"></div>
+
+        <!-- EMPTY STATE (shown by default) -->
+        <div class="sr-reco-empty" id="recoEmptyState">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"></path>
+              <path d="M9 8h6"></path>
+              <path d="M9 12h6"></path>
+            </svg>
+          </div>
+
+          <h3>No recommendations yet</h3>
+          <p>Stock recommendations will appear here once generated.</p>
+        </div>
+      </section>
+
+      <!-- TABLE PANEL -->
+      <section class="sr-panel">
+
+        <!-- TOOLBAR -->
+        <div class="sr-toolbar">
+
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="M20 20l-4-4"></path>
+            </svg>
+
+            <input
+              type="search"
+              id="srSearch"
+              placeholder="Search product, category..."
+              autocomplete="off"
+            >
+          </div>
+
+          <div class="sr-filters">
+            <select id="categoryFilter">
+              <option value="">All Category</option>
+              <option value="steel-products">Steel Products</option>
+              <option value="roofing-materials">Roofing Materials</option>
+              <option value="hardware-items">Hardware Items</option>
+            </select>
+
+            <select id="statusFilter">
+              <option value="">All Status</option>
+              <option value="urgent">Urgent</option>
+              <option value="recommended">Recommended</option>
+              <option value="monitor">Monitor</option>
+              <option value="ok">OK</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-wrapper">
+          <table class="sr-table">
+            <thead>
+              <tr>
+                <th>PRODUCT</th>
+                <th>CATEGORY</th>
+                <th>CURRENT STOCK</th>
+                <th>REORDER LEVEL</th>
+                <th>RECENT SALES</th>
+                <th>SUGGESTED ORDER</th>
+                <th>STOCK GAP</th>
+                <th class="actions-heading">RECOMMENDED</th>
+              </tr>
+            </thead>
+
+            <tbody id="srTableBody"></tbody>
+          </table>
+
+          <!-- EMPTY STATE -->
+          <div class="sr-empty" id="srEmptyState">
+            <div class="empty-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"></path>
+                <path d="M9 8h6"></path>
+                <path d="M9 12h6"></path>
+              </svg>
+            </div>
+
+            <h3>No items to display</h3>
+            <p>Replenishment table will appear here.</p>
+          </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="sr-table-footer">
+          <p>
+            Showing
+            <strong id="visibleCount">0</strong>
+            of
+            <strong id="totalCount">0</strong>
+            items
+          </p>
+
+          <div class="pagination">
+            <button type="button" id="previousPage" disabled>‹</button>
+            <span id="currentPage">1</span>
+            <button type="button" id="nextPage" disabled>›</button>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <script src="sidebar.js"></script>
+  <script src="topbar.js"></script>
+  <script src="stock-replenishment.js"></script>
+</body>
+</html>

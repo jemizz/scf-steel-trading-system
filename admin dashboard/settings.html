@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Settings - SCF Steel Trading</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="topbar.css">
+  <link rel="stylesheet" href="settings.css">
+</head>
+
+<body>
+
+  <!-- SIDEBAR (component) -->
+  <div id="sidebar"></div>
+
+  <!-- MAIN -->
+  <main class="settings-main">
+
+    <!-- TOPBAR (component) -->
+    <div id="topbar" data-page-title="Settings"></div>
+
+    <!-- CONTENT -->
+    <div class="settings-content">
+
+      <!-- PAGE HEADER -->
+      <section class="settings-header">
+        <h1>Settings</h1>
+        <p>System configuration and preferences</p>
+      </section>
+
+      <!-- TABS -->
+      <section class="settings-tabs" aria-label="Settings tabs">
+        <button type="button" class="tab-btn active" data-tab="account">
+          User Account
+        </button>
+
+        <button type="button" class="tab-btn" data-tab="notification">
+          Notification
+        </button>
+      </section>
+
+      <!-- TAB: ACCOUNT -->
+      <section class="tab-panel show" id="tab-account">
+
+        <!-- ACCOUNT INFORMATION -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <h2>Account Information</h2>
+          </div>
+
+          <div class="account-summary">
+            <div class="avatar"></div>
+
+            <div class="account-meta">
+              <strong>Administrator</strong>
+              <span>admin@scfsteel.com</span>
+              <span class="role-badge">Admin</span>
+            </div>
+          </div>
+
+          <form class="settings-form" autocomplete="off">
+            <div class="form-grid">
+              <div class="field">
+                <label for="firstName">First Name</label>
+                <input id="firstName" type="text" />
+              </div>
+
+              <div class="field">
+                <label for="lastName">Last Name</label>
+                <input id="lastName" type="text" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="emailAddress">Email Address</label>
+              <input id="emailAddress" type="email" />
+            </div>
+          </form>
+        </div>
+
+        <!-- CHANGE PASSWORD -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <h2>Change Password</h2>
+          </div>
+
+          <form class="settings-form" autocomplete="off">
+            <div class="field">
+              <label for="currentPassword">Current Password</label>
+              <input id="currentPassword" type="password" />
+            </div>
+
+            <div class="field">
+              <label for="newPassword">New Password</label>
+              <input id="newPassword" type="password" />
+            </div>
+
+            <div class="field">
+              <label for="confirmPassword">Confirm Password</label>
+              <input id="confirmPassword" type="password" />
+            </div>
+          </form>
+        </div>
+
+      </section>
+
+      <!-- TAB: NOTIFICATION -->
+      <section class="tab-panel" id="tab-notification">
+
+        <div class="settings-card">
+
+          <div class="settings-card-header">
+            <h2>Notification Settings</h2>
+          </div>
+
+          <div class="notif-list">
+
+            <div class="notif-item">
+              <div class="notif-text">
+                <strong>Low Stock Alerts</strong>
+                <p>When product stock falls below reorder level</p>
+              </div>
+
+              <label class="switch">
+                <input type="checkbox" id="notifLowStock">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="notif-item">
+              <div class="notif-text">
+                <strong>New Fabrication Requests</strong>
+                <p>When a new job request is submitted</p>
+              </div>
+
+              <label class="switch">
+                <input type="checkbox" id="notifFabrication">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="notif-item">
+              <div class="notif-text">
+                <strong>Purchase Order Delivery</strong>
+                <p>When expected PO delivery date arrives</p>
+              </div>
+
+              <label class="switch">
+                <input type="checkbox" id="notifPoDelivery">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="notif-item">
+              <div class="notif-text">
+                <strong>Daily Sales Summary</strong>
+                <p>End-of-day sales report notification</p>
+              </div>
+
+              <label class="switch">
+                <input type="checkbox" id="notifDailySales">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+            <div class="notif-item">
+              <div class="notif-text">
+                <strong>Payment Due Reminders</strong>
+                <p>For outstanding wholesale credit payments</p>
+              </div>
+
+              <label class="switch">
+                <input type="checkbox" id="notifPaymentDue">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+          </div>
+
+          <button
+            type="button"
+            class="save-settings-btn"
+            id="saveNotificationSettings"
+          >
+            Save Notifications Settings
+          </button>
+
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script src="sidebar.js"></script>
+  <script src="topbar.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>
