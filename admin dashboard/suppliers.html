@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Suppliers - SCF Steel Trading</title>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap"
+    rel="stylesheet"
+  >
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="topbar.css">
+  <link rel="stylesheet" href="suppliers.css">
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar"></div>
+
+  <!-- SUPPLIERS -->
+  <main class="suppliers-main">
+
+    <!-- TOP BAR (component) -->
+    <div
+      id="topbar"
+      data-page-title="Suppliers"
+    ></div>
+
+    <!-- CONTENT -->
+    <div class="suppliers-content">
+
+      <!-- PAGE HEADER -->
+      <section class="suppliers-header">
+        <div>
+          <h1>Suppliers</h1>
+          <p>
+            <span id="supplierRegisteredCount">0</span>
+            Suppliers Registered
+          </p>
+        </div>
+
+        <button
+          type="button"
+          class="add-supplier-btn"
+          id="addSupplierBtn"
+        >
+          <span class="plus">+</span>
+          Supplier
+        </button>
+      </section>
+
+      <!-- PANEL -->
+      <section class="suppliers-panel">
+
+        <!-- TOOLBAR -->
+        <div class="suppliers-toolbar">
+
+          <!-- SEARCH -->
+          <div class="search-box">
+            <svg viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="M20 20l-4-4"></path>
+            </svg>
+
+            <input
+              type="search"
+              id="supplierSearch"
+              placeholder="Search supplier name, contact, email..."
+              autocomplete="off"
+            >
+          </div>
+
+          <!-- FILTERS -->
+          <div class="supplier-filters">
+            <select id="statusFilter">
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-wrapper">
+          <table class="suppliers-table">
+            <thead>
+              <tr>
+                <th>SUPPLIER ID</th>
+                <th>SUPPLIER NAME</th>
+                <th>CONTACT PERSON</th>
+                <th>CONTACT NUMBER</th>
+                <th>EMAIL</th>
+                <th>ADDRESS</th>
+                <th>STATUS</th>
+                <th class="actions-heading">ACTIONS</th>
+              </tr>
+            </thead>
+
+            <tbody id="supplierTableBody"></tbody>
+          </table>
+
+          <!-- EMPTY STATE -->
+          <div class="suppliers-empty" id="supplierEmptyState" style="display:none;">
+            <div class="empty-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+            </div>
+
+            <h3>No suppliers found</h3>
+            <p>Try a different search or filter.</p>
+          </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="suppliers-table-footer">
+          <p>
+            Showing
+            <strong id="visibleSupplierCount">0</strong>
+            of
+            <strong id="totalSupplierCount">0</strong>
+            suppliers
+          </p>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script src="sidebar.js"></script>
+  <script src="topbar.js"></script>
+  <script src="suppliers.js"></script>
+
+</body>
+</html>

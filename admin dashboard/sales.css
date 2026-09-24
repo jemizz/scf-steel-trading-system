@@ -30,57 +30,6 @@ body {
     background-color: #f3f4f5;
 }
 
-
-/* =========================
-   TOP BAR
-========================= */
-
-.sales-topbar {
-    height: 58px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 0 32px;
-
-    background-color: #ffffff;
-
-    border-bottom: 1px solid #e0e1e2;
-}
-
-.sales-topbar h1 {
-    margin: 0;
-
-    color: #272829;
-
-    font-size: 17px;
-    font-weight: 500;
-}
-
-
-/* =========================
-   DATE + TIME
-========================= */
-
-.sales-datetime {
-    display: flex;
-    align-items: center;
-
-    gap: 14px;
-
-    color: #73777b;
-
-    font-size: 10px;
-}
-
-.sales-datetime #currentTime {
-    padding-left: 14px;
-
-    border-left: 1px solid #dddddd;
-}
-
-
 /* =========================
    CONTENT
 ========================= */

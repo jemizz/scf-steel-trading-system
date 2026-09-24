@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-/*maya na dagdagan ng iba need ng search sa top ng dashboard and date para rin may quick access 
-since hindi pa pala ready yung mga ganun. might revise paa.*/ 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,6 +18,7 @@ since hindi pa pala ready yung mga ganun. might revise paa.*/
     >
 
     <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="topbar.css">
     <link rel="stylesheet" href="inventory.css">
 </head>
 
@@ -32,16 +32,10 @@ since hindi pa pala ready yung mga ganun. might revise paa.*/
     <main class="inventory-main">
 
         <!-- TOP BAR -->
-        <header class="admin-topbar">
-
-            <h1>Inventory</h1>
-
-            <div class="admin-datetime">
-                <span id="currentDate"></span>
-                <span id="currentTime"></span>
-            </div>
-
-        </header>
+        <div
+            id="topbar"
+            data-page-title="Inventory"
+        ></div>
 
 
         <div class="inventory-content">
@@ -330,6 +324,7 @@ since hindi pa pala ready yung mga ganun. might revise paa.*/
 
 
     <script src="sidebar.js"></script>
+    <script src="topbar.js"></script>
     <script src="inventory.js"></script>
 
 </body>

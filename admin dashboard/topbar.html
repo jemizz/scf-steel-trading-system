@@ -1,0 +1,267 @@
+<!-- =========================
+     ADMIN TOP BAR
+========================= -->
+
+<header class="admin-topbar">
+
+    <!-- PAGE TITLE -->
+    <h1 id="topbarPageTitle">Dashboard</h1>
+
+
+    <!-- RIGHT SIDE -->
+    <div class="topbar-right">
+
+
+        <!-- =========================
+             QUICK ACCESS
+        ========================== -->
+        <div class="quick-access">
+
+            <button
+                type="button"
+                class="quick-access-btn"
+                id="quickAccessBtn"
+            >
+                <span class="quick-plus">+</span>
+
+                <span class="quick-access-label">
+                    Quick Access
+                </span>
+
+                <span class="quick-arrow">
+                    ▼
+                </span>
+            </button>
+
+
+            <!-- QUICK ACCESS DROPDOWN -->
+            <div
+                class="quick-access-menu"
+                id="quickAccessMenu"
+            >
+
+                <p class="quick-menu-title">
+                    QUICK ACCESS
+                </p>
+
+
+                <!-- NEW TRANSACTION -->
+                <a
+                    href="new-transaction.html"
+                    class="quick-access-item primary-action"
+                >
+
+                    <div class="quick-access-symbol">
+                        +
+                    </div>
+
+                    <div class="quick-access-text">
+                        <strong>New Transaction</strong>
+                        <span>
+                            Sales with optional fabrication
+                        </span>
+                    </div>
+
+                </a>
+
+
+                <!-- NEW PURCHASE ORDER -->
+                <a
+                    href="new-purchase-order.html"
+                    class="quick-access-item"
+                >
+
+                    <div class="quick-access-symbol">
+                        PO
+                    </div>
+
+                    <div class="quick-access-text">
+                        <strong>New Purchase Order</strong>
+                        <span>
+                            Create a supplier purchase order
+                        </span>
+                    </div>
+
+                </a>
+
+
+                <div class="quick-menu-divider"></div>
+
+
+                <!-- STOCK IN -->
+                <button
+                    type="button"
+                    class="quick-access-item"
+                    id="quickStockIn"
+                >
+
+                    <div class="quick-access-symbol">
+                        ↓
+                    </div>
+
+                    <div class="quick-access-text">
+                        <strong>Stock In</strong>
+                        <span>
+                            Receive inventory
+                        </span>
+                    </div>
+
+                </button>
+
+
+                <!-- STOCK OUT -->
+                <button
+                    type="button"
+                    class="quick-access-item"
+                    id="quickStockOut"
+                >
+
+                    <div class="quick-access-symbol">
+                        ↑
+                    </div>
+
+                    <div class="quick-access-text">
+                        <strong>Stock Out</strong>
+                        <span>
+                            Record inventory release
+                        </span>
+                    </div>
+
+                </button>
+
+
+                <!-- ADD PRODUCT -->
+                <button
+                    type="button"
+                    class="quick-access-item"
+                    id="quickAddProduct"
+                >
+
+                    <div class="quick-access-symbol">
+                        +
+                    </div>
+
+                    <div class="quick-access-text">
+                        <strong>Add Product</strong>
+                        <span>
+                            Create a new product
+                        </span>
+                    </div>
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- DIVIDER -->
+        <div class="topbar-divider"></div>
+
+
+        <!-- =========================
+             NOTIFICATIONS
+        ========================== -->
+        <div class="notifications">
+
+            <button
+                type="button"
+                class="notification-btn"
+                id="notificationBtn"
+                aria-label="Notifications"
+            >
+                <span class="notification-bell">
+                    &#128276;
+                </span>
+
+                <span
+                    class="notification-badge"
+                    id="notificationBadge"
+                ></span>
+            </button>
+
+
+            <!-- NOTIFICATION DROPDOWN -->
+            <div
+                class="notification-menu"
+                id="notificationMenu"
+            >
+
+                <div class="notification-header">
+
+                    <div>
+                        <h2>Notifications</h2>
+
+                        <p>
+                            System alerts and updates
+                        </p>
+                    </div>
+
+
+                    <button
+                        type="button"
+                        id="markAllReadBtn"
+                    >
+                        Mark all as read
+                    </button>
+
+                </div>
+
+
+                <!-- NOTIFICATION LIST -->
+                <div
+                    class="notification-list"
+                    id="notificationList"
+                >
+
+                    <!-- EMPTY STATE -->
+                    <div
+                        class="notification-empty"
+                        id="notificationEmpty"
+                    >
+
+                        <div class="notification-empty-icon">
+                            &#128276;
+                        </div>
+
+                        <strong>
+                            No notifications
+                        </strong>
+
+                        <p>
+                            You're all caught up.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DIVIDER -->
+        <div class="topbar-divider"></div>
+
+
+        <!-- =========================
+             DATE AND TIME
+        ========================== -->
+        <div class="topbar-datetime">
+
+            <span id="currentDate">
+                Loading date...
+            </span>
+
+            <div class="datetime-divider"></div>
+
+            <span id="currentTime">
+                Loading time...
+            </span>
+
+        </div>
+
+    </div>
+
+</header>

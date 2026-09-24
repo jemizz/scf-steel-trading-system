@@ -18,6 +18,7 @@
     >
 
     <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="topbar.css">
     <link rel="stylesheet" href="sales.css">
 </head>
 
@@ -36,16 +37,10 @@
 
 
         <!-- TOP BAR -->
-        <header class="sales-topbar">
-
-            <h1>Sales</h1>
-
-            <div class="sales-datetime">
-                <span id="currentDate"></span>
-                <span id="currentTime"></span>
-            </div>
-
-        </header>
+        <div
+            id="topbar"
+            data-page-title="Sales"
+        ></div>
 
 
         <!-- =========================
@@ -401,6 +396,7 @@
          SCRIPTS
     ========================== -->
     <script src="sidebar.js"></script>
+    <script src="topbar.js"></script>
     <script src="sales.js"></script>
 
 </body>

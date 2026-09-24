@@ -18,6 +18,7 @@
     >
 
     <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="topbar.css">
     <link rel="stylesheet" href="products.css">
 </head>
 
@@ -31,16 +32,11 @@
     <main class="products-main">
 
         <!-- TOP BAR -->
-        <header class="products-topbar">
-
-            <h1>Products</h1>
-
-            <div class="products-datetime">
-                <span id="currentDate"></span>
-                <span id="currentTime"></span>
-            </div>
-
-        </header>
+        
+        <div
+            id="topbar"
+            data-page-title="Products"
+        ></div>
 
 
         <!-- CONTENT -->
@@ -215,6 +211,7 @@
 
 
     <script src="sidebar.js"></script>
+    <script src="topbar.js"></script>
     <script src="products.js"></script>
 
 </body>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-//add comment tryy 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +17,7 @@
     >
 
     <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="topbar.css">
     <link rel="stylesheet" href="dashboard.css">
 </head>
 
@@ -31,16 +31,10 @@
     <main class="dashboard-main">
 
         <!-- TOP BAR -->
-        <header class="dashboard-topbar">
-
-            <h1>Dashboard</h1>
-
-            <div class="dashboard-datetime">
-                <span id="currentDate"></span>
-                <span id="currentTime"></span>
-            </div>
-
-        </header>
+        <div
+            id="topbar"
+            data-page-title="Dashboard"
+        ></div>
 
 
         <!-- DASHBOARD CONTENT -->
@@ -416,7 +410,8 @@
 
 
     <script src="sidebar.js"></script>
-    <script src="dashboard.js"></script>
+    <script src="topbar.js"></script>
+    <script src="products.js"></script>
 
 </body>
 
