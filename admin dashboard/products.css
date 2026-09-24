@@ -1,0 +1,775 @@
+/* =========================
+   GENERAL
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+
+    background-color: #f3f4f5;
+    color: #272829;
+
+    font-family: "Geologica", sans-serif;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.products-main {
+    min-height: 100vh;
+
+    margin-left: 230px;
+
+    background-color: #f3f4f5;
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.products-topbar {
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 32px;
+
+    background-color: #ffffff;
+
+    border-bottom: 1px solid #e0e1e2;
+}
+
+.products-topbar h1 {
+    margin: 0;
+
+    color: #272829;
+
+    font-size: 17px;
+    font-weight: 500;
+}
+
+
+/* =========================
+   DATE + TIME
+========================= */
+
+.products-datetime {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    color: #73777b;
+
+    font-size: 10px;
+}
+
+.products-datetime #currentTime {
+    padding-left: 14px;
+
+    border-left: 1px solid #dddddd;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.products-content {
+    width: 100%;
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    padding: 35px 32px 60px;
+}
+
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.products-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 30px;
+}
+
+.products-header h1 {
+    margin-bottom: 4px;
+
+    color: #272829;
+
+    font-size: 27px;
+    font-weight: 600;
+}
+
+.products-header p {
+    color: #7b7f83;
+
+    font-size: 10px;
+}
+
+
+/* ADD BUTTON */
+
+.add-product-btn {
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 0 16px;
+
+    background-color: #272829;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 5px;
+
+    font-family: "Geologica", sans-serif;
+
+    font-size: 9px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.add-product-btn:hover {
+    background-color: #3b3d40;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+.plus {
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1;
+}
+
+
+/* =========================
+   PRODUCT PANEL
+========================= */
+
+.products-panel {
+    overflow: hidden;
+
+    background-color: #ffffff;
+
+    border: 1px solid #d8dadd;
+    border-radius: 7px;
+
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.025);
+}
+
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.products-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+
+    padding: 18px;
+
+    border-bottom: 1px solid #e8e9ea;
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box {
+    position: relative;
+
+    flex: 1;
+    max-width: 620px;
+}
+
+.search-box svg {
+    position: absolute;
+
+    top: 50%;
+    left: 13px;
+
+    width: 14px;
+    height: 14px;
+
+    transform: translateY(-50%);
+
+    fill: none;
+    stroke: #8a8e91;
+
+    stroke-width: 1.7;
+    stroke-linecap: round;
+}
+
+.search-box input {
+    width: 100%;
+    height: 36px;
+
+    padding: 0 14px 0 38px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #d5d7da;
+    border-radius: 5px;
+
+    color: #272829;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 9px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.search-box input::placeholder {
+    color: #a1a4a7;
+}
+
+.search-box input:focus {
+    border-color: #85898d;
+
+    box-shadow: 0 0 0 3px rgba(39, 40, 41, 0.05);
+}
+
+
+/* =========================
+   FILTERS
+========================= */
+
+.product-filters {
+    display: flex;
+
+    gap: 10px;
+}
+
+.product-filters select {
+    min-width: 130px;
+    height: 36px;
+
+    padding: 0 30px 0 12px;
+
+    background-color: #ffffff;
+    color: #55595c;
+
+    border: 1px solid #d5d7da;
+    border-radius: 5px;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 8px;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+.product-filters select:hover,
+.product-filters select:focus {
+    border-color: #969a9e;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.products-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+.products-table th {
+    height: 45px;
+
+    padding: 0 14px;
+
+    background-color: #fafafa;
+    color: #5c6064;
+
+    border-bottom: 1px solid #e2e3e4;
+
+    font-size: 7px;
+    font-weight: 600;
+
+    letter-spacing: 0.25px;
+
+    text-align: left;
+}
+
+.products-table td {
+    height: 62px;
+
+    padding: 9px 14px;
+
+    color: #55595d;
+
+    border-bottom: 1px solid #eeeeee;
+
+    font-size: 8px;
+
+    vertical-align: middle;
+}
+
+
+/* COLUMN WIDTHS */
+
+.products-table th:nth-child(1) {
+    width: 10%;
+}
+
+.products-table th:nth-child(2) {
+    width: 24%;
+}
+
+.products-table th:nth-child(3) {
+    width: 14%;
+}
+
+.products-table th:nth-child(4) {
+    width: 10%;
+}
+
+.products-table th:nth-child(5) {
+    width: 10%;
+}
+
+.products-table th:nth-child(6) {
+    width: 8%;
+}
+
+.products-table th:nth-child(7) {
+    width: 13%;
+}
+
+.products-table th:nth-child(8) {
+    width: 11%;
+}
+
+
+/* TABLE ROW */
+
+.products-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.products-table tbody tr:hover {
+    background-color: #fafafa;
+}
+
+
+/* =========================
+   PRODUCT CELL
+========================= */
+
+.product-info {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+.product-image {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    overflow: hidden;
+
+    background-color: #e4e5e6;
+
+    border-radius: 4px;
+}
+
+.product-image img {
+    width: 100%;
+    height: 100%;
+
+    display: block;
+
+    object-fit: cover;
+}
+
+.product-details {
+    min-width: 0;
+}
+
+.product-details strong {
+    display: block;
+
+    margin-bottom: 3px;
+
+    overflow: hidden;
+
+    color: #343638;
+
+    font-size: 8px;
+    font-weight: 500;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.product-details span {
+    color: #95999c;
+
+    font-size: 7px;
+}
+
+
+/* =========================
+   STOCK CELL
+========================= */
+
+.stock-value {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #45494c;
+
+    font-weight: 500;
+}
+
+.stock-minimum {
+    color: #a0a3a6;
+
+    font-size: 6.5px;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 65px;
+
+    padding: 5px 8px;
+
+    border-radius: 20px;
+
+    font-size: 6.5px;
+    font-weight: 500;
+}
+
+.status-in-stock {
+    background-color: #e4f5ed;
+    color: #25845e;
+}
+
+.status-low-stock {
+    background-color: #fff3d9;
+    color: #ad7911;
+}
+
+.status-out-of-stock {
+    background-color: #fde6e6;
+    color: #c64c4c;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.actions-heading {
+    text-align: center !important;
+}
+
+.product-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+}
+
+.action-btn {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: transparent;
+
+    border: none;
+    border-radius: 4px;
+
+    color: #62666a;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.action-btn:hover {
+    background-color: #eeeeee;
+    color: #272829;
+}
+
+.action-btn.delete:hover {
+    background-color: #fdeaea;
+    color: #bd4747;
+}
+
+.action-btn svg {
+    width: 13px;
+    height: 13px;
+
+    fill: none;
+    stroke: currentColor;
+
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.products-empty {
+    min-height: 280px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    color: #8c9094;
+
+    text-align: center;
+}
+
+.empty-icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 13px;
+
+    background-color: #f0f1f2;
+
+    border-radius: 50%;
+}
+
+.empty-icon svg {
+    width: 20px;
+    height: 20px;
+
+    fill: none;
+    stroke: #73777a;
+
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+}
+
+.products-empty h3 {
+    margin-bottom: 5px;
+
+    color: #4c5053;
+
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.products-empty p {
+    font-size: 8px;
+}
+
+
+/* =========================
+   TABLE FOOTER
+========================= */
+
+.products-table-footer {
+    min-height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 18px;
+
+    border-top: 1px solid #e8e9ea;
+}
+
+.products-table-footer p {
+    color: #898d90;
+
+    font-size: 7.5px;
+}
+
+.products-table-footer strong {
+    color: #5b5f62;
+
+    font-weight: 500;
+}
+
+
+/* =========================
+   PAGINATION
+========================= */
+
+.pagination {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+.pagination button {
+    width: 27px;
+    height: 27px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #ffffff;
+    color: #666a6e;
+
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+
+    cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #f2f3f4;
+}
+
+.pagination button:disabled {
+    opacity: 0.4;
+
+    cursor: default;
+}
+
+.pagination span {
+    min-width: 27px;
+    height: 27px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #272829;
+    color: #ffffff;
+
+    border-radius: 4px;
+
+    font-size: 8px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+
+    .products-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .search-box {
+        max-width: none;
+    }
+
+    .product-filters {
+        width: 100%;
+    }
+
+    .product-filters select {
+        flex: 1;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .products-main {
+        margin-left: 200px;
+    }
+
+    .products-content {
+        padding: 25px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .products-header {
+        align-items: flex-start;
+        flex-direction: column;
+
+        gap: 18px;
+    }
+
+    .products-header h1 {
+        font-size: 23px;
+    }
+
+    .products-topbar {
+        padding: 0 20px;
+    }
+
+}

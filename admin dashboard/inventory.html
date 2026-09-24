@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inventory - SCF Steel Trading</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="inventory.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div id="sidebar"></div>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="inventory-main">
+
+        <!-- TOP BAR -->
+        <header class="admin-topbar">
+
+            <h1>Inventory</h1>
+
+            <div class="admin-datetime">
+                <span id="currentDate"></span>
+                <span id="currentTime"></span>
+            </div>
+
+        </header>
+
+
+        <div class="inventory-content">
+
+            <!-- PAGE HEADER -->
+            <section class="inventory-header">
+
+                <div>
+                    <h2>Inventory Management</h2>
+
+                    <p>
+                        Monitor stock levels and manage inventory movements.
+                    </p>
+                </div>
+
+
+                <div class="inventory-buttons">
+
+                    <button
+                        type="button"
+                        class="inventory-btn secondary-btn"
+                        id="stockOutBtn"
+                    >
+                        <span>−</span>
+                        Stock Out
+                    </button>
+
+                    <button
+                        type="button"
+                        class="inventory-btn primary-btn"
+                        id="stockInBtn"
+                    >
+                        <span>+</span>
+                        Stock In
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 INVENTORY SUMMARY
+            ========================== -->
+
+            <section class="inventory-summary">
+
+                <!-- TOTAL -->
+                <div class="summary-card">
+
+                    <div class="summary-card-content">
+
+                        <p>TOTAL ITEMS</p>
+
+                        <h3 id="totalItems">0</h3>
+
+                        <span>Active Products</span>
+
+                    </div>
+
+                    <div class="summary-icon total-icon">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4 7l8-4 8 4-8 4-8-4"></path>
+                            <path d="M4 7v10l8 4 8-4V7"></path>
+                            <path d="M12 11v10"></path>
+                        </svg>
+
+                    </div>
+
+                </div>
+
+
+                <!-- IN STOCK -->
+                <div class="summary-card">
+
+                    <div class="summary-card-content">
+
+                        <p>IN STOCK</p>
+
+                        <h3 id="inStockItems">0</h3>
+
+                        <span>Products Available</span>
+
+                    </div>
+
+                    <div class="summary-icon available-icon">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M4 7l8-4 8 4-8 4-8-4"></path>
+                            <path d="M4 7v10l8 4 8-4V7"></path>
+                            <path d="M8 13l3 3 5-6"></path>
+                        </svg>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOW STOCK -->
+                <div class="summary-card">
+
+                    <div class="summary-card-content">
+
+                        <p>LOW STOCK</p>
+
+                        <h3 id="lowStockItems">0</h3>
+
+                        <span>Below Stock Level</span>
+
+                    </div>
+
+                    <div class="summary-icon warning-icon">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 3L2 21h20L12 3z"></path>
+                            <path d="M12 9v5"></path>
+                            <path d="M12 17h.01"></path>
+                        </svg>
+
+                    </div>
+
+                </div>
+
+
+                <!-- OUT OF STOCK -->
+                <div class="summary-card">
+
+                    <div class="summary-card-content">
+
+                        <p>OUT OF STOCK</p>
+
+                        <h3 id="outOfStockItems">0</h3>
+
+                        <span>Needs Restocking</span>
+
+                    </div>
+
+                    <div class="summary-icon danger-icon">
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 3L2 21h20L12 3z"></path>
+                            <path d="M12 9v5"></path>
+                            <path d="M12 17h.01"></path>
+                        </svg>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 INVENTORY TABLE
+            ========================== -->
+
+            <section class="inventory-panel">
+
+                <!-- TOOLBAR -->
+                <div class="inventory-toolbar">
+
+                    <div class="inventory-search">
+
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <path d="M20 20l-4-4"></path>
+                        </svg>
+
+                        <input
+                            type="search"
+                            id="inventorySearch"
+                            placeholder="Search product ID, product name, category..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <div class="inventory-filters">
+
+                        <select id="categoryFilter">
+                            <option value="">All Categories</option>
+                        </select>
+
+                        <select id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="in-stock">In Stock</option>
+                            <option value="low-stock">Low Stock</option>
+                            <option value="out-of-stock">Out of Stock</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TABLE -->
+                <div class="inventory-table-wrapper">
+
+                    <table class="inventory-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>PRODUCT ID</th>
+                                <th>PRODUCT NAME</th>
+                                <th>CATEGORY</th>
+                                <th>STOCK QTY</th>
+                                <th>UNIT</th>
+                                <th>MIN. STOCK</th>
+                                <th>STOCK STATUS</th>
+                                <th class="actions-heading">ACTIONS</th>
+                            </tr>
+
+                        </thead>
+
+
+                        <!-- DATABASE ROWS LATER -->
+                        <tbody id="inventoryTableBody"></tbody>
+
+                    </table>
+
+
+                    <!-- EMPTY STATE -->
+                    <div
+                        class="inventory-empty"
+                        id="inventoryEmptyState"
+                    >
+
+                        <div class="empty-icon">
+
+                            <svg viewBox="0 0 24 24">
+                                <rect x="4" y="7" width="16" height="13"></rect>
+                                <path d="M3 4h18v3H3"></path>
+                                <path d="M9 11h6"></path>
+                            </svg>
+
+                        </div>
+
+                        <h3>No inventory records yet</h3>
+
+                        <p>
+                            Inventory records will appear here once products
+                            are added to the system.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FOOTER -->
+                <div class="inventory-table-footer">
+
+                    <p>
+                        Showing
+                        <strong id="visibleInventoryCount">0</strong>
+                        of
+                        <strong id="totalInventoryCount">0</strong>
+                        items
+                    </p>
+
+
+                    <div class="pagination">
+
+                        <button type="button" disabled>
+                            ‹
+                        </button>
+
+                        <span>1</span>
+
+                        <button type="button" disabled>
+                            ›
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <script src="sidebar.js"></script>
+    <script src="inventory.js"></script>
+
+</body>
+
+</html>

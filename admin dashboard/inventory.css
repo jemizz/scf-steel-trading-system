@@ -1,0 +1,864 @@
+/* =========================
+   GENERAL
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+
+    background-color: #f3f4f5;
+    color: #272829;
+
+    font-family: "Geologica", sans-serif;
+}
+
+
+/* =========================
+   MAIN
+========================= */
+
+.inventory-main {
+    min-height: 100vh;
+
+    margin-left: 230px;
+
+    background-color: #f3f4f5;
+}
+
+
+/* =========================
+   SHARED ADMIN TOP BAR
+========================= */
+
+.admin-topbar {
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 32px;
+
+    background-color: #ffffff;
+
+    border-bottom: 1px solid #e0e1e2;
+}
+
+.admin-topbar h1 {
+    margin: 0;
+
+    color: #272829;
+
+    font-size: 17px;
+    font-weight: 500;
+}
+
+.admin-datetime {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    color: #73777b;
+
+    font-size: 10px;
+}
+
+.admin-datetime #currentTime {
+    padding-left: 14px;
+
+    border-left: 1px solid #dddddd;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.inventory-content {
+    width: 100%;
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    padding: 35px 32px 60px;
+}
+
+
+/* =========================
+   PAGE HEADER
+========================= */
+
+.inventory-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 25px;
+}
+
+.inventory-header h2 {
+    margin-bottom: 4px;
+
+    color: #272829;
+
+    font-size: 27px;
+    font-weight: 600;
+}
+
+.inventory-header p {
+    color: #7b7f83;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.inventory-buttons {
+    display: flex;
+
+    gap: 9px;
+}
+
+.inventory-btn {
+    height: 37px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    min-width: 105px;
+
+    padding: 0 15px;
+
+    border-radius: 5px;
+
+    font-family: "Geologica", sans-serif;
+
+    font-size: 9px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.inventory-btn span {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.secondary-btn {
+    background-color: #ffffff;
+    color: #424649;
+
+    border: 1px solid #cfd1d3;
+}
+
+.secondary-btn:hover {
+    background-color: #f8f8f8;
+
+    transform: translateY(-1px);
+}
+
+.primary-btn {
+    background-color: #272829;
+    color: #ffffff;
+
+    border: 1px solid #272829;
+}
+
+.primary-btn:hover {
+    background-color: #3b3d40;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
+}
+
+
+/* =========================
+   SUMMARY GRID
+========================= */
+
+.inventory-summary {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 16px;
+
+    margin-bottom: 28px;
+}
+
+.summary-card {
+    min-height: 105px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    padding: 18px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #d9dbdd;
+    border-radius: 6px;
+
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.025);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.summary-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.06);
+}
+
+
+/* CARD TEXT */
+
+.summary-card-content p {
+    margin-bottom: 8px;
+
+    color: #7b7f82;
+
+    font-size: 8px;
+    font-weight: 500;
+
+    letter-spacing: 0.3px;
+}
+
+.summary-card-content h3 {
+    margin-bottom: 5px;
+
+    color: #272829;
+
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.summary-card-content span {
+    color: #96999c;
+
+    font-size: 7.5px;
+}
+
+
+/* =========================
+   SUMMARY ICONS
+========================= */
+
+.summary-icon {
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 6px;
+}
+
+.summary-icon svg {
+    width: 17px;
+    height: 17px;
+
+    fill: none;
+
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* TOTAL */
+
+.total-icon {
+    background-color: #edf2f5;
+}
+
+.total-icon svg {
+    stroke: #647783;
+}
+
+
+/* AVAILABLE */
+
+.available-icon {
+    background-color: #e8f5f1;
+}
+
+.available-icon svg {
+    stroke: #3a927a;
+}
+
+
+/* WARNING */
+
+.warning-icon {
+    background-color: #fff0e8;
+}
+
+.warning-icon svg {
+    stroke: #b56c4d;
+}
+
+
+/* DANGER */
+
+.danger-icon {
+    background-color: #fde8e8;
+}
+
+.danger-icon svg {
+    stroke: #c34d4d;
+}
+
+
+/* =========================
+   INVENTORY PANEL
+========================= */
+
+.inventory-panel {
+    overflow: hidden;
+
+    background-color: #ffffff;
+
+    border: 1px solid #d8dadd;
+    border-radius: 7px;
+
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.025);
+}
+
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.inventory-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+
+    padding: 18px;
+
+    border-bottom: 1px solid #e8e9ea;
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.inventory-search {
+    position: relative;
+
+    flex: 1;
+    max-width: 620px;
+}
+
+.inventory-search svg {
+    position: absolute;
+
+    top: 50%;
+    left: 13px;
+
+    width: 14px;
+    height: 14px;
+
+    transform: translateY(-50%);
+
+    fill: none;
+    stroke: #8a8e91;
+
+    stroke-width: 1.7;
+    stroke-linecap: round;
+}
+
+.inventory-search input {
+    width: 100%;
+    height: 36px;
+
+    padding: 0 14px 0 38px;
+
+    background-color: #ffffff;
+    color: #272829;
+
+    border: 1px solid #d5d7da;
+    border-radius: 5px;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 9px;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.inventory-search input::placeholder {
+    color: #a1a4a7;
+}
+
+.inventory-search input:focus {
+    border-color: #85898d;
+
+    box-shadow: 0 0 0 3px rgba(39, 40, 41, 0.05);
+}
+
+
+/* =========================
+   FILTERS
+========================= */
+
+.inventory-filters {
+    display: flex;
+
+    gap: 10px;
+}
+
+.inventory-filters select {
+    min-width: 130px;
+    height: 36px;
+
+    padding: 0 30px 0 12px;
+
+    background-color: #ffffff;
+    color: #55595c;
+
+    border: 1px solid #d5d7da;
+    border-radius: 5px;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 8px;
+
+    outline: none;
+
+    cursor: pointer;
+}
+
+.inventory-filters select:hover,
+.inventory-filters select:focus {
+    border-color: #969a9e;
+}
+
+
+/* =========================
+   TABLE
+========================= */
+
+.inventory-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.inventory-table {
+    width: 100%;
+
+    border-collapse: collapse;
+
+    table-layout: fixed;
+}
+
+.inventory-table th {
+    height: 45px;
+
+    padding: 0 14px;
+
+    background-color: #fafafa;
+    color: #5c6064;
+
+    border-bottom: 1px solid #e2e3e4;
+
+    font-size: 7px;
+    font-weight: 600;
+
+    letter-spacing: 0.2px;
+
+    text-align: left;
+}
+
+.inventory-table td {
+    height: 58px;
+
+    padding: 8px 14px;
+
+    color: #55595d;
+
+    border-bottom: 1px solid #eeeeee;
+
+    font-size: 8px;
+
+    vertical-align: middle;
+}
+
+
+/* COLUMN WIDTHS */
+
+.inventory-table th:nth-child(1) {
+    width: 11%;
+}
+
+.inventory-table th:nth-child(2) {
+    width: 20%;
+}
+
+.inventory-table th:nth-child(3) {
+    width: 16%;
+}
+
+.inventory-table th:nth-child(4) {
+    width: 11%;
+}
+
+.inventory-table th:nth-child(5) {
+    width: 8%;
+}
+
+.inventory-table th:nth-child(6) {
+    width: 11%;
+}
+
+.inventory-table th:nth-child(7) {
+    width: 14%;
+}
+
+.inventory-table th:nth-child(8) {
+    width: 9%;
+}
+
+
+/* ROW */
+
+.inventory-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.inventory-table tbody tr:hover {
+    background-color: #fafafa;
+}
+
+
+/* =========================
+   STOCK QUANTITY
+========================= */
+
+.stock-quantity {
+    color: #272829;
+
+    font-weight: 500;
+}
+
+
+/* =========================
+   STATUS BADGES
+========================= */
+
+.stock-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 68px;
+
+    padding: 5px 8px;
+
+    border-radius: 20px;
+
+    font-size: 6.5px;
+    font-weight: 500;
+}
+
+.status-in-stock {
+    background-color: #e4f5ed;
+    color: #25845e;
+}
+
+.status-low-stock {
+    background-color: #fff3d9;
+    color: #ad7911;
+}
+
+.status-out-of-stock {
+    background-color: #fde6e6;
+    color: #c64c4c;
+}
+
+
+/* =========================
+   ACTIONS
+========================= */
+
+.actions-heading {
+    text-align: center !important;
+}
+
+.inventory-actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 5px;
+}
+
+.inventory-action-btn {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: transparent;
+    color: #62666a;
+
+    border: none;
+    border-radius: 4px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.inventory-action-btn:hover {
+    background-color: #eeeeee;
+
+    color: #272829;
+}
+
+.inventory-action-btn svg {
+    width: 13px;
+    height: 13px;
+
+    fill: none;
+    stroke: currentColor;
+
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.inventory-empty {
+    min-height: 270px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    color: #8c9094;
+
+    text-align: center;
+}
+
+.empty-icon {
+    width: 45px;
+    height: 45px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 13px;
+
+    background-color: #f0f1f2;
+
+    border-radius: 50%;
+}
+
+.empty-icon svg {
+    width: 20px;
+    height: 20px;
+
+    fill: none;
+    stroke: #73777a;
+
+    stroke-width: 1.5;
+}
+
+.inventory-empty h3 {
+    margin-bottom: 5px;
+
+    color: #4c5053;
+
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.inventory-empty p {
+    max-width: 300px;
+
+    font-size: 8px;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   TABLE FOOTER
+========================= */
+
+.inventory-table-footer {
+    min-height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 18px;
+
+    border-top: 1px solid #e8e9ea;
+}
+
+.inventory-table-footer p {
+    color: #898d90;
+
+    font-size: 7.5px;
+}
+
+.inventory-table-footer strong {
+    color: #5b5f62;
+
+    font-weight: 500;
+}
+
+
+/* =========================
+   PAGINATION
+========================= */
+
+.pagination {
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+}
+
+.pagination button,
+.pagination span {
+    width: 27px;
+    height: 27px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 4px;
+}
+
+.pagination button {
+    background-color: #ffffff;
+    color: #666a6e;
+
+    border: 1px solid #dddddd;
+
+    cursor: pointer;
+}
+
+.pagination button:disabled {
+    opacity: 0.4;
+
+    cursor: default;
+}
+
+.pagination span {
+    background-color: #272829;
+    color: #ffffff;
+
+    font-size: 8px;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+
+    .inventory-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 900px) {
+
+    .inventory-toolbar {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .inventory-search {
+        max-width: none;
+    }
+
+    .inventory-filters select {
+        flex: 1;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .inventory-main {
+        margin-left: 200px;
+    }
+
+    .inventory-content {
+        padding: 25px;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .inventory-header {
+        align-items: flex-start;
+        flex-direction: column;
+
+        gap: 18px;
+    }
+
+    .inventory-summary {
+        grid-template-columns: 1fr;
+    }
+
+    .inventory-buttons {
+        width: 100%;
+    }
+
+    .inventory-btn {
+        flex: 1;
+    }
+
+}

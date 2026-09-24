@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Products - SCF Steel Trading</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="products.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div id="sidebar"></div>
+
+
+    <!-- MAIN -->
+    <main class="products-main">
+
+        <!-- TOP BAR -->
+        <header class="products-topbar">
+
+            <h1>Products</h1>
+
+            <div class="products-datetime">
+                <span id="currentDate"></span>
+                <span id="currentTime"></span>
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <div class="products-content">
+
+
+            <!-- PAGE HEADER -->
+            <section class="products-header">
+
+                <div>
+                    <h1>Products</h1>
+
+                    <p>
+                        Manage products, variants, pricing and inventory information.
+                    </p>
+                </div>
+
+
+                <button
+                    type="button"
+                    class="add-product-btn"
+                    id="addProductBtn"
+                >
+                    <span class="plus">+</span>
+                    Add Product
+                </button>
+
+            </section>
+
+
+            <!-- PRODUCT PANEL -->
+            <section class="products-panel">
+
+
+                <!-- TOOLBAR -->
+                <div class="products-toolbar">
+
+
+                    <!-- SEARCH -->
+                    <div class="search-box">
+
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <path d="M20 20l-4-4"></path>
+                        </svg>
+
+                        <input
+                            type="search"
+                            id="productSearch"
+                            placeholder="Search product name, SKU, category..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+
+                    <!-- FILTERS -->
+                    <div class="product-filters">
+
+                        <select id="categoryFilter">
+                            <option value="">All Categories</option>
+                        </select>
+
+
+                        <select id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="in-stock">In Stock</option>
+                            <option value="low-stock">Low Stock</option>
+                            <option value="out-of-stock">Out of Stock</option>
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TABLE -->
+                <div class="table-wrapper">
+
+                    <table class="products-table">
+
+                        <thead>
+                            <tr>
+                                <th>PRODUCT ID</th>
+                                <th>PRODUCT</th>
+                                <th>CATEGORY</th>
+                                <th>PRICE</th>
+                                <th>STOCK</th>
+                                <th>UNIT</th>
+                                <th>STATUS</th>
+                                <th class="actions-heading">ACTIONS</th>
+                            </tr>
+                        </thead>
+
+
+                        <!--
+                            Products from the database will
+                            eventually be inserted here.
+                        -->
+                        <tbody id="productsTableBody"></tbody>
+
+                    </table>
+
+
+                    <!-- EMPTY STATE -->
+                    <div
+                        class="products-empty"
+                        id="productsEmptyState"
+                    >
+
+                        <div class="empty-icon">
+
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 7l8-4 8 4-8 4-8-4"></path>
+                                <path d="M4 7v10l8 4 8-4V7"></path>
+                                <path d="M12 11v10"></path>
+                            </svg>
+
+                        </div>
+
+                        <h3>No products yet</h3>
+
+                        <p>
+                            Products added to the system will appear here.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- TABLE FOOTER -->
+                <div class="products-table-footer">
+
+                    <p>
+                        Showing
+                        <strong id="visibleProductCount">0</strong>
+                        of
+                        <strong id="totalProductCount">0</strong>
+                        products
+                    </p>
+
+                    <div class="pagination">
+
+                        <button
+                            type="button"
+                            id="previousPage"
+                            disabled
+                        >
+                            ‹
+                        </button>
+
+                        <span id="currentPage">1</span>
+
+                        <button
+                            type="button"
+                            id="nextPage"
+                            disabled
+                        >
+                            ›
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <script src="sidebar.js"></script>
+    <script src="products.js"></script>
+
+</body>
+
+</html>

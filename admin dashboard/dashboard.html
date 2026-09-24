@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - SCF Steel Trading</title>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="sidebar.css">
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+
+<body>
+
+    <!-- SIDEBAR -->
+    <div id="sidebar"></div>
+
+
+    <!-- DASHBOARD -->
+    <main class="dashboard-main">
+
+        <!-- TOP BAR -->
+        <header class="dashboard-topbar">
+
+            <h1>Dashboard</h1>
+
+            <div class="dashboard-datetime">
+                <span id="currentDate"></span>
+                <span id="currentTime"></span>
+            </div>
+
+        </header>
+
+
+        <!-- DASHBOARD CONTENT -->
+        <div class="dashboard-content">
+
+
+            <!-- =========================
+                 SUMMARY CARDS
+            ========================== -->
+
+            <section class="summary-grid">
+
+                <div class="summary-card">
+                    <p class="summary-label">TOTAL PRODUCTS</p>
+
+                    <h2 id="totalProducts">0</h2>
+
+                    <p class="summary-subtext">
+                        Active Items
+                    </p>
+                </div>
+
+
+                <div class="summary-card">
+                    <p class="summary-label">LOW STOCK ITEMS</p>
+
+                    <h2 id="lowStockItems">0</h2>
+
+                    <p class="summary-subtext">
+                        Needs Attention
+                    </p>
+                </div>
+
+
+                <div class="summary-card">
+                    <p class="summary-label">TODAY'S SALES</p>
+
+                    <h2 id="todaySales">₱0.00</h2>
+
+                    <p class="summary-subtext">
+                        <span id="todayTransactions">0</span>
+                        Transactions
+                    </p>
+                </div>
+
+
+                <div class="summary-card">
+                    <p class="summary-label">PENDING FABRICATION</p>
+
+                    <h2 id="pendingFabrication">0</h2>
+
+                    <p class="summary-subtext">
+                        Awaiting Schedule
+                    </p>
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 SALES + INVENTORY
+            ========================== -->
+
+            <section class="overview-grid">
+
+                <!-- SALES OVERVIEW -->
+                <div class="dashboard-card sales-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Sales Overview</h3>
+                            <p>Latest sales performance</p>
+                        </div>
+
+                        <span class="card-period" id="salesPeriod">
+                            Current Period
+                        </span>
+
+                    </div>
+
+
+                    <!-- Chart goes here later -->
+                    <div
+                        class="chart-placeholder"
+                        id="salesChart"
+                    >
+                        <p>No sales data available</p>
+                    </div>
+
+                </div>
+
+
+                <!-- INVENTORY STATUS -->
+                <div class="dashboard-card inventory-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Inventory Status</h3>
+                            <p>Stock distribution</p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="inventory-placeholder">
+
+                        <div class="donut-placeholder">
+                            <div class="donut-center"></div>
+                        </div>
+
+
+                        <div class="inventory-legend">
+
+                            <div>
+                                <span class="legend-dot in-stock"></span>
+                                In Stock
+
+                                <strong id="inStockCount">
+                                    0
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span class="legend-dot low-stock"></span>
+                                Low Stock
+
+                                <strong id="lowStockCount">
+                                    0
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span class="legend-dot out-stock"></span>
+                                Out of Stock
+
+                                <strong id="outStockCount">
+                                    0
+                                </strong>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 RECENT SALES + FABRICATION
+            ========================== -->
+
+            <section class="activity-grid">
+
+                <!-- RECENT SALES -->
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Recent Sales</h3>
+                        </div>
+
+                        <a href="sales.html">
+                            View All →
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        class="list-container"
+                        id="recentSalesList"
+                    >
+
+                        <div class="empty-state">
+                            No recent sales yet.
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FABRICATION JOBS -->
+                <div class="dashboard-card">
+
+                    <div class="card-header">
+
+                        <div>
+                            <h3>Fabrication Jobs</h3>
+                        </div>
+
+                        <a href="fabrication.html">
+                            View All →
+                        </a>
+
+                    </div>
+
+
+                    <div
+                        class="list-container"
+                        id="fabricationJobsList"
+                    >
+
+                        <div class="empty-state">
+                            No fabrication jobs yet.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 ALGORITHM INSIGHTS
+            ========================== -->
+
+            <section class="algorithm-section">
+
+                <h2>Algorithm Insights</h2>
+
+
+                <div class="algorithm-grid">
+
+
+                    <!-- STOCK REPLENISHMENT -->
+                    <div class="dashboard-card algorithm-card">
+
+                        <div class="algorithm-header">
+
+                            <div class="algorithm-icon">
+                                ↻
+                            </div>
+
+                            <div>
+                                <h3>
+                                    Smart Stock Replenishment
+                                </h3>
+
+                                <p>
+                                    Products recommended for restocking
+                                    based on stock levels and sales history.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="algorithm-content"
+                            id="stockRecommendations"
+                        >
+
+                            <div class="empty-state">
+                                No recommendations yet.
+                            </div>
+
+                        </div>
+
+
+                        <a
+                            href="stock-replenishment.html"
+                            class="algorithm-link"
+                        >
+                            View all recommendations →
+                        </a>
+
+                    </div>
+
+
+                    <!-- FABRICATION PRIORITY -->
+                    <div class="dashboard-card algorithm-card">
+
+                        <div class="algorithm-header">
+
+                            <div class="algorithm-icon">
+                                ⚙
+                            </div>
+
+                            <div>
+                                <h3>
+                                    Job Scheduling Priority
+                                </h3>
+
+                                <p>
+                                    Jobs prioritized by due date,
+                                    quantity, complexity and estimated time.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="algorithm-content"
+                            id="priorityJobs"
+                        >
+
+                            <div class="empty-state">
+                                No scheduled jobs yet.
+                            </div>
+
+                        </div>
+
+
+                        <a
+                            href="fabrication.html"
+                            class="algorithm-link"
+                        >
+                            View schedule →
+                        </a>
+
+                    </div>
+
+
+                    <!-- PRODUCT RECOMMENDATIONS -->
+                    <div class="dashboard-card algorithm-card">
+
+                        <div class="algorithm-header">
+
+                            <div class="algorithm-icon">
+                                ☆
+                            </div>
+
+                            <div>
+                                <h3>
+                                    Product Recommendations
+                                </h3>
+
+                                <p>
+                                    Related products based on customer
+                                    views and searches.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="algorithm-content"
+                            id="productRecommendations"
+                        >
+
+                            <div class="empty-state">
+                                No recommendations yet.
+                            </div>
+
+                        </div>
+
+
+                        <a
+                            href="product-analysis.html"
+                            class="algorithm-link"
+                        >
+                            View analytics →
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+
+    <script src="sidebar.js"></script>
+    <script src="dashboard.js"></script>
+
+</body>
+
+</html>

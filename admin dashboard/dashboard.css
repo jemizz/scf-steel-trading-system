@@ -1,0 +1,575 @@
+/* =========================
+   GENERAL
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+
+    background-color: #f2f3f4;
+    color: #272829;
+
+    font-family: "Geologica", sans-serif;
+}
+
+
+/* =========================
+   MAIN DASHBOARD
+========================= */
+
+.dashboard-main {
+    min-height: 100vh;
+
+    margin-left: 230px;
+
+    background-color: #f2f3f4;
+}
+
+
+/* =========================
+   TOP BAR
+========================= */
+
+.dashboard-topbar {
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 32px;
+
+    background-color: #ffffff;
+
+    border-bottom: 1px solid #e0e1e2;
+}
+
+.dashboard-topbar h1 {
+    color: #272829;
+
+    font-size: 17px;
+    font-weight: 500;
+}
+
+
+/* DATE + TIME */
+
+.dashboard-datetime {
+    display: flex;
+    align-items: center;
+
+    gap: 14px;
+
+    color: #73777b;
+
+    font-size: 10px;
+}
+
+#currentTime {
+    padding-left: 14px;
+
+    border-left: 1px solid #dddddd;
+}
+
+
+/* =========================
+   CONTENT
+========================= */
+
+.dashboard-content {
+    width: 100%;
+    max-width: 1250px;
+
+    margin: 0 auto;
+
+    padding: 28px 32px 50px;
+}
+
+
+/* =========================
+   SUMMARY
+========================= */
+
+.summary-grid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.summary-card {
+    min-height: 100px;
+
+    padding: 18px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #d9dbdd;
+    border-radius: 6px;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.025);
+}
+
+.summary-label {
+    margin-bottom: 8px;
+
+    color: #777b7f;
+
+    font-size: 8px;
+    font-weight: 600;
+
+    letter-spacing: 0.5px;
+}
+
+.summary-card h2 {
+    margin-bottom: 5px;
+
+    color: #272829;
+
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.summary-subtext {
+    color: #8a8e92;
+
+    font-size: 8px;
+}
+
+
+/* =========================
+   GENERAL CARD
+========================= */
+
+.dashboard-card {
+    background-color: #ffffff;
+
+    border: 1px solid #d9dbdd;
+    border-radius: 6px;
+
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.025);
+}
+
+
+/* =========================
+   CARD HEADER
+========================= */
+
+.card-header {
+    min-height: 55px;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    padding: 16px 18px 10px;
+}
+
+.card-header h3 {
+    margin-bottom: 3px;
+
+    color: #343638;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.card-header p,
+.card-period {
+    color: #92969a;
+
+    font-size: 7px;
+}
+
+.card-header a {
+    color: #686c70;
+
+    font-size: 8px;
+
+    text-decoration: none;
+}
+
+.card-header a:hover {
+    color: #272829;
+}
+
+
+/* =========================
+   OVERVIEW GRID
+========================= */
+
+.overview-grid {
+    display: grid;
+
+    grid-template-columns: 2.2fr 0.9fr;
+
+    gap: 18px;
+
+    margin-bottom: 22px;
+}
+
+.sales-card,
+.inventory-card {
+    min-height: 245px;
+}
+
+
+/* =========================
+   CHART PLACEHOLDER
+========================= */
+
+.chart-placeholder {
+    height: 170px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 18px 18px;
+
+    color: #a0a3a6;
+
+    border-top: 1px solid #f0f0f0;
+
+    font-size: 9px;
+}
+
+
+/* =========================
+   INVENTORY
+========================= */
+
+.inventory-placeholder {
+    min-height: 170px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 5px 20px 20px;
+}
+
+
+/* TEMPORARY DONUT */
+
+.donut-placeholder {
+    width: 95px;
+    height: 95px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 17px;
+
+    background:
+        conic-gradient(
+            #dedede 0deg 360deg
+        );
+
+    border-radius: 50%;
+}
+
+.donut-center {
+    width: 65px;
+    height: 65px;
+
+    background-color: #ffffff;
+
+    border-radius: 50%;
+}
+
+
+/* LEGEND */
+
+.inventory-legend {
+    width: 100%;
+}
+
+.inventory-legend div {
+    display: grid;
+
+    grid-template-columns: 8px 1fr auto;
+
+    align-items: center;
+
+    margin-bottom: 5px;
+
+    color: #74787c;
+
+    font-size: 7px;
+}
+
+.legend-dot {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+}
+
+.in-stock {
+    background-color: #25b88a;
+}
+
+.low-stock {
+    background-color: #f0a323;
+}
+
+.out-stock {
+    background-color: #e75d5d;
+}
+
+.inventory-legend strong {
+    color: #55595d;
+
+    font-size: 7px;
+    font-weight: 500;
+}
+
+
+/* =========================
+   ACTIVITY
+========================= */
+
+.activity-grid {
+    display: grid;
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 18px;
+
+    margin-bottom: 35px;
+}
+
+.activity-grid > .dashboard-card {
+    min-height: 275px;
+}
+
+
+/* =========================
+   LIST CONTAINERS
+========================= */
+
+.list-container {
+    min-height: 195px;
+
+    padding: 0 18px 18px;
+}
+
+
+/* =========================
+   EMPTY STATES
+========================= */
+
+.empty-state {
+    min-height: 90px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #a0a3a6;
+
+    font-size: 8px;
+
+    text-align: center;
+}
+
+
+/* =========================
+   ALGORITHM
+========================= */
+
+.algorithm-section {
+    margin-top: 10px;
+}
+
+.algorithm-section > h2 {
+    margin-bottom: 15px;
+
+    color: #343638;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.algorithm-grid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+}
+
+.algorithm-card {
+    min-height: 210px;
+
+    padding: 17px;
+}
+
+
+/* ALGORITHM HEADER */
+
+.algorithm-header {
+    display: grid;
+
+    grid-template-columns: 26px 1fr;
+
+    gap: 9px;
+
+    margin-bottom: 15px;
+}
+
+.algorithm-icon {
+    width: 25px;
+    height: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #f1f2f3;
+
+    border-radius: 4px;
+
+    color: #505458;
+
+    font-size: 12px;
+}
+
+.algorithm-header h3 {
+    margin-bottom: 4px;
+
+    color: #343638;
+
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.algorithm-header p {
+    color: #92969a;
+
+    font-size: 7px;
+    line-height: 1.5;
+}
+
+
+/* ALGORITHM CONTENT */
+
+.algorithm-content {
+    min-height: 90px;
+
+    background-color: #f7f7f7;
+
+    border-radius: 4px;
+}
+
+.algorithm-content .empty-state {
+    min-height: 90px;
+}
+
+
+/* ALGORITHM LINK */
+
+.algorithm-link {
+    display: inline-block;
+
+    margin-top: 12px;
+
+    color: #6f7377;
+
+    font-size: 7px;
+
+    text-decoration: none;
+}
+
+.algorithm-link:hover {
+    color: #272829;
+}
+
+
+/* =========================
+   HOVER
+========================= */
+
+.summary-card,
+.dashboard-card {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.summary-card:hover,
+.dashboard-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1100px) {
+
+    .summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .overview-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .algorithm-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 800px) {
+
+    .dashboard-main {
+        margin-left: 200px;
+    }
+
+    .dashboard-content {
+        padding: 25px;
+    }
+
+    .activity-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-topbar {
+        padding: 0 20px;
+    }
+
+    .dashboard-datetime {
+        gap: 7px;
+    }
+
+    #currentTime {
+        padding-left: 7px;
+    }
+
+}
