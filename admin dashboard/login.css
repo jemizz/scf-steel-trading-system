@@ -807,7 +807,6 @@ body {
 
 }
 
-
 @media (max-width: 430px) {
 
     .login-area {
@@ -818,4 +817,41 @@ body {
         font-size: 28px;
     }
 
+}
+
+/* =========================
+   INPUT ERROR STATE
+========================= */
+
+.input-wrapper input.input-error {
+    border-color: #d64545;
+    background-color: #fff8f8;
+    box-shadow: 0 0 0 3px rgba(214, 69, 69, 0.08);
+}
+
+.input-wrapper input.input-error:focus {
+    border-color: #d64545;
+    box-shadow: 0 0 0 3px rgba(214, 69, 69, 0.12);
+}
+
+
+/* =========================
+   DISABLED LOGIN BUTTON
+========================= */
+
+.login-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.login-btn:disabled:hover {
+    background-color: var(--dark);
+    transform: none;
+    box-shadow: none;
+}
+
+.login-btn:disabled:hover svg {
+    transform: none;
 }
