@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login - SCF Steel Trading</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- Login CSS -->
+    <link rel="stylesheet" href="login.css">
+</head>
+
+<body>
+
+    <main class="login-page">
+
+        <!-- =========================
+             LEFT SIDE
+        ========================== -->
+        <section class="login-brand">
+
+            <div class="brand-background"></div>
+            <div class="brand-overlay"></div>
+
+            <div class="brand-content">
+
+                <!-- LOGO -->
+                <a href="../product catalog/home1.html" class="login-logo">
+
+                    <img
+                        src="../pictures/logo1.png"
+                        alt="SCF Steel Trading Logo"
+                    >
+
+                    <div class="logo-text">
+                        <span>SCF Steel</span>
+                        <span>Trading</span>
+                    </div>
+
+                </a>
+
+
+                <!-- BRAND MESSAGE -->
+                <div class="brand-message">
+
+                    <div class="brand-label">
+                        <span></span>
+                        <p>ADMINISTRATION</p>
+                    </div>
+
+                    <h1>
+                        Manage your business<br>
+                        in one place.
+                    </h1>
+
+                    <p>
+                        Access SCF Steel Trading's inventory, sales,
+                        suppliers, purchase orders, fabrication jobs,
+                        reports, and business operations.
+                    </p>
+
+                </div>
+
+
+                <!-- BOTTOM TEXT -->
+                <div class="brand-footer">
+                    SCF Steel Trading Management System
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             RIGHT SIDE
+        ========================== -->
+        <section class="login-area">
+
+            <div class="login-container">
+
+
+                <!-- MOBILE LOGO -->
+                <div class="mobile-logo">
+
+                    <img
+                        src="../pictures/logo1.png"
+                        alt="SCF Steel Trading Logo"
+                    >
+
+                    <div>
+                        <span>SCF Steel</span>
+                        <span>Trading</span>
+                    </div>
+
+                </div>
+
+
+                <!-- LOGIN HEADER -->
+                <div class="login-header">
+
+                    <div class="login-label">
+                        <span></span>
+                        <p>ADMIN PORTAL</p>
+                    </div>
+
+                    <h2>Welcome back</h2>
+
+                    <p class="login-description">
+                        Sign in to access the SCF Steel Trading
+                        administration system.
+                    </p>
+
+                </div>
+
+
+                <!-- LOGIN FORM -->
+                <form
+                    class="login-form"
+                    id="loginForm"
+                    action="#"
+                    method="post"
+                >
+
+
+                    <!-- USERNAME -->
+                    <div class="form-group">
+
+                        <label for="username">
+                            Username
+                        </label>
+
+                        <div class="input-wrapper">
+
+                            <div class="input-icon">
+
+                                <svg viewBox="0 0 24 24">
+                                    <circle cx="12" cy="8" r="4"></circle>
+                                    <path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"></path>
+                                </svg>
+
+                            </div>
+
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                placeholder="Enter your username"
+                                autocomplete="username"
+                                required
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PASSWORD -->
+                    <div class="form-group">
+
+                        <div class="password-label">
+
+                            <label for="password">
+                                Password
+                            </label>
+
+                        </div>
+
+
+                        <div class="input-wrapper">
+
+                            <div class="input-icon">
+
+                                <svg viewBox="0 0 24 24">
+                                    <rect
+                                        x="5"
+                                        y="10"
+                                        width="14"
+                                        height="11"
+                                        rx="2"
+                                    ></rect>
+
+                                    <path
+                                        d="M8 10V7a4 4 0 0 1 8 0v3"
+                                    ></path>
+                                </svg>
+
+                            </div>
+
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                autocomplete="current-password"
+                                required
+                            >
+
+
+                            <!-- SHOW / HIDE PASSWORD -->
+                            <button
+                                type="button"
+                                class="password-toggle"
+                                id="passwordToggle"
+                                aria-label="Show password"
+                            >
+
+                                <svg
+                                    class="eye-open"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"
+                                    ></path>
+
+                                    <circle
+                                        cx="12"
+                                        cy="12"
+                                        r="3"
+                                    ></circle>
+                                </svg>
+
+
+                                <svg
+                                    class="eye-closed"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path d="M3 3l18 18"></path>
+
+                                    <path
+                                        d="M10.6 6.2A10.8 10.8 0 0 1 12 6c6.5 0 10 6 10 6a17.8 17.8 0 0 1-2.1 2.8"
+                                    ></path>
+
+                                    <path
+                                        d="M6.2 6.2C3.5 8 2 12 2 12s3.5 6 10 6a10.5 10.5 0 0 0 4.1-.8"
+                                    ></path>
+                                </svg>
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FORM OPTIONS -->
+                    <div class="form-options">
+
+                        <label class="remember-me">
+
+                            <input
+                                type="checkbox"
+                                id="rememberMe"
+                            >
+
+                            <span class="custom-checkbox">
+
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M5 12l4 4L19 6"></path>
+                                </svg>
+
+                            </span>
+
+                            <span>Remember me</span>
+
+                        </label>
+
+                    </div>
+
+
+                    <!-- ERROR MESSAGE -->
+                    <div
+                        class="login-message"
+                        id="loginMessage"
+                        aria-live="polite"
+                    ></div>
+
+
+                    <!-- LOGIN BUTTON -->
+                    <button
+                        type="submit"
+                        class="login-btn"
+                    >
+
+                        <span>Sign In</span>
+
+                        <svg viewBox="0 0 24 24">
+                            <path d="M5 12h14"></path>
+                            <path d="M14 7l5 5-5 5"></path>
+                        </svg>
+
+                    </button>
+
+                </form>
+
+
+                <!-- SECURITY NOTE -->
+                <div class="security-note">
+
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 3l7 3v5c0 5-3 8-7 10-4-2-7-5-7-10V6l7-3z"
+                        ></path>
+
+                        <path d="M9 12l2 2 4-4"></path>
+                    </svg>
+
+                    <p>
+                        Authorized personnel only. Access to this
+                        system is restricted to SCF Steel Trading
+                        administrators.
+                    </p>
+
+                </div>
+
+
+                <!-- BACK TO CATALOG -->
+                <a
+                    href="../product catalog/home1.html"
+                    class="catalog-link"
+                >
+
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 12H5"></path>
+                        <path d="M10 7l-5 5 5 5"></path>
+                    </svg>
+
+                    Back to Product Catalog
+
+                </a>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script src="login.js"></script>
+
+</body>
+
+</html>
