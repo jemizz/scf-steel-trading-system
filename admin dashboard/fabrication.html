@@ -43,27 +43,64 @@
       </section>
 
       <!-- SUMMARY -->
-      <section class="fab-summary-grid">
-        <div class="fab-summary-card">
-          <p class="fab-summary-label">PENDING</p>
-          <h2 id="pendingCount">0</h2>
-        </div>
+        <section class="fab-summary-grid" aria-label="Fabrication summary">
 
-        <div class="fab-summary-card">
-          <p class="fab-summary-label">SCHEDULED</p>
-          <h2 id="scheduledCount">0</h2>
-        </div>
+          <div class="fab-summary-card">
+            <p class="fab-summary-label">Pending</p>
+            <h2 id="pendingCount">0</h2>
+            <p class="fab-summary-note">Awaiting scheduling</p>
 
-        <div class="fab-summary-card">
-          <p class="fab-summary-label">IN PROGRESS</p>
-          <h2 id="inProgressCount">0</h2>
-        </div>
+            <span class="fab-summary-icon fab-icon-pending" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="8"></circle>
+                <path d="M12 7v5l3 2"></path>
+              </svg>
+            </span>
+          </div>
 
-        <div class="fab-summary-card">
-          <p class="fab-summary-label">COMPLETED</p>
-          <h2 id="completedCount">0</h2>
-        </div>
-      </section>
+          <div class="fab-summary-card">
+            <p class="fab-summary-label">Scheduled</p>
+            <h2 id="scheduledCount">0</h2>
+            <p class="fab-summary-note">Queued for fabrication</p>
+
+            <span class="fab-summary-icon fab-icon-scheduled" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <rect x="4" y="5" width="16" height="15" rx="2"></rect>
+                <path d="M8 3v4M16 3v4M4 10h16"></path>
+                <path d="M8 14h2M14 14h2"></path>
+              </svg>
+            </span>
+          </div>
+
+          <div class="fab-summary-card">
+            <p class="fab-summary-label">In Progress</p>
+            <h2 id="inProgressCount">0</h2>
+            <p class="fab-summary-note">Currently being processed</p>
+
+            <span class="fab-summary-icon fab-icon-progress" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M20 7v5h-5"></path>
+                <path d="M4 17v-5h5"></path>
+                <path d="M6.1 7a7 7 0 0 1 11.6-1L20 9"></path>
+                <path d="M17.9 17a7 7 0 0 1-11.6 1L4 15"></path>
+              </svg>
+            </span>
+          </div>
+
+          <div class="fab-summary-card">
+            <p class="fab-summary-label">Completed</p>
+            <h2 id="completedCount">0</h2>
+            <p class="fab-summary-note">Finished fabrication jobs</p>
+
+            <span class="fab-summary-icon fab-icon-completed" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="8"></circle>
+                <path d="m8 12 3 3 5-6"></path>
+              </svg>
+            </span>
+          </div>
+
+        </section>
 
       <!-- PANEL -->
       <section class="fab-panel">

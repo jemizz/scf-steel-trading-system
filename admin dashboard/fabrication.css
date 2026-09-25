@@ -1,8 +1,16 @@
 /* =========================
    GENERAL
 ========================= */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { margin: 0; padding: 0; }
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
 
 body {
   min-height: 100vh;
@@ -12,153 +20,248 @@ body {
 }
 
 /* =========================
-   MAIN
+   MAIN AND CONTENT
 ========================= */
+
 .fab-main {
   min-height: 100vh;
   margin-left: 230px;
   background-color: #f3f4f5;
 }
 
-/* =========================
-   CONTENT
-========================= */
+.fab-main > #topbar {
+  min-height: 58px;
+}
+
 .fab-content {
   width: 100%;
-  max-width: 1250px;
-  margin: 0 auto;
-  padding: 35px 32px 60px;
+  max-width: none;
+  margin: 0;
+  padding: 35px 29px 32px 32px;
+
+  font-size: 12px;
+}
+
+.fab-content button,
+.fab-content input,
+.fab-content select {
+  font-family: inherit;
 }
 
 /* =========================
    PAGE HEADER
 ========================= */
+
 .fab-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 14px;
+
+  min-height: 51px;
+  gap: 20px;
+  margin-bottom: 24px;
 }
 
 .fab-header h1 {
-  margin-bottom: 4px;
+  margin: 0;
+
   color: #272829;
-  font-size: 27px;
+  font-size: 28px;
   font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
 }
 
 .fab-header p {
-  color: #7b7f83;
+  margin: 4px 0 0;
+
+  color: #737b86;
   font-size: 10px;
+  font-weight: 400;
+  line-height: 1.5;
 }
 
 /* =========================
-   NEW REQUEST BUTTON
+   HEADER BUTTON
 ========================= */
-.new-request-btn {
-  height: 38px;
-  display: flex;
+
+.fab-header .new-request-btn {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 7px;
 
-  padding: 0 16px;
+  min-width: 110px;
+  height: 40px;
+  padding: 0 17px;
 
-  background-color: #272829;
   color: #ffffff;
+  background-color: #272829;
 
-  border: none;
+  border: 1px solid transparent;
   border-radius: 5px;
 
-  font-family: "Geologica", sans-serif;
-  font-size: 9px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
 
   cursor: pointer;
-
-  transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition: background-color 0.15s ease;
 }
 
-.new-request-btn:hover {
-  background-color: #3b3d40;
-  transform: translateY(-1px);
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+.fab-header .new-request-btn:hover {
+  background-color: #3b3d3f;
 }
 
 /* =========================
-   SUMMARY
+   SUMMARY CARDS
 ========================= */
+
 .fab-summary-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
-  margin-bottom: 20px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+
+  margin-bottom: 28px;
 }
 
 .fab-summary-card {
-  min-height: 78px;
-  padding: 14px 14px;
+  position: relative;
+
+  height: 117px;
+  min-height: 117px;
+  padding: 18px;
 
   background-color: #ffffff;
 
-  border: 1px solid #c9cbcd;
-  border-radius: 8px;
+  border: 1px solid #d7dbe0;
+  border-radius: 6px;
 
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.025);
 }
 
 .fab-summary-label {
-  margin-bottom: 8px;
-  color: #55595d;
-  font-size: 7px;
-  font-weight: 600;
-  letter-spacing: 0.6px;
+  margin: 0 44px 7px 0;
+
+  color: #747d88;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
 }
 
 .fab-summary-card h2 {
   margin: 0;
+
   color: #272829;
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 1;
+  font-size: 27px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: -0.6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.fab-summary-note {
+  margin: 8px 0 0;
+
+  color: #8a929d;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 15px;
+}
+
+.fab-summary-icon {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 38px;
+  height: 38px;
+
+  border-radius: 7px;
+}
+
+.fab-summary-icon svg {
+  width: 19px;
+  height: 19px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.fab-icon-pending {
+  color: #ae7b1c;
+  background-color: #fff4da;
+}
+
+.fab-icon-scheduled {
+  color: #617c8e;
+  background-color: #edf2f6;
+}
+
+.fab-icon-progress {
+  color: #3977c9;
+  background-color: #eaf1fc;
+}
+
+.fab-icon-completed {
+  color: #26987f;
+  background-color: #e7f4ef;
 }
 
 /* =========================
-   PANEL
+   TABLE PANEL
 ========================= */
+
 .fab-panel {
   overflow: hidden;
+
   background-color: #ffffff;
 
-  border: 1px solid #d8dadd;
+  border: 1px solid #d7dbe0;
   border-radius: 7px;
 
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.025);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.025);
 }
 
 /* =========================
    TOOLBAR
 ========================= */
+
 .fab-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 10px;
 
-  gap: 18px;
+  min-height: 75px;
   padding: 18px;
 
-  border-bottom: 1px solid #e8e9ea;
+  border-bottom: 1px solid #e5e7eb;
 }
 
 /* =========================
-   SEARCH (Sales-like)
+   SEARCH
 ========================= */
-.search-box {
+
+.fab-toolbar .search-box {
   position: relative;
-  flex: 1;
-  max-width: 500px;
+  flex: 1 1 auto;
+
+  width: 100%;
+  max-width: 620px;
+  min-width: 0;
 }
 
-.search-box svg {
+.fab-toolbar .search-box svg {
   position: absolute;
   top: 50%;
   left: 13px;
@@ -169,196 +272,335 @@ body {
   transform: translateY(-50%);
 
   fill: none;
-  stroke: #8a8e91;
-
+  stroke: #87909b;
   stroke-width: 1.7;
   stroke-linecap: round;
+
+  pointer-events: none;
 }
 
-.search-box input {
+.fab-toolbar .search-box input {
+  display: block;
+
   width: 100%;
-  height: 36px;
+  min-width: 0;
+  height: 39px;
+  padding: 0 13px 0 38px;
 
-  padding: 0 14px 0 38px;
-
+  color: #333a44;
   background-color: #ffffff;
 
-  border: 1px solid #d5d7da;
+  border: 1px solid #d3d8df;
   border-radius: 5px;
 
-  color: #272829;
-
-  font-family: "Geologica", sans-serif;
-  font-size: 9px;
+  font-size: 11px;
+  font-weight: 400;
 
   outline: none;
-
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.search-box input::placeholder { color: #a1a4a7; }
+.fab-toolbar .search-box input::placeholder {
+  color: #929aa6;
+  opacity: 1;
+}
 
-.search-box input:focus {
-  border-color: #85898d;
-  box-shadow: 0 0 0 3px rgba(39, 40, 41, 0.05);
+.fab-toolbar .search-box input:focus {
+  border-color: #8794a3;
 }
 
 /* =========================
    FILTERS
 ========================= */
+
 .fab-filters {
   display: flex;
+  flex-shrink: 0;
   gap: 10px;
+
+  margin-left: auto;
 }
 
 .fab-filters select {
-  min-width: 120px;
-  height: 36px;
-
+  width: 135px;
+  min-width: 0;
+  height: 39px;
   padding: 0 12px;
-  padding-right: 30px;
 
+  color: #3c4653;
   background-color: #ffffff;
-  color: #55595c;
 
-  border: 1px solid #d5d7da;
+  border: 1px solid #d3d8df;
   border-radius: 5px;
 
-  font-family: "Geologica", sans-serif;
-  font-size: 8px;
+  font-size: 10px;
+  font-weight: 400;
 
-  outline: none;
   cursor: pointer;
 }
 
-.fab-filters select:hover,
-.fab-filters select:focus {
+.fab-filters select:hover {
   border-color: #969a9e;
 }
 
 /* =========================
    TABLE
 ========================= */
-.table-wrapper {
+
+.fab-panel .table-wrapper {
   width: 100%;
+  min-height: 290px;
+
   overflow-x: auto;
 }
 
 .fab-table {
   width: 100%;
+  min-width: 850px;
+  margin: 0;
+
   border-collapse: collapse;
   table-layout: fixed;
-}
-
-.fab-table th {
-  height: 45px;
-  padding: 0 14px;
-
-  background-color: #fafafa;
-  color: #5c6064;
-
-  border-bottom: 1px solid #e2e3e4;
-
-  font-size: 7px;
-  font-weight: 600;
-  letter-spacing: 0.25px;
-
   text-align: left;
 }
 
+.fab-table th {
+  height: 48px;
+  padding: 0 14px;
+
+  color: #455469;
+  background-color: #f9f9fa;
+
+  border-bottom: 1px solid #dfe3e8;
+
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.35px;
+  text-align: left;
+  text-transform: uppercase;
+}
+
 .fab-table td {
-  height: 62px;
-  padding: 9px 14px;
+  height: 49px;
+  padding: 8px 14px;
 
-  color: #55595d;
-  border-bottom: 1px solid #eeeeee;
+  color: #3d4652;
 
-  font-size: 8px;
+  border-bottom: 1px solid #edf0f2;
+
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+
   vertical-align: middle;
+  overflow-wrap: anywhere;
+}
+
+.fab-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.fab-table tbody tr:hover {
+  background-color: #fafbfc;
 }
 
 /* Column widths */
-.fab-table th:nth-child(1) { width: 11%; } /* JOB ID */
-.fab-table th:nth-child(2) { width: 14%; } /* CUSTOMER */
-.fab-table th:nth-child(3) { width: 10%; } /* DUE DATE */
-.fab-table th:nth-child(4) { width: 11%; } /* SERVICE */
-.fab-table th:nth-child(5) { width: 22%; } /* DESCRIPTION */
-.fab-table th:nth-child(6) { width: 7%;  } /* QTY */
-.fab-table th:nth-child(7) { width: 12%; } /* STATUS */
-.fab-table th:nth-child(8) { width: 13%; } /* ACTIONS */
+.fab-table th:nth-child(1) {
+  width: 11%;
+}
 
-.fab-table tbody tr { transition: background-color 0.15s ease; }
-.fab-table tbody tr:hover { background-color: #fafafa; }
+.fab-table th:nth-child(2) {
+  width: 14%;
+}
 
-.actions-heading { text-align: center !important; }
+.fab-table th:nth-child(3) {
+  width: 10%;
+}
 
-/* =========================
-   EMPTY STATE (same as Sales)
-========================= */
-.fab-empty {
-  min-height: 280px;
+.fab-table th:nth-child(4) {
+  width: 11%;
+}
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+.fab-table th:nth-child(5) {
+  width: 22%;
+}
 
-  color: #8c9094;
+.fab-table th:nth-child(6) {
+  width: 7%;
+}
+
+.fab-table th:nth-child(7) {
+  width: 12%;
+}
+
+.fab-table th:nth-child(8) {
+  width: 13%;
+}
+
+.fab-table .actions-heading,
+.fab-table td:last-child {
   text-align: center;
 }
 
-.empty-icon {
-  width: 45px;
-  height: 45px;
+/* =========================
+   STATUS BADGES
+========================= */
 
+.fab-table .status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 22px;
+  padding: 3px 8px;
+
+  border-radius: 4px;
+
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.fab-table .status-pending {
+  color: #ae7b1c;
+  background-color: #fff4da;
+}
+
+.fab-table .status-scheduled {
+  color: #617c8e;
+  background-color: #edf2f6;
+}
+
+.fab-table .status-in-progress {
+  color: #3977c9;
+  background-color: #eaf1fc;
+}
+
+.fab-table .status-completed {
+  color: #279160;
+  background-color: #e6f5eb;
+}
+
+.fab-table .status-cancelled {
+  color: #d95858;
+  background-color: #fde9e9;
+}
+
+/* =========================
+   TABLE ACTIONS
+========================= */
+
+.fab-table button {
+  font-family: inherit;
+  font-size: 10px;
+}
+
+.fab-table .view-button,
+.fab-table .view-btn {
+  padding: 6px 8px;
+
+  color: #6e7782;
+  background-color: transparent;
+
+  border: none;
+  border-radius: 4px;
+
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.fab-table .view-button:hover,
+.fab-table .view-btn:hover {
+  color: #272829;
+  background-color: #f0f2f4;
+}
+
+/* =========================
+   EMPTY STATE
+========================= */
+
+.fab-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding: 80px 20px 45px;
+
+  color: #87919e;
+  text-align: center;
+}
+
+.fab-empty[hidden] {
+  display: none;
+}
+
+.fab-empty .empty-icon {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  margin-bottom: 13px;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 14px;
 
+  color: #7c858f;
   background-color: #f0f1f2;
+
   border-radius: 50%;
 }
 
-.empty-icon svg {
+.fab-empty .empty-icon svg {
   width: 20px;
   height: 20px;
 
   fill: none;
-  stroke: #73777a;
-
+  stroke: currentColor;
   stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
 .fab-empty h3 {
-  margin-bottom: 5px;
-  color: #4c5053;
-  font-size: 10px;
+  margin: 0;
+
+  color: #46546a;
+  font-size: 13px;
   font-weight: 500;
+  line-height: 1.5;
 }
 
-.fab-empty p { font-size: 8px; }
+.fab-empty p {
+  max-width: 320px;
+  margin: 6px 0 0;
+
+  color: #87919e;
+  font-size: 10px;
+  line-height: 1.6;
+}
 
 /* =========================
-   TABLE FOOTER + PAGINATION (same as Sales)
+   FOOTER AND PAGINATION
 ========================= */
-.fab-table-footer {
-  min-height: 55px;
 
+.fab-table-footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
 
-  padding: 0 18px;
+  min-height: 55px;
+  padding: 12px 18px;
+
   border-top: 1px solid #e8e9ea;
 }
 
 .fab-table-footer p {
+  margin: 0;
+
   color: #898d90;
-  font-size: 7.5px;
+  font-size: 10px;
+  line-height: 1.5;
 }
 
 .fab-table-footer strong {
@@ -366,86 +608,163 @@ body {
   font-weight: 500;
 }
 
-.pagination {
+.fab-table-footer .pagination {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.pagination button {
-  width: 27px;
-  height: 27px;
-
+.fab-table-footer .pagination button,
+.fab-table-footer .pagination span {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background-color: #ffffff;
+  min-width: 27px;
+  height: 27px;
+
+  border-radius: 4px;
+
+  font-family: inherit;
+  font-size: 10px;
+}
+
+.fab-table-footer .pagination button {
   color: #666a6e;
+  background-color: #ffffff;
 
   border: 1px solid #dddddd;
-  border-radius: 4px;
 
   cursor: pointer;
 }
 
-.pagination button:hover:not(:disabled) { background-color: #f2f3f4; }
-.pagination button:disabled { opacity: 0.4; cursor: default; }
+.fab-table-footer .pagination button:hover:not(:disabled) {
+  background-color: #f2f3f4;
+}
 
-.pagination span {
-  min-width: 27px;
-  height: 27px;
+.fab-table-footer .pagination button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  background-color: #272829;
+.fab-table-footer .pagination span {
   color: #ffffff;
+  background-color: #272829;
+}
 
-  border-radius: 4px;
+/* =========================
+   KEYBOARD FOCUS
+========================= */
 
-  font-size: 8px;
+.fab-content button:focus-visible,
+.fab-content select:focus-visible {
+  outline: 2px solid #8a9fb8;
+  outline-offset: 3px;
 }
 
 /* =========================
    RESPONSIVE
 ========================= */
+
 @media (max-width: 1100px) {
-  .fab-summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .fab-content {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+
+  .fab-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fab-toolbar .search-box {
+    max-width: none;
+  }
+
+  .fab-filters select {
+    width: 120px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Matches the sales layout when the sidebar becomes an overlay. */
+  .fab-main {
+    margin-left: 0;
+  }
+
+  .fab-content {
+    padding: 24px 18px;
+  }
+
+  .fab-header h1 {
+    font-size: 24px;
+  }
 
   .fab-toolbar {
-    align-items: stretch;
-    flex-direction: column;
+    flex-wrap: wrap;
   }
 
-  .search-box { max-width: none; }
+  .fab-toolbar .search-box {
+    flex: 1 0 100%;
+  }
 
-  .fab-filters { width: 100%; }
+  .fab-filters {
+    width: 100%;
+    margin-left: 0;
+  }
 
-  .fab-filters select { flex: 1; }
+  .fab-filters select {
+    flex: 1;
+    width: 0;
+  }
 }
 
-@media (max-width: 800px) {
-  .fab-main { margin-left: 200px; }
-  .fab-content { padding: 25px; }
-}
-
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   .fab-header {
     align-items: flex-start;
-    flex-direction: column;
-    gap: 18px;
+    gap: 12px;
   }
 
-  .fab-header h1 { font-size: 23px; }
+  .fab-header h1 {
+    font-size: 21px;
+  }
 
-  .fab-summary-grid { grid-template-columns: 1fr; }
+  .fab-header .new-request-btn {
+    min-width: 94px;
+    padding: 0 12px;
+  }
+
+  .fab-summary-grid {
+    gap: 12px;
+  }
+
+  .fab-summary-card {
+    padding: 14px;
+  }
+
+  .fab-summary-label {
+    margin-right: 34px;
+    font-size: 9px;
+  }
+
+  .fab-summary-card h2 {
+    font-size: 23px;
+  }
+
+  .fab-summary-icon {
+    top: 14px;
+    right: 14px;
+
+    width: 30px;
+    height: 30px;
+  }
+
+  .fab-summary-icon svg {
+    width: 16px;
+    height: 16px;
+  }
 
   .fab-table-footer {
     align-items: flex-start;
     flex-direction: column;
-    gap: 12px;
-    padding: 14px 18px;
   }
 }
