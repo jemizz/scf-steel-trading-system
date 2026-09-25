@@ -1,16 +1,8 @@
 /* =========================
    GENERAL
 ========================= */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-html, body {
-  margin: 0;
-  padding: 0;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
 
 body {
   min-height: 100vh;
@@ -19,110 +11,170 @@ body {
   font-family: "Geologica", sans-serif;
 }
 
-
 /* =========================
    MAIN
 ========================= */
-.suppliers-main {
+.sr-main {
   min-height: 100vh;
   margin-left: 230px;
   background-color: #f3f4f5;
 }
 
-
 /* =========================
    CONTENT
 ========================= */
-.suppliers-content {
+.sr-content {
   width: 100%;
   max-width: 1250px;
   margin: 0 auto;
   padding: 35px 32px 60px;
 }
 
-
 /* =========================
-   PAGE HEADER
+   HEADER
 ========================= */
-.suppliers-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 30px;
+.sr-header {
+  margin-bottom: 14px;
 }
 
-.suppliers-header h1 {
+.sr-header h1 {
   margin-bottom: 4px;
   color: #272829;
   font-size: 27px;
   font-weight: 600;
 }
 
-.suppliers-header p {
+.sr-header p {
   color: #7b7f83;
   font-size: 10px;
 }
 
-
-/* ADD BUTTON */
-.add-supplier-btn {
-  height: 38px;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-
-  padding: 0 16px;
-
-  background-color: #272829;
-  color: #ffffff;
-
-  border: none;
-  border-radius: 5px;
-
-  font-family: "Geologica", sans-serif;
-  font-size: 9px;
-  font-weight: 500;
-
-  cursor: pointer;
-
-  transition:
-    background-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+/* =========================
+   SUMMARY
+========================= */
+.sr-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
 }
 
-.add-supplier-btn:hover {
-  background-color: #3b3d40;
-  transform: translateY(-1px);
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+.sr-summary-card {
+  min-height: 78px;
+  padding: 14px 14px;
+  background-color: #ffffff;
+  border: 1px solid #c9cbcd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
 }
 
-.plus {
-  font-size: 15px;
-  font-weight: 300;
+.sr-summary-label {
+  margin-bottom: 8px;
+  color: #55595d;
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+}
+
+.sr-summary-card h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 600;
   line-height: 1;
 }
 
+/* number colors (like screenshot) */
+.sr-summary-card.urgent h2 { color: #d93636; }
+.sr-summary-card.recommended h2 { color: #f0a323; }
+.sr-summary-card.monitor h2 { color: #2b6fe8; }
+.sr-summary-card.ok h2 { color: #25b88a; }
 
 /* =========================
-   PANEL
+   RECOMMENDATION SECTION
 ========================= */
-.suppliers-panel {
-  overflow: hidden;
+.sr-reco-section {
+  margin-bottom: 18px;
+}
 
+.sr-reco-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+/* Empty state (cards area) */
+.sr-reco-empty {
+  min-height: 210px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
   background-color: #ffffff;
 
   border: 1px solid #d8dadd;
   border-radius: 7px;
 
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.025);
+
+  color: #8c9094;
+  text-align: center;
 }
 
+/* shared empty icon style (same as Sales) */
+.empty-icon {
+  width: 45px;
+  height: 45px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin-bottom: 13px;
+
+  background-color: #f0f1f2;
+  border-radius: 50%;
+}
+
+.empty-icon svg {
+  width: 20px;
+  height: 20px;
+
+  fill: none;
+  stroke: #73777a;
+
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.sr-reco-empty h3 {
+  margin-bottom: 5px;
+  color: #4c5053;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.sr-reco-empty p {
+  font-size: 8px;
+}
+
+/* =========================
+   TABLE PANEL
+========================= */
+.sr-panel {
+  overflow: hidden;
+  background-color: #ffffff;
+  border: 1px solid #d8dadd;
+  border-radius: 7px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.025);
+}
 
 /* =========================
    TOOLBAR
 ========================= */
-.suppliers-toolbar {
+.sr-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -133,20 +185,15 @@ body {
   border-bottom: 1px solid #e8e9ea;
 }
 
-
-/* =========================
-   SEARCH
-========================= */
+/* SEARCH (same pattern as Sales) */
 .search-box {
   position: relative;
-
   flex: 1;
-  max-width: 620px;
+  max-width: 500px;
 }
 
 .search-box svg {
   position: absolute;
-
   top: 50%;
   left: 13px;
 
@@ -180,34 +227,28 @@ body {
 
   outline: none;
 
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.search-box input::placeholder {
-  color: #a1a4a7;
-}
+.search-box input::placeholder { color: #a1a4a7; }
 
 .search-box input:focus {
   border-color: #85898d;
   box-shadow: 0 0 0 3px rgba(39, 40, 41, 0.05);
 }
 
-
-/* =========================
-   FILTERS
-========================= */
-.supplier-filters {
+/* FILTERS */
+.sr-filters {
   display: flex;
   gap: 10px;
 }
 
-.supplier-filters select {
-  min-width: 180px;
+.sr-filters select {
+  min-width: 120px;
   height: 36px;
 
-  padding: 0 30px 0 12px;
+  padding: 0 12px;
+  padding-right: 30px;
 
   background-color: #ffffff;
   color: #55595c;
@@ -222,11 +263,10 @@ body {
   cursor: pointer;
 }
 
-.supplier-filters select:hover,
-.supplier-filters select:focus {
+.sr-filters select:hover,
+.sr-filters select:focus {
   border-color: #969a9e;
 }
-
 
 /* =========================
    TABLE
@@ -234,18 +274,16 @@ body {
 .table-wrapper {
   width: 100%;
   overflow-x: auto;
-  position: relative;
 }
 
-.suppliers-table {
+.sr-table {
   width: 100%;
   border-collapse: collapse;
   table-layout: fixed;
 }
 
-.suppliers-table th {
+.sr-table th {
   height: 45px;
-
   padding: 0 14px;
 
   background-color: #fafafa;
@@ -255,15 +293,13 @@ body {
 
   font-size: 7px;
   font-weight: 600;
-
   letter-spacing: 0.25px;
 
   text-align: left;
 }
 
-.suppliers-table td {
+.sr-table td {
   height: 62px;
-
   padding: 9px 14px;
 
   color: #55595d;
@@ -271,37 +307,25 @@ body {
   border-bottom: 1px solid #eeeeee;
 
   font-size: 8px;
-
   vertical-align: middle;
 }
 
-.suppliers-table tbody tr {
-  transition: background-color 0.15s ease;
-}
+/* COLUMN WIDTHS */
+.sr-table th:nth-child(1) { width: 20%; } /* product */
+.sr-table th:nth-child(2) { width: 12%; } /* category */
+.sr-table th:nth-child(3) { width: 10%; } /* current stock */
+.sr-table th:nth-child(4) { width: 10%; } /* reorder level */
+.sr-table th:nth-child(5) { width: 10%; } /* recent sales */
+.sr-table th:nth-child(6) { width: 12%; } /* suggested order */
+.sr-table th:nth-child(7) { width: 10%; } /* stock gap */
+.sr-table th:nth-child(8) { width: 16%; } /* recommended */
 
-.suppliers-table tbody tr:hover {
-  background-color: #fafafa;
-}
-
-/* Column widths (adjust anytime) */
-.suppliers-table th:nth-child(1) { width: 10%; }
-.suppliers-table th:nth-child(2) { width: 18%; }
-.suppliers-table th:nth-child(3) { width: 12%; }
-.suppliers-table th:nth-child(4) { width: 12%; }
-.suppliers-table th:nth-child(5) { width: 17%; }
-.suppliers-table th:nth-child(6) { width: 15%; }
-.suppliers-table th:nth-child(7) { width: 8%; }
-.suppliers-table th:nth-child(8) { width: 8%; }
-
-.actions-heading {
-  text-align: center !important;
-}
-
+.actions-heading { text-align: center !important; }
 
 /* =========================
-   EMPTY STATE (Sales-style)
+   EMPTY STATE (table)
 ========================= */
-.suppliers-empty {
+.sr-empty {
   min-height: 280px;
 
   display: flex;
@@ -309,57 +333,23 @@ body {
   align-items: center;
   justify-content: center;
 
-  padding: 30px;
-
   color: #8c9094;
-
   text-align: center;
 }
 
-.empty-icon {
-  width: 45px;
-  height: 45px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin-bottom: 13px;
-
-  background-color: #f0f1f2;
-
-  border-radius: 50%;
-}
-
-.empty-icon svg {
-  width: 20px;
-  height: 20px;
-
-  fill: none;
-  stroke: #73777a;
-
-  stroke-width: 1.5;
-  stroke-linejoin: round;
-}
-
-.suppliers-empty h3 {
+.sr-empty h3 {
   margin-bottom: 5px;
-
   color: #4c5053;
-
   font-size: 10px;
   font-weight: 500;
 }
 
-.suppliers-empty p {
-  font-size: 8px;
-}
-
+.sr-empty p { font-size: 8px; }
 
 /* =========================
-   TABLE FOOTER (Sales-style)
+   TABLE FOOTER + PAGINATION (same pattern)
 ========================= */
-.suppliers-table-footer {
+.sr-table-footer {
   min-height: 55px;
 
   display: flex;
@@ -367,24 +357,19 @@ body {
   justify-content: space-between;
 
   padding: 0 18px;
-
   border-top: 1px solid #e8e9ea;
 }
 
-.suppliers-table-footer p {
+.sr-table-footer p {
   color: #898d90;
   font-size: 7.5px;
 }
 
-.suppliers-table-footer strong {
+.sr-table-footer strong {
   color: #5b5f62;
-  font-weight: 600;
+  font-weight: 500;
 }
 
-
-/* =========================
-   PAGINATION (Sales-style)
-========================= */
 .pagination {
   display: flex;
   align-items: center;
@@ -408,14 +393,8 @@ body {
   cursor: pointer;
 }
 
-.pagination button:hover:not(:disabled) {
-  background-color: #f2f3f4;
-}
-
-.pagination button:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
+.pagination button:hover:not(:disabled) { background-color: #f2f3f4; }
+.pagination button:disabled { opacity: 0.4; cursor: default; }
 
 .pagination span {
   min-width: 27px;
@@ -433,48 +412,39 @@ body {
   font-size: 8px;
 }
 
-
 /* =========================
    RESPONSIVE
 ========================= */
+@media (max-width: 1100px) {
+  .sr-summary-grid { grid-template-columns: repeat(2, 1fr); }
+  .sr-reco-grid { grid-template-columns: 1fr; }
+}
+
 @media (max-width: 1000px) {
-  .suppliers-toolbar {
+  .sr-toolbar {
     align-items: stretch;
     flex-direction: column;
   }
 
-  .search-box {
-    max-width: none;
-  }
+  .search-box { max-width: none; }
+  .sr-filters { width: 100%; }
 
-  .supplier-filters {
-    width: 100%;
-  }
-
-  .supplier-filters select {
-    width: 100%;
+  .sr-filters select {
+    flex: 1;
     min-width: 0;
   }
 }
 
 @media (max-width: 800px) {
-  .suppliers-main {
-    margin-left: 200px;
-  }
-
-  .suppliers-content {
-    padding: 25px;
-  }
+  .sr-main { margin-left: 200px; }
+  .sr-content { padding: 25px; }
 }
 
 @media (max-width: 600px) {
-  .suppliers-header {
+  .sr-table-footer {
     align-items: flex-start;
     flex-direction: column;
-    gap: 18px;
-  }
-
-  .suppliers-header h1 {
-    font-size: 23px;
+    gap: 12px;
+    padding: 14px 18px;
   }
 }

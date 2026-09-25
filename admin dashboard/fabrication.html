@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Fabrication - SCF Steel Trading</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="topbar.css">
+  <link rel="stylesheet" href="fabrication.css">
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar"></div>
+
+  <!-- MAIN -->
+  <main class="fab-main">
+
+    <!-- TOP BAR (component) -->
+    <div id="topbar" data-page-title="Fabrication"></div>
+
+    <!-- CONTENT -->
+    <div class="fab-content">
+
+      <!-- PAGE HEADER -->
+      <section class="fab-header">
+        <div>
+          <h1>Fabrication Services</h1>
+          <p>Custom metal and roofing fabrication job management</p>
+        </div>
+
+        <button type="button" class="new-request-btn" id="newRequestBtn">
+          New Request
+        </button>
+      </section>
+
+      <!-- SUMMARY -->
+      <section class="fab-summary-grid">
+        <div class="fab-summary-card">
+          <p class="fab-summary-label">PENDING</p>
+          <h2 id="pendingCount">0</h2>
+        </div>
+
+        <div class="fab-summary-card">
+          <p class="fab-summary-label">SCHEDULED</p>
+          <h2 id="scheduledCount">0</h2>
+        </div>
+
+        <div class="fab-summary-card">
+          <p class="fab-summary-label">IN PROGRESS</p>
+          <h2 id="inProgressCount">0</h2>
+        </div>
+
+        <div class="fab-summary-card">
+          <p class="fab-summary-label">COMPLETED</p>
+          <h2 id="completedCount">0</h2>
+        </div>
+      </section>
+
+      <!-- PANEL -->
+      <section class="fab-panel">
+
+        <!-- TOOLBAR -->
+        <div class="fab-toolbar">
+
+          <!-- SEARCH -->
+          <div class="search-box">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="M20 20l-4-4"></path>
+            </svg>
+
+            <input
+              type="search"
+              id="fabSearch"
+              placeholder="Search transaction, customer..."
+              autocomplete="off"
+            >
+          </div>
+
+          <!-- FILTERS -->
+          <div class="fab-filters">
+            <select id="priorityFilter">
+              <option value="">All Priority</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+
+            <select id="statusFilter">
+              <option value="">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="scheduled">Scheduled</option>
+              <option value="in-progress">In Progress</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-wrapper">
+          <table class="fab-table">
+            <thead>
+              <tr>
+                <th>JOB ID</th>
+                <th>CUSTOMER</th>
+                <th>DUE DATE</th>
+                <th>SERVICE</th>
+                <th>DESCRIPTION</th>
+                <th>QTY</th>
+                <th>STATUS</th>
+                <th class="actions-heading">ACTIONS</th>
+              </tr>
+            </thead>
+
+            <tbody id="fabTableBody"></tbody>
+          </table>
+
+          <!-- EMPTY STATE (shown by default) -->
+          <div class="fab-empty" id="fabEmptyState">
+            <div class="empty-icon">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"></path>
+                <path d="M9 8h6"></path>
+                <path d="M9 12h6"></path>
+              </svg>
+            </div>
+
+            <h3>No fabrication requests yet</h3>
+            <p>Fabrication jobs will appear here once created.</p>
+          </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="fab-table-footer">
+          <p>
+            Showing
+            <strong id="visibleFabCount">0</strong>
+            of
+            <strong id="totalFabCount">0</strong>
+            jobs
+          </p>
+
+          <div class="pagination">
+            <button type="button" id="previousPage" disabled>‹</button>
+            <span id="currentPage">1</span>
+            <button type="button" id="nextPage" disabled>›</button>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <script src="sidebar.js"></script>
+  <script src="topbar.js"></script>
+  <script src="fabrication.js"></script>
+</body>
+</html>
