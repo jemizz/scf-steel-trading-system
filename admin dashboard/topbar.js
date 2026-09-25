@@ -22,7 +22,9 @@ document.addEventListener("DOMContentLoaded", function () {
         .then(function (response) {
 
             if (!response.ok) {
-                throw new Error("Could not load topbar.html");
+                throw new Error(
+                    "Could not load topbar.html"
+                );
             }
 
             return response.text();
@@ -34,14 +36,17 @@ document.addEventListener("DOMContentLoaded", function () {
             topbarContainer.innerHTML = html;
 
 
-            // Set current page title
+            // Set page title
             setTopbarTitle(pageTitle);
 
 
             // Start date and time
             updateDateTime();
 
-            setInterval(updateDateTime, 1000);
+            setInterval(
+                updateDateTime,
+                1000
+            );
 
 
             // Start topbar features
@@ -72,7 +77,9 @@ document.addEventListener("DOMContentLoaded", function () {
 function setTopbarTitle(title) {
 
     const titleElement =
-        document.getElementById("topbarPageTitle");
+        document.getElementById(
+            "topbarPageTitle"
+        );
 
 
     if (!titleElement) {
@@ -92,10 +99,14 @@ function setTopbarTitle(title) {
 function updateDateTime() {
 
     const dateElement =
-        document.getElementById("currentDate");
+        document.getElementById(
+            "currentDate"
+        );
 
     const timeElement =
-        document.getElementById("currentTime");
+        document.getElementById(
+            "currentTime"
+        );
 
 
     if (!dateElement || !timeElement) {
@@ -107,21 +118,27 @@ function updateDateTime() {
 
 
     const formattedDate =
-        now.toLocaleDateString("en-US", {
-            weekday: "short",
-            month: "short",
-            day: "numeric",
-            year: "numeric"
-        });
+        now.toLocaleDateString(
+            "en-US",
+            {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            }
+        );
 
 
     const formattedTime =
-        now.toLocaleTimeString("en-US", {
-            hour: "numeric",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: true
-        });
+        now.toLocaleTimeString(
+            "en-US",
+            {
+                hour: "numeric",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true
+            }
+        );
 
 
     dateElement.textContent =
@@ -141,10 +158,14 @@ function updateDateTime() {
 function setupQuickAccess() {
 
     const button =
-        document.getElementById("quickAccessBtn");
+        document.getElementById(
+            "quickAccessBtn"
+        );
 
     const menu =
-        document.getElementById("quickAccessMenu");
+        document.getElementById(
+            "quickAccessMenu"
+        );
 
 
     if (!button || !menu) {
@@ -152,28 +173,40 @@ function setupQuickAccess() {
     }
 
 
-    // OPEN / CLOSE QUICK ACCESS MENU
-    button.addEventListener("click", function (event) {
+    // =========================
+    // OPEN / CLOSE MENU
+    // =========================
 
-        event.stopPropagation();
+    button.addEventListener(
+        "click",
+        function (event) {
 
-
-        const isOpen =
-            menu.classList.contains("show");
-
-
-        closeTopbarMenus();
+            event.stopPropagation();
 
 
-        if (!isOpen) {
+            const isOpen =
+                menu.classList.contains(
+                    "show"
+                );
 
-            menu.classList.add("show");
 
-            button.classList.add("active");
+            closeTopbarMenus();
+
+
+            if (!isOpen) {
+
+                menu.classList.add(
+                    "show"
+                );
+
+                button.classList.add(
+                    "active"
+                );
+
+            }
 
         }
-
-    });
+    );
 
 
     // =========================
@@ -181,7 +214,9 @@ function setupQuickAccess() {
     // =========================
 
     const newTransactionButton =
-        document.getElementById("quickNewTransaction");
+        document.getElementById(
+            "quickNewTransaction"
+        );
 
 
     if (newTransactionButton) {
@@ -201,11 +236,39 @@ function setupQuickAccess() {
 
 
     // =========================
+    // NEW PURCHASE ORDER
+    // =========================
+
+    const newPurchaseOrderButton =
+        document.getElementById(
+            "quickNewPurchaseOrder"
+        );
+
+
+    if (newPurchaseOrderButton) {
+
+        newPurchaseOrderButton.addEventListener(
+            "click",
+            function () {
+
+                closeTopbarMenus();
+
+                openNewPurchaseOrder();
+
+            }
+        );
+
+    }
+
+
+    // =========================
     // STOCK IN
     // =========================
 
     const stockInButton =
-        document.getElementById("quickStockIn");
+        document.getElementById(
+            "quickStockIn"
+        );
 
 
     if (stockInButton) {
@@ -215,12 +278,6 @@ function setupQuickAccess() {
             function () {
 
                 closeTopbarMenus();
-
-
-                /*
-                    We will connect this to the
-                    Stock In modal later.
-                */
 
                 console.log(
                     "Stock In selected"
@@ -237,7 +294,9 @@ function setupQuickAccess() {
     // =========================
 
     const stockOutButton =
-        document.getElementById("quickStockOut");
+        document.getElementById(
+            "quickStockOut"
+        );
 
 
     if (stockOutButton) {
@@ -247,12 +306,6 @@ function setupQuickAccess() {
             function () {
 
                 closeTopbarMenus();
-
-
-                /*
-                    We will connect this to the
-                    Stock Out modal later.
-                */
 
                 console.log(
                     "Stock Out selected"
@@ -269,7 +322,9 @@ function setupQuickAccess() {
     // =========================
 
     const addProductButton =
-        document.getElementById("quickAddProduct");
+        document.getElementById(
+            "quickAddProduct"
+        );
 
 
     if (addProductButton) {
@@ -279,12 +334,6 @@ function setupQuickAccess() {
             function () {
 
                 closeTopbarMenus();
-
-
-                /*
-                    We will connect this to the
-                    Add Product modal later.
-                */
 
                 console.log(
                     "Add Product selected"
@@ -304,26 +353,30 @@ function setupQuickAccess() {
 
 function openNewTransaction() {
 
-    /*
-        Prevent the transaction modal
-        from opening more than once.
-    */
-
     const existingModal =
         document.getElementById(
             "transactionOverlay"
         );
 
 
+    // Modal already exists
     if (existingModal) {
+
+        if (
+            typeof initializeTransactionModal ===
+            "function"
+        ) {
+
+            initializeTransactionModal();
+
+        }
+
         return;
+
     }
 
 
-    /*
-        Load the transaction modal HTML.
-    */
-
+    // Load modal HTML
     fetch("new-transaction.html")
 
         .then(function (response) {
@@ -336,17 +389,11 @@ function openNewTransaction() {
 
             }
 
-
             return response.text();
 
         })
 
         .then(function (html) {
-
-            /*
-                Add the modal HTML at the
-                end of the current page.
-            */
 
             document.body.insertAdjacentHTML(
                 "beforeend",
@@ -354,11 +401,7 @@ function openNewTransaction() {
             );
 
 
-            /*
-                Check if new-transaction.js
-                was already loaded before.
-            */
-
+            // Check if JS is already loaded
             const existingScript =
                 document.getElementById(
                     "newTransactionScript"
@@ -366,11 +409,6 @@ function openNewTransaction() {
 
 
             if (existingScript) {
-
-                /*
-                    JS already exists,
-                    just initialize the modal.
-                */
 
                 if (
                     typeof initializeTransactionModal ===
@@ -381,18 +419,16 @@ function openNewTransaction() {
 
                 }
 
-
                 return;
 
             }
 
 
-            /*
-                Load new-transaction.js.
-            */
-
+            // Load JS
             const script =
-                document.createElement("script");
+                document.createElement(
+                    "script"
+                );
 
 
             script.id =
@@ -447,6 +483,168 @@ function openNewTransaction() {
 
 
 // =========================
+// OPEN NEW PURCHASE ORDER
+// =========================
+
+function openNewPurchaseOrder() {
+
+    const existingModal =
+        document.getElementById(
+            "purchaseOrderOverlay"
+        );
+
+
+    // Modal already exists
+    if (existingModal) {
+
+        if (
+            typeof openPurchaseOrderModal ===
+            "function"
+        ) {
+
+            openPurchaseOrderModal();
+
+        } else {
+
+            existingModal.classList.add(
+                "show"
+            );
+
+        }
+
+        return;
+
+    }
+
+
+    // Load Purchase Order HTML
+    fetch("new-purchase-order.html")
+
+        .then(function (response) {
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Could not load new-purchase-order.html"
+                );
+
+            }
+
+            return response.text();
+
+        })
+
+        .then(function (html) {
+
+            // Insert modal
+            document.body.insertAdjacentHTML(
+                "beforeend",
+                html
+            );
+
+
+            // Check if script already exists
+            const existingScript =
+                document.getElementById(
+                    "newPurchaseOrderScript"
+                );
+
+
+            if (existingScript) {
+
+                if (
+                    typeof initializePurchaseOrderModal ===
+                    "function"
+                ) {
+
+                    initializePurchaseOrderModal();
+
+                }
+
+
+                if (
+                    typeof openPurchaseOrderModal ===
+                    "function"
+                ) {
+
+                    openPurchaseOrderModal();
+
+                }
+
+                return;
+
+            }
+
+
+            // Create script
+            const script =
+                document.createElement(
+                    "script"
+                );
+
+
+            script.id =
+                "newPurchaseOrderScript";
+
+
+            script.src =
+                "new-purchase-order.js";
+
+
+            script.onload =
+                function () {
+
+                    if (
+                        typeof initializePurchaseOrderModal ===
+                        "function"
+                    ) {
+
+                        initializePurchaseOrderModal();
+
+                    }
+
+
+                    if (
+                        typeof openPurchaseOrderModal ===
+                        "function"
+                    ) {
+
+                        openPurchaseOrderModal();
+
+                    }
+
+                };
+
+
+            script.onerror =
+                function () {
+
+                    console.error(
+                        "Could not load new-purchase-order.js"
+                    );
+
+                };
+
+
+            document.body.appendChild(
+                script
+            );
+
+        })
+
+        .catch(function (error) {
+
+            console.error(
+                "New Purchase Order error:",
+                error
+            );
+
+        });
+
+}
+
+
+// =========================
 // NOTIFICATIONS
 // =========================
 
@@ -468,7 +666,10 @@ function setupNotifications() {
     }
 
 
-    // OPEN / CLOSE NOTIFICATION MENU
+    // =========================
+    // OPEN / CLOSE
+    // =========================
+
     button.addEventListener(
         "click",
         function (event) {
@@ -501,7 +702,10 @@ function setupNotifications() {
     );
 
 
+    // =========================
     // MARK ALL AS READ
+    // =========================
+
     const markAllReadButton =
         document.getElementById(
             "markAllReadBtn"
@@ -568,7 +772,6 @@ function updateNotificationBadge() {
         unreadNotifications.length;
 
 
-    // NO UNREAD NOTIFICATIONS
     if (unreadCount === 0) {
 
         badge.textContent = "";
@@ -582,7 +785,6 @@ function updateNotificationBadge() {
     }
 
 
-    // SHOW BADGE
     badge.classList.add(
         "show"
     );
@@ -614,15 +816,18 @@ function closeTopbarMenus() {
             "quickAccessMenu"
         );
 
+
     const notificationMenu =
         document.getElementById(
             "notificationMenu"
         );
 
+
     const quickButton =
         document.getElementById(
             "quickAccessBtn"
         );
+
 
     const notificationButton =
         document.getElementById(
@@ -714,10 +919,46 @@ document.addEventListener(
         }
 
 
-        /*
-            If New Transaction is open,
-            close the transaction first.
-        */
+        // =========================
+        // PURCHASE ORDER
+        // =========================
+
+        const purchaseOrderModal =
+            document.getElementById(
+                "purchaseOrderOverlay"
+            );
+
+
+        if (
+            purchaseOrderModal &&
+            purchaseOrderModal.classList.contains(
+                "show"
+            )
+        ) {
+
+            if (
+                typeof closePurchaseOrderModal ===
+                "function"
+            ) {
+
+                closePurchaseOrderModal();
+
+            } else {
+
+                purchaseOrderModal.classList.remove(
+                    "show"
+                );
+
+            }
+
+            return;
+
+        }
+
+
+        // =========================
+        // NEW TRANSACTION
+        // =========================
 
         const transactionModal =
             document.getElementById(
@@ -740,15 +981,14 @@ document.addEventListener(
 
             }
 
-
             return;
 
         }
 
 
-        /*
-            Otherwise close topbar menus.
-        */
+        // =========================
+        // TOPBAR MENUS
+        // =========================
 
         closeTopbarMenus();
 

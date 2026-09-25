@@ -1,0 +1,716 @@
+<!-- =========================
+     NEW PURCHASE ORDER MODAL
+========================= -->
+
+<div class="po-overlay" id="purchaseOrderOverlay">
+
+    <div class="po-modal">
+
+        <!-- =========================
+             HEADER
+        ========================== -->
+
+        <div class="po-modal-header">
+
+            <div>
+                <h2>New Purchase Order</h2>
+
+                <p>
+                    Create a purchase order for a supplier.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="po-close-btn"
+                id="closePurchaseOrder"
+                aria-label="Close"
+            >
+                &times;
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             PROGRESS
+        ========================== -->
+
+        <div class="po-progress">
+
+            <div class="po-progress-item active" data-progress="1">
+                <div class="po-step-number">1</div>
+
+                <div>
+                    <strong>Supplier</strong>
+                    <span>Select supplier</span>
+                </div>
+            </div>
+
+
+            <div class="po-progress-line"></div>
+
+
+            <div class="po-progress-item" data-progress="2">
+                <div class="po-step-number">2</div>
+
+                <div>
+                    <strong>Products</strong>
+                    <span>Add order items</span>
+                </div>
+            </div>
+
+
+            <div class="po-progress-line"></div>
+
+
+            <div class="po-progress-item" data-progress="3">
+                <div class="po-step-number">3</div>
+
+                <div>
+                    <strong>Order Details</strong>
+                    <span>Purchase information</span>
+                </div>
+            </div>
+
+
+            <div class="po-progress-line"></div>
+
+
+            <div class="po-progress-item" data-progress="4">
+                <div class="po-step-number">4</div>
+
+                <div>
+                    <strong>Review</strong>
+                    <span>Confirm order</span>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             BODY
+        ========================== -->
+
+        <div class="po-modal-body">
+
+
+            <!-- =================================
+                 STEP 1 - SUPPLIER
+            ================================== -->
+
+            <section class="po-step active" data-step="1">
+
+                <div class="po-section-heading">
+                    <h3>Select Supplier</h3>
+
+                    <p>
+                        Choose the supplier for this purchase order.
+                    </p>
+                </div>
+
+
+                <div class="po-field">
+
+                    <label for="poSupplierSearch">
+                        Supplier
+                    </label>
+
+                    <div class="po-search-wrapper">
+
+                        <span class="po-search-icon">⌕</span>
+
+                        <input
+                            type="search"
+                            id="poSupplierSearch"
+                            placeholder="Search supplier name..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUPPLIER RESULTS -->
+
+                <div
+                    class="po-supplier-results"
+                    id="poSupplierResults"
+                >
+
+                    <div class="po-empty-selection">
+
+                        <div class="po-empty-symbol">
+                            S
+                        </div>
+
+                        <strong>No supplier selected</strong>
+
+                        <p>
+                            Search and select a supplier to continue.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SELECTED SUPPLIER -->
+
+                <div
+                    class="po-selected-supplier"
+                    id="poSelectedSupplier"
+                    hidden
+                >
+
+                    <div class="po-selected-supplier-header">
+
+                        <div>
+                            <span class="po-small-label">
+                                SELECTED SUPPLIER
+                            </span>
+
+                            <h4 id="selectedSupplierName">
+                                Supplier Name
+                            </h4>
+                        </div>
+
+                        <button
+                            type="button"
+                            id="changeSupplierBtn"
+                        >
+                            Change
+                        </button>
+
+                    </div>
+
+
+                    <div class="po-supplier-info">
+
+                        <div>
+                            <span>Contact Person</span>
+
+                            <strong id="selectedSupplierContact">
+                                —
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Phone</span>
+
+                            <strong id="selectedSupplierPhone">
+                                —
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Email</span>
+
+                            <strong id="selectedSupplierEmail">
+                                —
+                            </strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="po-secondary-action"
+                    id="poAddSupplierBtn"
+                >
+                    + Add New Supplier
+                </button>
+
+            </section>
+
+
+            <!-- =================================
+                 STEP 2 - PRODUCTS
+            ================================== -->
+
+            <section class="po-step" data-step="2">
+
+                <div class="po-section-heading">
+
+                    <h3>Add Products</h3>
+
+                    <p>
+                        Select the products and variants you want to order.
+                    </p>
+
+                </div>
+
+
+                <!-- PRODUCT SEARCH -->
+
+                <div class="po-field">
+
+                    <label for="poProductSearch">
+                        Search Products
+                    </label>
+
+                    <div class="po-search-wrapper">
+
+                        <span class="po-search-icon">⌕</span>
+
+                        <input
+                            type="search"
+                            id="poProductSearch"
+                            placeholder="Search product name, product ID, category..."
+                            autocomplete="off"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- PRODUCT SEARCH RESULTS -->
+
+                <div
+                    class="po-product-results"
+                    id="poProductResults"
+                ></div>
+
+
+                <!-- ORDER ITEMS -->
+
+                <div class="po-order-items">
+
+                    <div class="po-items-heading">
+
+                        <div>
+                            <h4>Order Items</h4>
+
+                            <span id="poItemCount">
+                                0 items
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="po-table-wrapper">
+
+                        <table class="po-items-table">
+
+                            <thead>
+
+                                <tr>
+                                    <th>PRODUCT</th>
+                                    <th>VARIANT / SIZE</th>
+                                    <th>UNIT</th>
+                                    <th>QUANTITY</th>
+                                    <th>UNIT COST</th>
+                                    <th>SUBTOTAL</th>
+                                    <th></th>
+                                </tr>
+
+                            </thead>
+
+
+                            <tbody id="poItemsBody"></tbody>
+
+                        </table>
+
+
+                        <!-- EMPTY ITEMS -->
+
+                        <div
+                            class="po-items-empty"
+                            id="poItemsEmpty"
+                        >
+
+                            <div class="po-empty-symbol">
+                                +
+                            </div>
+
+                            <strong>No products added</strong>
+
+                            <p>
+                                Search for products above to add them to this purchase order.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="po-order-total">
+
+                        <span>Order Subtotal</span>
+
+                        <strong id="poOrderSubtotal">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 STEP 3 - ORDER DETAILS
+            ================================== -->
+
+            <section class="po-step" data-step="3">
+
+                <div class="po-section-heading">
+
+                    <h3>Order Details</h3>
+
+                    <p>
+                        Enter the purchase information for this order.
+                    </p>
+
+                </div>
+
+
+                <div class="po-details-grid">
+
+
+                    <!-- PO NUMBER -->
+
+                    <div class="po-field">
+
+                        <label for="poNumber">
+                            PO Number
+                        </label>
+
+                        <input
+                            type="text"
+                            id="poNumber"
+                            readonly
+                        >
+
+                        <span class="po-field-note">
+                            Automatically generated
+                        </span>
+
+                    </div>
+
+
+                    <!-- ORDER DATE -->
+
+                    <div class="po-field">
+
+                        <label for="poOrderDate">
+                            Order Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="poOrderDate"
+                        >
+
+                    </div>
+
+
+                    <!-- PAYMENT TERMS -->
+
+                    <div class="po-field">
+
+                        <label for="poPaymentTerms">
+                            Payment Terms
+                        </label>
+
+                        <select id="poPaymentTerms">
+
+                            <option value="">
+                                Select payment terms
+                            </option>
+
+                            <option value="Cash">
+                                Cash
+                            </option>
+
+                            <option value="COD">
+                                Cash on Delivery
+                            </option>
+
+                            <option value="7 Days">
+                                7 Days
+                            </option>
+
+                            <option value="15 Days">
+                                15 Days
+                            </option>
+
+                            <option value="30 Days">
+                                30 Days
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- REFERENCE -->
+
+                    <div class="po-field">
+
+                        <label for="poReference">
+                            Reference No.
+                            <span>(Optional)</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="poReference"
+                            placeholder="Supplier quotation or reference"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- NOTES -->
+
+                <div class="po-field po-full-field">
+
+                    <label for="poNotes">
+                        Notes / Remarks
+                        <span>(Optional)</span>
+                    </label>
+
+                    <textarea
+                        id="poNotes"
+                        rows="5"
+                        placeholder="Add notes or instructions for this purchase order..."
+                    ></textarea>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================
+                 STEP 4 - REVIEW
+            ================================== -->
+
+            <section class="po-step" data-step="4">
+
+                <div class="po-section-heading">
+
+                    <h3>Review Purchase Order</h3>
+
+                    <p>
+                        Review the information before creating the purchase order.
+                    </p>
+
+                </div>
+
+
+                <div class="po-review-card">
+
+
+                    <!-- REVIEW HEADER -->
+
+                    <div class="po-review-header">
+
+                        <div>
+
+                            <span class="po-review-label">
+                                PURCHASE ORDER
+                            </span>
+
+                            <h3 id="reviewPONumber">
+                                PO-2026-0001
+                            </h3>
+
+                        </div>
+
+
+                        <div class="po-review-date">
+
+                            <span>Order Date</span>
+
+                            <strong id="reviewOrderDate">
+                                —
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SUPPLIER REVIEW -->
+
+                    <div class="po-review-section">
+
+                        <span class="po-review-section-title">
+                            SUPPLIER
+                        </span>
+
+
+                        <div class="po-review-supplier">
+
+                            <div>
+
+                                <span>Supplier</span>
+
+                                <strong id="reviewSupplierName">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>Contact Person</span>
+
+                                <strong id="reviewSupplierContact">
+                                    —
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>Payment Terms</span>
+
+                                <strong id="reviewPaymentTerms">
+                                    —
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PRODUCTS REVIEW -->
+
+                    <div class="po-review-section">
+
+                        <span class="po-review-section-title">
+                            ORDER ITEMS
+                        </span>
+
+
+                        <div class="po-review-table-wrapper">
+
+                            <table class="po-review-table">
+
+                                <thead>
+
+                                    <tr>
+                                        <th>PRODUCT</th>
+                                        <th>VARIANT</th>
+                                        <th>QTY</th>
+                                        <th>UNIT COST</th>
+                                        <th>AMOUNT</th>
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody id="poReviewItemsBody"></tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- REVIEW NOTES -->
+
+                    <div
+                        class="po-review-section"
+                        id="poReviewNotesSection"
+                    >
+
+                        <span class="po-review-section-title">
+                            NOTES / REMARKS
+                        </span>
+
+                        <p id="reviewNotes">
+                            —
+                        </p>
+
+                    </div>
+
+
+                    <!-- TOTAL -->
+
+                    <div class="po-review-total">
+
+                        <span>Total Amount</span>
+
+                        <strong id="reviewTotalAmount">
+                            ₱0.00
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+        <!-- =========================
+     FOOTER
+========================= -->
+
+<div class="po-modal-footer">
+
+    <button
+        type="button"
+        class="po-back-btn"
+        id="poBackBtn"
+        hidden
+    >
+        ← Back
+    </button>
+
+    <div class="po-footer-right">
+
+        <button
+            type="button"
+            class="po-cancel-btn"
+            id="poCancelBtn"
+        >
+            Cancel
+        </button>
+
+        <button
+            type="button"
+            class="po-draft-btn"
+            id="poDraftBtn"
+        >
+            Save as Draft
+        </button>
+
+        <button
+            type="button"
+            class="po-next-btn"
+            id="poNextBtn"
+        >
+            Next →
+        </button>
+
+        <button
+            type="button"
+            class="po-create-btn"
+            id="poCreateBtn"
+            hidden
+        >
+            Create Purchase Order
+        </button>
+
+    </div>
+
+</div>

@@ -1,0 +1,1381 @@
+/* =========================
+   PURCHASE ORDER OVERLAY
+========================= */
+[hidden] {
+    display: none !important;
+}
+
+
+.po-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 5000;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 30px;
+
+    background-color: rgba(20, 22, 24, 0.68);
+
+    font-family: "Geologica", sans-serif;
+}
+
+.po-overlay.show {
+    display: flex;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.po-modal {
+    width: min(1100px, 100%);
+    max-height: calc(100vh - 60px);
+
+    display: flex;
+    flex-direction: column;
+
+    background-color: #f7f8f9;
+
+    border-radius: 8px;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.25);
+
+    overflow: hidden;
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.po-modal-header {
+    min-height: 78px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    flex-shrink: 0;
+
+    gap: 20px;
+
+    padding: 18px 24px;
+
+    background-color: #ffffff;
+
+    border-bottom: 1px solid #e2e4e6;
+}
+
+.po-modal-header h2 {
+    margin: 0 0 4px;
+
+    color: #272829;
+
+    font-size: 21px;
+    font-weight: 600;
+}
+
+.po-modal-header p {
+    margin: 0;
+
+    color: #85898d;
+
+    font-size: 11px;
+}
+
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
+.po-close-btn {
+    width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    padding: 0;
+
+    background-color: transparent;
+    color: #62666a;
+
+    border: none;
+    border-radius: 5px;
+
+    font-family: Arial, sans-serif;
+    font-size: 22px;
+    font-weight: 300;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.po-close-btn:hover {
+    background-color: #f1f2f3;
+    color: #272829;
+}
+
+
+/* =========================
+   PROGRESS STEPS
+========================= */
+
+.po-progress {
+    display: flex;
+    align-items: flex-start;
+
+    flex-shrink: 0;
+
+    padding: 20px 80px 18px;
+
+    background-color: #ffffff;
+
+    border-bottom: 1px solid #e2e4e6;
+}
+
+.po-progress-item {
+    min-width: 75px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 6px;
+
+    color: #969a9e;
+
+    text-align: center;
+}
+
+.po-step-number {
+    width: 27px;
+    height: 27px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    background-color: #ffffff;
+    color: #777c80;
+
+    border: 1px solid #cfd2d5;
+    border-radius: 50%;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.po-progress-item > div:last-child {
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+
+    text-align: center;
+}
+
+.po-progress-item strong {
+    color: inherit;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.po-progress-item span {
+    display: block;
+
+    margin-top: 2px;
+
+    color: inherit;
+
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.po-progress-item.active {
+    color: #272829;
+}
+
+.po-progress-item.active .po-step-number {
+    background-color: #272829;
+    color: #ffffff;
+
+    border-color: #272829;
+}
+
+.po-progress-item.completed {
+    color: #61677a;
+}
+
+.po-progress-item.completed .po-step-number {
+    background-color: #61677a;
+    color: #ffffff;
+
+    border-color: #61677a;
+}
+
+.po-progress-line {
+    height: 1px;
+
+    flex: 1;
+
+    margin-top: 13px;
+
+    background-color: #dfe1e3;
+}
+
+
+/* =========================
+   MODAL BODY
+========================= */
+
+.po-modal-body {
+    flex: 1;
+
+    min-height: 0;
+
+    padding: 18px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    background-color: #f7f8f9;
+
+    scrollbar-width: thin;
+    scrollbar-color: #a7aaad transparent;
+}
+
+.po-modal-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.po-modal-body::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+.po-modal-body::-webkit-scrollbar-thumb {
+    background-color: #a7aaad;
+
+    border: 2px solid #f7f8f9;
+    border-radius: 20px;
+}
+
+.po-modal-body::-webkit-scrollbar-thumb:hover {
+    background-color: #85898d;
+}
+
+
+/* =========================
+   STEPS
+========================= */
+
+.po-step {
+    display: none;
+
+    width: 100%;
+}
+
+.po-step.active {
+    display: block;
+}
+
+
+/* =========================
+   STEP CONTENT CARD
+========================= */
+
+.po-step.active {
+    padding: 18px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e0e2e4;
+    border-radius: 6px;
+}
+
+
+/* =========================
+   SECTION HEADING
+========================= */
+
+.po-section-heading {
+    margin-bottom: 18px;
+}
+
+.po-section-heading h3 {
+    margin: 0 0 3px;
+
+    color: #343638;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.po-section-heading p {
+    margin: 0;
+
+    color: #92969a;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   FIELD
+========================= */
+
+.po-field {
+    margin-bottom: 16px;
+}
+
+.po-field:last-child {
+    margin-bottom: 0;
+}
+
+.po-field label {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #484b4e;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.po-field label span {
+    color: #9b9ea1;
+
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.po-field input,
+.po-field select,
+.po-field textarea {
+    width: 100%;
+
+    background-color: #ffffff;
+    color: #343638;
+
+    border: 1px solid #d9dcdf;
+    border-radius: 5px;
+
+    outline: none;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 11px;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.po-field input,
+.po-field select {
+    height: 37px;
+
+    padding: 0 11px;
+}
+
+.po-field textarea {
+    min-height: 75px;
+
+    padding: 10px 11px;
+
+    resize: vertical;
+
+    line-height: 1.5;
+}
+
+.po-field input:focus,
+.po-field select:focus,
+.po-field textarea:focus {
+    border-color: #858a8f;
+
+    box-shadow:
+        0 0 0 2px rgba(97, 103, 122, 0.08);
+}
+
+.po-field input::placeholder,
+.po-field textarea::placeholder {
+    color: #adb0b3;
+}
+
+.po-field input[readonly] {
+    background-color: #f5f6f7;
+    color: #606468;
+
+    cursor: default;
+}
+
+.po-field-note {
+    display: block;
+
+    margin-top: 5px;
+
+    color: #999da0;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+.po-search-wrapper {
+    position: relative;
+}
+
+.po-search-wrapper input {
+    padding-left: 38px;
+}
+
+.po-search-icon {
+    position: absolute;
+
+    top: 50%;
+    left: 13px;
+
+    z-index: 2;
+
+    transform: translateY(-50%);
+
+    color: #85898d;
+
+    font-size: 15px;
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   SUPPLIER RESULTS
+========================= */
+
+.po-supplier-results {
+    max-height: 220px;
+
+    margin-bottom: 16px;
+
+    overflow-y: auto;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e0e2e4;
+    border-radius: 6px;
+
+    scrollbar-width: thin;
+}
+
+
+/* =========================
+   EMPTY STATES
+========================= */
+
+.po-empty-selection,
+.po-items-empty {
+    min-height: 150px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 25px;
+
+    text-align: center;
+}
+
+.po-empty-symbol {
+    width: 35px;
+    height: 35px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 9px;
+
+    background-color: #f0f1f2;
+    color: #777b7e;
+
+    border-radius: 50%;
+
+    font-size: 18px;
+}
+
+.po-empty-selection strong,
+.po-items-empty strong {
+    margin-bottom: 4px;
+
+    color: #55595c;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.po-empty-selection p,
+.po-items-empty p {
+    margin: 0;
+
+    color: #999da0;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   SUPPLIER OPTION
+========================= */
+
+.po-supplier-option {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 12px 14px;
+
+    background-color: #ffffff;
+
+    border: none;
+    border-bottom: 1px solid #eeeeee;
+
+    font-family: "Geologica", sans-serif;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition: background-color 0.15s ease;
+}
+
+.po-supplier-option:last-child {
+    border-bottom: none;
+}
+
+.po-supplier-option:hover {
+    background-color: #f7f8f8;
+}
+
+.po-supplier-option strong {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #343638;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.po-supplier-option span {
+    color: #92969a;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   SELECTED SUPPLIER
+========================= */
+
+.po-selected-supplier {
+    margin-bottom: 16px;
+
+    padding: 14px;
+
+    background-color: #f6f7f8;
+
+    border: 1px solid #e0e2e4;
+    border-radius: 5px;
+}
+
+.po-selected-supplier-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    margin-bottom: 14px;
+}
+
+.po-small-label {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #92969a;
+
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.po-selected-supplier-header h4 {
+    margin: 0;
+
+    color: #343638;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.po-selected-supplier-header button {
+    padding: 0;
+
+    background: none;
+    color: #686c70;
+
+    border: none;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 10px;
+
+    cursor: pointer;
+}
+
+.po-selected-supplier-header button:hover {
+    color: #272829;
+
+    text-decoration: underline;
+}
+
+.po-supplier-info {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 15px;
+}
+
+.po-supplier-info div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.po-supplier-info span {
+    color: #92969a;
+
+    font-size: 10px;
+}
+
+.po-supplier-info strong {
+    color: #55595d;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+
+/* =========================
+   SECONDARY ACTION
+========================= */
+
+.po-secondary-action {
+    height: 37px;
+
+    padding: 0 13px;
+
+    background-color: #ffffff;
+    color: #55595c;
+
+    border: 1px solid #d6d9dc;
+    border-radius: 5px;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition: background-color 0.15s ease;
+}
+
+.po-secondary-action:hover {
+    background-color: #f5f6f7;
+}
+
+
+/* =========================
+   PRODUCT RESULTS
+========================= */
+
+.po-product-results:not(:empty) {
+    max-height: 220px;
+
+    overflow-y: auto;
+
+    margin-top: -8px;
+    margin-bottom: 16px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e0e2e4;
+    border-radius: 6px;
+
+    scrollbar-width: thin;
+}
+
+.po-product-option {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 12px 14px;
+
+    background-color: #ffffff;
+
+    border: none;
+    border-bottom: 1px solid #eeeeee;
+
+    font-family: "Geologica", sans-serif;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition: background-color 0.15s ease;
+}
+
+.po-product-option:last-child {
+    border-bottom: none;
+}
+
+.po-product-option:hover {
+    background-color: #f7f8f8;
+}
+
+.po-product-option strong {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #343638;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.po-product-option span {
+    color: #999da0;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   ORDER ITEMS
+========================= */
+
+.po-order-items {
+    margin-top: 10px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e0e2e4;
+    border-radius: 6px;
+
+    overflow: hidden;
+}
+
+.po-items-heading {
+    min-height: 61px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 13px 15px;
+
+    border-bottom: 1px solid #e5e7e8;
+}
+
+.po-items-heading h4 {
+    margin: 0 0 3px;
+
+    color: #343638;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.po-items-heading span {
+    padding: 5px 8px;
+
+    background-color: #f1f2f3;
+    color: #74787c;
+
+    border-radius: 4px;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   ITEMS TABLE
+========================= */
+
+.po-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.po-items-table {
+    width: 100%;
+
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.po-items-table th {
+    padding: 9px 8px;
+
+    background-color: #f4f5f6;
+    color: #777b7f;
+
+    border-bottom: 1px solid #e1e3e5;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    text-align: left;
+}
+
+.po-items-table td {
+    padding: 10px 8px;
+
+    color: #4b4e51;
+
+    border-bottom: 1px solid #eceeef;
+
+    font-size: 11px;
+
+    vertical-align: middle;
+}
+
+.po-items-table input {
+    width: 100%;
+    height: 31px;
+
+    padding: 0 8px;
+
+    border: 1px solid #d8dbde;
+    border-radius: 4px;
+
+    outline: none;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 11px;
+}
+
+.po-items-table input:focus {
+    border-color: #858a8f;
+}
+
+.po-remove-item {
+    width: 27px;
+    height: 27px;
+
+    background-color: transparent;
+    color: #a34c4c;
+
+    border: 1px solid #e3d5d5;
+    border-radius: 4px;
+
+    cursor: pointer;
+}
+
+.po-remove-item:hover {
+    background-color: #faf1f1;
+}
+
+
+/* =========================
+   ORDER TOTAL
+========================= */
+
+.po-order-total {
+    min-height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 25px;
+
+    padding: 0 15px;
+
+    background-color: #f0f2f3;
+
+    border-top: 1px solid #e5e7e8;
+}
+
+.po-order-total span {
+    color: #65696d;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.po-order-total strong {
+    min-width: 100px;
+
+    color: #272829;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    text-align: right;
+}
+
+
+/* =========================
+   ORDER DETAILS
+========================= */
+
+.po-details-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 13px;
+}
+
+.po-full-field {
+    grid-column: 1 / -1;
+}
+
+
+/* =========================
+   REVIEW CARD
+========================= */
+
+.po-review-card {
+    overflow: hidden;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e0e2e4;
+    border-radius: 6px;
+}
+
+.po-review-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 18px;
+
+    background-color: #f6f7f8;
+
+    border-bottom: 1px solid #e2e4e6;
+}
+
+.po-review-label {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #92969a;
+
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.po-review-header h3 {
+    margin: 0;
+
+    color: #272829;
+
+    font-size: 17px;
+    font-weight: 600;
+}
+
+.po-review-date {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+
+    text-align: right;
+}
+
+.po-review-date span {
+    color: #92969a;
+
+    font-size: 10px;
+}
+
+.po-review-date strong {
+    color: #55595d;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+
+/* =========================
+   REVIEW SECTION
+========================= */
+
+.po-review-section {
+    padding: 18px;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+.po-review-section-title {
+    display: block;
+
+    margin-bottom: 12px;
+
+    color: #92969a;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.po-review-supplier {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+}
+
+.po-review-supplier div {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+.po-review-supplier span {
+    color: #92969a;
+
+    font-size: 10px;
+}
+
+.po-review-supplier strong {
+    color: #4f5357;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.po-review-section > p {
+    margin: 0;
+
+    color: #686c70;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   REVIEW TABLE
+========================= */
+
+.po-review-table-wrapper {
+    width: 100%;
+
+    overflow-x: auto;
+}
+
+.po-review-table {
+    width: 100%;
+
+    border-collapse: collapse;
+}
+
+.po-review-table th {
+    padding: 9px 8px;
+
+    background-color: #f4f5f6;
+    color: #777b7f;
+
+    border-bottom: 1px solid #e1e3e5;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    text-align: left;
+}
+
+.po-review-table td {
+    padding: 10px 8px;
+
+    color: #4b4e51;
+
+    border-bottom: 1px solid #eceeef;
+
+    font-size: 11px;
+}
+
+
+/* =========================
+   REVIEW TOTAL
+========================= */
+
+.po-review-total {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 25px;
+
+    padding: 14px 15px;
+
+    background-color: #f0f2f3;
+}
+
+.po-review-total span {
+    color: #343638;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.po-review-total strong {
+    min-width: 120px;
+
+    color: #272829;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    text-align: right;
+}
+
+
+/* =========================
+   FOOTER
+========================= */
+
+.po-modal-footer {
+    min-height: 66px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    flex-shrink: 0;
+
+    gap: 15px;
+
+    padding: 12px 18px;
+
+    background-color: #ffffff;
+
+    border-top: 1px solid #e0e2e4;
+}
+
+.po-footer-right {
+    display: flex;
+    align-items: center;
+
+    gap: 9px;
+
+    margin-left: auto;
+}
+
+.po-modal-footer button {
+    height: 37px;
+
+    padding: 0 18px;
+
+    border-radius: 5px;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.po-back-btn,
+.po-cancel-btn {
+    height: 40px;
+    padding: 0 18px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    background-color: #ffffff;
+    color: #4c5053;
+
+    border: 1px solid #d5d7da;
+    border-radius: 6px;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+
+    cursor: pointer;
+}
+
+.po-back-btn:hover,
+.po-cancel-btn:hover {
+    background-color: #f5f5f5;
+    border-color: #bfc2c5;
+}
+
+.po-draft-btn {
+    background-color: #ffffff;
+    color: #55595c;
+
+    border: 1px solid #d6d9dc;
+}
+
+.po-draft-btn:hover {
+    background-color: #f5f6f7;
+}
+
+.po-next-btn,
+.po-create-btn {
+    min-width: 145px;
+
+    background-color: #272829;
+    color: #ffffff;
+
+    border: none;
+}
+
+.po-next-btn:hover,
+.po-create-btn:hover {
+    background-color: #3b3d40;
+}
+
+
+/* =========================
+   RESPONSIVE - TABLET
+========================= */
+
+@media (max-width: 900px) {
+
+    .po-supplier-info,
+    .po-review-supplier {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+/* =========================
+   RESPONSIVE - SMALL TABLET
+========================= */
+
+@media (max-width: 700px) {
+
+    .po-overlay {
+        padding: 10px;
+    }
+
+    .po-modal {
+        max-height: calc(100vh - 20px);
+    }
+
+    .po-progress {
+        padding: 16px 20px;
+    }
+
+    .po-details-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .po-full-field {
+        grid-column: auto;
+    }
+
+}
+
+
+/* =========================
+   RESPONSIVE - MOBILE
+========================= */
+
+@media (max-width: 500px) {
+
+    .po-modal-header {
+        padding: 15px;
+    }
+
+    .po-modal-header h2 {
+        font-size: 19px;
+    }
+
+    .po-modal-body {
+        padding: 10px;
+    }
+
+    .po-step.active {
+        padding: 15px;
+    }
+
+    .po-progress-item strong {
+        font-size: 10px;
+    }
+
+    .po-progress-item span {
+        display: none;
+    }
+
+    .po-modal-footer {
+        align-items: stretch;
+        flex-direction: column-reverse;
+    }
+
+    .po-footer-right {
+        width: 100%;
+
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        margin-left: 0;
+    }
+
+    .po-back-btn {
+        width: 100%;
+    }
+
+    .po-next-btn,
+    .po-create-btn {
+        min-width: 0;
+    }
+
+}
