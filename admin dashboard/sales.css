@@ -16,10 +16,8 @@ body {
 
 body {
     min-height: 100vh;
-
     background-color: #f3f4f5;
     color: #272829;
-
     font-family: "Geologica", sans-serif;
 }
 
@@ -30,9 +28,7 @@ body {
 
 .sales-main {
     min-height: 100vh;
-
     margin-left: 230px;
-
     background-color: #f3f4f5;
 }
 
@@ -44,9 +40,7 @@ body {
 .sales-content {
     width: 100%;
     max-width: 1250px;
-
     margin: 0 auto;
-
     padding: 35px 32px 60px;
 }
 
@@ -59,33 +53,50 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     margin-bottom: 25px;
 }
 
 .sales-header h1 {
+<<<<<<< Updated upstream
     margin-bottom: 5px;
 
     color: #272829;
 
     font-size: 29px;
+=======
+    margin-bottom: 4px;
+    color: #272829;
+    font-size: 27px;
+>>>>>>> Stashed changes
     font-weight: 600;
 }
 
 .sales-header p {
     color: #7b7f83;
+<<<<<<< Updated upstream
 
     font-size: 12px;
     line-height: 1.5;
+=======
+    font-size: 10px;
+>>>>>>> Stashed changes
 }
 
 
 /* =========================
-   NEW SALE BUTTON
+   BUTTON (same sizing as inventory primary)
 ========================= */
 
 .add-sale-btn {
+<<<<<<< Updated upstream
     height: 40px;
+=======
+    height: 37px;
+>>>>>>> Stashed changes
 
     display: flex;
     align-items: center;
@@ -93,9 +104,15 @@ body {
 
     gap: 7px;
 
+<<<<<<< Updated upstream
     min-width: 110px;
 
     padding: 0 16px;
+=======
+    min-width: 105px;
+
+    padding: 0 15px;
+>>>>>>> Stashed changes
 
     background-color: #272829;
     color: #ffffff;
@@ -118,37 +135,46 @@ body {
 
 .add-sale-btn:hover {
     background-color: #3b3d40;
-
     transform: translateY(-1px);
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
 }
 
 .add-sale-btn .plus,
 .plus {
+<<<<<<< Updated upstream
     font-size: 17px;
+=======
+    font-size: 14px;
+>>>>>>> Stashed changes
     font-weight: 300;
-
     line-height: 1;
 }
 
 
 /* =========================
-   SALES SUMMARY
+   SALES SUMMARY (match inventory)
 ========================= */
 
 .sales-summary {
     display: grid;
-
     grid-template-columns: repeat(4, 1fr);
+<<<<<<< Updated upstream
 
     gap: 16px;
 
+=======
+    gap: 16px;
+>>>>>>> Stashed changes
     margin-bottom: 28px;
 }
 
 
 /* =========================
+<<<<<<< Updated upstream
    SUMMARY CARD
    SAME AS INVENTORY
 ========================= */
@@ -167,6 +193,25 @@ body {
 
     border: 1px solid #d9dbdd;
     border-radius: 6px;
+=======
+   SUMMARY CARD (match inventory size + layout)
+========================= */
+
+.sales-summary .summary-card {
+    min-height: 105px;                 /* same as inventory */
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;           /* important: top aligned */
+    justify-content: space-between;
+
+    padding: 18px;                     /* same as inventory */
+
+    background-color: #ffffff;
+
+    border: 1px solid #d9dbdd;         /* same as inventory */
+    border-radius: 6px;                /* same as inventory */
+>>>>>>> Stashed changes
 
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.025);
 
@@ -177,6 +222,7 @@ body {
 
 .sales-summary .summary-card:hover {
     transform: translateY(-2px);
+<<<<<<< Updated upstream
 
     box-shadow: 0 5px 12px rgba(0, 0, 0, 0.06);
 }
@@ -192,12 +238,46 @@ body {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+=======
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* force inventory-like stacking (prevents “centered” look) */
+.sales-summary .summary-info {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+}
+
+/* remove any divider line (kahit wala sa HTML, baka galing sa old CSS/pseudo) */
+.sales-summary hr,
+.sales-summary .divider,
+.sales-summary .summary-divider,
+.sales-summary .summary-line {
+    display: none !important;
+}
+
+/* kill possible pseudo-lines */
+.sales-summary .summary-title::before,
+.sales-summary .summary-title::after,
+.sales-summary .summary-info::before,
+.sales-summary .summary-info::after,
+.sales-summary .summary-card::before,
+.sales-summary .summary-card::after {
+    content: none !important;
+>>>>>>> Stashed changes
 }
 
 
-/* SUMMARY TITLE */
+/* =========================
+   CARD TEXT (match inventory sizing)
+========================= */
 
 .sales-summary .summary-title {
+<<<<<<< Updated upstream
     margin: 0 2 8px;
 
     color: #7b7f82;
@@ -224,6 +304,22 @@ body {
     color: #272829;
 
     font-size: 26px;
+=======
+    margin-bottom: 8px;
+    color: #7b7f82;
+
+    font-size: 8px;
+    font-weight: 500;
+
+    letter-spacing: 0.3px;
+}
+
+.sales-summary .summary-number {
+    margin: 0 0 5px;
+    color: #272829;
+
+    font-size: 22px;
+>>>>>>> Stashed changes
     font-weight: 600;
 
     line-height: normal;
@@ -231,7 +327,12 @@ body {
     border: none;
 }
 
+.sales-summary .summary-subtext {
+    color: #96999c;
+    font-size: 7.5px;
+}
 
+<<<<<<< Updated upstream
 /* =========================
    TODAY'S SALES AMOUNT
 ========================= */
@@ -283,10 +384,21 @@ body {
     line-height: normal;
 
     white-space: nowrap;
+=======
+/* remove old “underline” effect on Today’s Sales */
+.sales-amount {
+    position: static;
+    display: inline;
+    padding-bottom: 0;
+}
+.sales-amount::after {
+    content: none;
+>>>>>>> Stashed changes
 }
 
 
 /* =========================
+<<<<<<< Updated upstream
    SUMMARY ICONS
    SAME AS INVENTORY
 ========================= */
@@ -294,21 +406,35 @@ body {
 .sales-summary .summary-icon {
     width: 38px;
     height: 38px;
+=======
+   SUMMARY ICONS (match inventory)
+========================= */
 
-    flex-shrink: 0;
+.sales-summary .summary-icon {
+    width: 34px;
+    height: 34px;
+>>>>>>> Stashed changes
 
     display: flex;
     align-items: center;
     justify-content: center;
 
+<<<<<<< Updated upstream
     margin: 0;
 
+=======
+>>>>>>> Stashed changes
     border-radius: 6px;
 }
 
 .sales-summary .summary-icon svg {
+<<<<<<< Updated upstream
     width: 19px;
     height: 19px;
+=======
+    width: 17px;
+    height: 17px;
+>>>>>>> Stashed changes
 
     fill: none;
 
@@ -317,7 +443,11 @@ body {
     stroke-linejoin: round;
 }
 
+/* inventory-like palette */
+.sales-icon { background-color: #edf2f5; }
+.sales-icon svg { stroke: #647783; }
 
+<<<<<<< Updated upstream
 /* TODAY'S SALES */
 
 .sales-summary .sales-icon {
@@ -360,6 +490,16 @@ body {
 .sales-summary .wholesale-icon svg {
     stroke: #69738b;
 }
+=======
+.transaction-icon { background-color: #e8f5f1; }
+.transaction-icon svg { stroke: #3a927a; }
+
+.pending-icon { background-color: #fff0e8; }
+.pending-icon svg { stroke: #b56c4d; }
+
+.wholesale-icon { background-color: #fde8e8; }
+.wholesale-icon svg { stroke: #c34d4d; }
+>>>>>>> Stashed changes
 
 
 /* =========================
@@ -396,14 +536,17 @@ body {
 
 
 /* =========================
-   SEARCH
+   SEARCH (match inventory)
 ========================= */
 
 .search-box {
     position: relative;
 
     flex: 1;
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
     max-width: 620px;
 }
 
@@ -455,25 +598,28 @@ body {
 
 .search-box input:focus {
     border-color: #85898d;
-
     box-shadow: 0 0 0 3px rgba(39, 40, 41, 0.05);
 }
 
 
 /* =========================
-   FILTERS
+   FILTERS (match inventory sizing)
 ========================= */
 
 .sales-filters {
     display: flex;
-
     gap: 10px;
 }
 
 .sales-filters select,
 .sales-filters input {
+<<<<<<< Updated upstream
     min-width: 135px;
     height: 38px;
+=======
+    min-width: 130px;
+    height: 36px;
+>>>>>>> Stashed changes
 
     padding: 0 12px;
 
@@ -509,7 +655,6 @@ body {
 
 .table-wrapper {
     width: 100%;
-
     overflow-x: auto;
 }
 
@@ -520,9 +665,7 @@ body {
 
 .sales-table {
     width: 100%;
-
     border-collapse: collapse;
-
     table-layout: fixed;
 }
 
@@ -544,7 +687,11 @@ body {
     font-size: 9px;
     font-weight: 600;
 
+<<<<<<< Updated upstream
     letter-spacing: 0.3px;
+=======
+    letter-spacing: 0.2px;
+>>>>>>> Stashed changes
 
     text-align: left;
 }
@@ -555,9 +702,13 @@ body {
 ========================= */
 
 .sales-table td {
+<<<<<<< Updated upstream
     height: 64px;
+=======
+    height: 58px;
+>>>>>>> Stashed changes
 
-    padding: 9px 14px;
+    padding: 8px 14px;
 
     color: #55595d;
 
@@ -569,46 +720,31 @@ body {
 }
 
 
+<<<<<<< Updated upstream
 /* =========================
    TABLE COLUMN WIDTHS
 ========================= */
+=======
+/* COLUMN WIDTHS (keep your sales widths) */
+>>>>>>> Stashed changes
 
-.sales-table th:nth-child(1) {
-    width: 12%;
-}
-
-.sales-table th:nth-child(2) {
-    width: 12%;
-}
-
-.sales-table th:nth-child(3) {
-    width: 20%;
-}
-
-.sales-table th:nth-child(4) {
-    width: 10%;
-}
-
-.sales-table th:nth-child(5) {
-    width: 13%;
-}
-
-.sales-table th:nth-child(6) {
-    width: 12%;
-}
-
-.sales-table th:nth-child(7) {
-    width: 12%;
-}
-
-.sales-table th:nth-child(8) {
-    width: 9%;
-}
+.sales-table th:nth-child(1) { width: 12%; }
+.sales-table th:nth-child(2) { width: 12%; }
+.sales-table th:nth-child(3) { width: 20%; }
+.sales-table th:nth-child(4) { width: 10%; }
+.sales-table th:nth-child(5) { width: 13%; }
+.sales-table th:nth-child(6) { width: 12%; }
+.sales-table th:nth-child(7) { width: 12%; }
+.sales-table th:nth-child(8) { width: 9%; }
 
 
+<<<<<<< Updated upstream
 /* =========================
    TABLE ROW
 ========================= */
+=======
+/* ROW */
+>>>>>>> Stashed changes
 
 .sales-table tbody tr {
     transition: background-color 0.15s ease;
@@ -628,7 +764,11 @@ body {
     align-items: center;
     justify-content: center;
 
+<<<<<<< Updated upstream
     min-width: 72px;
+=======
+    min-width: 68px;
+>>>>>>> Stashed changes
 
     padding: 6px 9px;
 
@@ -752,11 +892,11 @@ body {
 
 
 /* =========================
-   EMPTY STATE
+   EMPTY STATE (match inventory)
 ========================= */
 
 .sales-empty {
-    min-height: 280px;
+    min-height: 270px;
 
     display: flex;
     flex-direction: column;
@@ -764,7 +904,6 @@ body {
     justify-content: center;
 
     color: #8c9094;
-
     text-align: center;
 }
 
@@ -779,7 +918,6 @@ body {
     margin-bottom: 14px;
 
     background-color: #f0f1f2;
-
     border-radius: 50%;
 }
 
@@ -805,15 +943,19 @@ body {
 .sales-empty p {
     max-width: 300px;
 
+<<<<<<< Updated upstream
     color: #8c9094;
 
     font-size: 10px;
+=======
+    font-size: 8px;
+>>>>>>> Stashed changes
     line-height: 1.5;
 }
 
 
 /* =========================
-   TABLE FOOTER
+   TABLE FOOTER (match inventory)
 ========================= */
 
 .sales-table-footer {
@@ -830,32 +972,44 @@ body {
 
 .sales-table-footer p {
     color: #898d90;
+<<<<<<< Updated upstream
 
     font-size: 10px;
+=======
+    font-size: 7.5px;
+>>>>>>> Stashed changes
 }
 
 .sales-table-footer strong {
     color: #5b5f62;
+<<<<<<< Updated upstream
 
     font-weight: 600;
+=======
+    font-weight: 500;
+>>>>>>> Stashed changes
 }
 
 
 /* =========================
-   PAGINATION
+   PAGINATION (match inventory)
 ========================= */
 
 .pagination {
     display: flex;
     align-items: center;
-
     gap: 6px;
 }
 
 .pagination button,
 .pagination span {
+<<<<<<< Updated upstream
     width: 30px;
     height: 30px;
+=======
+    width: 27px;
+    height: 27px;
+>>>>>>> Stashed changes
 
     display: flex;
     align-items: center;
@@ -869,20 +1023,18 @@ body {
     color: #666a6e;
 
     border: 1px solid #dddddd;
+<<<<<<< Updated upstream
 
     font-family: "Geologica", sans-serif;
     font-size: 15px;
+=======
+>>>>>>> Stashed changes
 
     cursor: pointer;
 }
 
-.pagination button:hover:not(:disabled) {
-    background-color: #f2f3f4;
-}
-
 .pagination button:disabled {
     opacity: 0.4;
-
     cursor: default;
 }
 
@@ -890,26 +1042,34 @@ body {
     background-color: #272829;
     color: #ffffff;
 
+<<<<<<< Updated upstream
     font-size: 10px;
     font-weight: 500;
+=======
+    font-size: 8px;
+>>>>>>> Stashed changes
 }
 
 
 /* =========================
-   RESPONSIVE
+   RESPONSIVE (same breakpoints as inventory)
 ========================= */
 
 @media (max-width: 1100px) {
-
     .sales-summary {
         grid-template-columns: repeat(2, 1fr);
     }
+}
 
+<<<<<<< Updated upstream
 }
 
 
 @media (max-width: 900px) {
 
+=======
+@media (max-width: 900px) {
+>>>>>>> Stashed changes
     .sales-toolbar {
         align-items: stretch;
 
@@ -920,20 +1080,13 @@ body {
         max-width: none;
     }
 
-    .sales-filters {
-        width: 100%;
-    }
-
     .sales-filters select,
     .sales-filters input {
         flex: 1;
     }
-
 }
 
-
 @media (max-width: 800px) {
-
     .sales-main {
         margin-left: 200px;
     }
@@ -941,20 +1094,17 @@ body {
     .sales-content {
         padding: 25px;
     }
-
 }
 
-
 @media (max-width: 600px) {
-
     .sales-header {
         align-items: flex-start;
 
         flex-direction: column;
-
         gap: 18px;
     }
 
+<<<<<<< Updated upstream
     .sales-header h1 {
         font-size: 25px;
     }
@@ -963,18 +1113,16 @@ body {
         width: 100%;
     }
 
+=======
+>>>>>>> Stashed changes
     .sales-summary {
         grid-template-columns: 1fr;
     }
 
-    .sales-filters {
-        flex-direction: column;
-    }
-
-    .sales-filters select,
-    .sales-filters input {
+    .add-sale-btn {
         width: 100%;
     }
+<<<<<<< Updated upstream
 
     .sales-table {
         min-width: 900px;
@@ -990,4 +1138,6 @@ body {
         padding: 14px 18px;
     }
 
+=======
+>>>>>>> Stashed changes
 }

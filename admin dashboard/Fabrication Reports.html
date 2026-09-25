@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fabrication Reports - SCF Steel Trading</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="sidebar.css" />
+  <link rel="stylesheet" href="topbar.css" />
+  <link rel="stylesheet" href="new-transaction.css" />
+
+  <link rel="stylesheet" href="Fabrication Reports.css" />
+</head>
+
+<body>
+  <div id="sidebar"></div>
+
+  <main class="reports-main">
+    <div id="topbar" data-page-title="Reports"></div>
+
+    <div class="reports-content">
+      <section class="reports-header">
+        <div>
+          <h1>Reports</h1>
+          <p>Business performance analytics and summaries</p>
+        </div>
+
+        <div class="reports-actions">
+          <button type="button" id="exportBtn"><span>⇩</span>Export</button>
+          <button type="button" id="printBtn"><span>⎙</span>Print</button>
+        </div>
+      </section>
+
+      <section class="reports-filter-card">
+        <div class="filter-field">
+          <label>DATE FROM</label>
+          <div class="date-input">
+            <input type="date" id="dateFrom" />
+          </div>
+        </div>
+
+        <div class="filter-field">
+          <label>DATE TO</label>
+          <div class="date-input">
+            <input type="date" id="dateTo" />
+          </div>
+        </div>
+
+        <div class="filter-field category-field">
+          <label>&nbsp;</label>
+          <select id="categorySelect">
+            <option value="all">All Category</option>
+            <option value="Steel Products">Steel Bars</option>
+            <option value="Roofing Materials">Roofing Sheets</option>
+            <option value="Hardware Items">C-Purlins</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="reports-tabs">
+        <a class="report-tab" href="reports(Sales Reports).html">Sales Reports</a>
+        <a class="report-tab" href="Inventory Reports.html">Inventory Reports</a>
+        <a class="report-tab" href="Procurement Reports.html">Procurement Reports</a>
+        <span class="report-tab active">Fabrication Reports</span>
+      </section>
+
+      <!-- FABRICATION VIEW -->
+      <div class="report-view active" id="fabricationView">
+        <section class="summary-cards">
+          <div class="summary-card">
+            <p>TOTAL JOBS</p>
+            <h2 id="fabTotalJobs">0</h2>
+            <span>No data</span>
+          </div>
+
+          <div class="summary-card">
+            <p>IN PROGRESS</p>
+            <h2 id="fabInProgress">0</h2>
+            <span>No data</span>
+          </div>
+
+          <div class="summary-card">
+            <p>COMPLETED</p>
+            <h2 id="fabCompleted">0</h2>
+            <span>No data</span>
+          </div>
+
+          <div class="summary-card">
+            <p>PENDING</p>
+            <h2 id="fabPending">0</h2>
+            <span>No data</span>
+          </div>
+        </section>
+
+        <section class="report-panel">
+          <h3>Fabrication Jobs by Service Type</h3>
+
+          <div class="panel-body">
+            <!-- Hidden until you render real data -->
+            <div class="fab-list is-hidden" id="fabServiceList"></div>
+
+            <!-- Empty state shown by default -->
+            <div class="reports-empty" id="fabServiceEmpty">
+              <div class="reports-empty-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 19V5M4 19H20" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" />
+                  <path d="M7 14l3-3 3 2 4-5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </div>
+              <h4>No fabrication records yet</h4>
+              <p>Service type breakdown will appear here once jobs are added.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script src="sidebar.js"></script>
+  <script src="topbar.js"></script>
+  <script src="new-transaction.js"></script>
+
+  <script src="Fabrication Reports.js"></script>
+</body>
+</html>

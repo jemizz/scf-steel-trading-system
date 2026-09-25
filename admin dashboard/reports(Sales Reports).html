@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sales Reports - SCF Steel Trading</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet" />
+
+  <!-- shared css -->
+  <link rel="stylesheet" href="sidebar.css" />
+  <link rel="stylesheet" href="topbar.css" />
+  <link rel="stylesheet" href="new-transaction.css" />
+
+  <!-- page css -->
+  <link rel="stylesheet" href="reports(Sales Reports).css" />
+</head>
+
+<body>
+  <div id="sidebar"></div>
+
+  <main class="reports-main">
+    <div id="topbar" data-page-title="Reports"></div>
+
+    <div class="reports-content">
+      <section class="reports-header">
+        <div>
+          <h1>Reports</h1>
+          <p>Business performance analytics and summaries</p>
+        </div>
+
+        <div class="reports-actions">
+          <button type="button" id="exportBtn"><span>⇩</span>Export</button>
+          <button type="button" id="printBtn"><span>⎙</span>Print</button>
+        </div>
+      </section>
+
+      <section class="reports-filter-card">
+        <div class="filter-field">
+          <label>DATE FROM</label>
+          <div class="date-input">
+            <input type="date" id="dateFrom" />
+          </div>
+        </div>
+
+        <div class="filter-field">
+          <label>DATE TO</label>
+          <div class="date-input">
+            <input type="date" id="dateTo" />
+          </div>
+        </div>
+
+        <div class="filter-field category-field">
+          <label>&nbsp;</label>
+          <select id="categorySelect">
+            <option value="all">All Category</option>
+            <option value="Steel Products">Steel Bars</option>
+            <option value="Roofing Materials">Roofing Sheets</option>
+            <option value="Hardware Items">C-Purlins</option>
+          </select>
+        </div>
+      </section>
+
+      <section class="reports-tabs">
+        <span class="report-tab active">Sales Reports</span>
+        <a class="report-tab" href="Inventory Reports.html">Inventory Reports</a>
+        <a class="report-tab" href="Procurement Reports.html">Procurement Reports</a>
+        <a class="report-tab" href="Fabrication Reports.html">Fabrication Reports</a>
+      </section>
+
+      <div class="report-view active" id="salesView">
+        <section class="summary-cards">
+          <div class="summary-card">
+            <p>TOTAL REVENUE</p>
+            <h2 id="salesTotalRevenue">₱0</h2>
+            <span id="salesRevenueRange">No data</span>
+          </div>
+
+          <div class="summary-card">
+            <p>PAID COLLECTIONS</p>
+            <h2 id="salesPaidCollections">₱0</h2>
+            <span id="salesCollectionsNote">No data</span>
+          </div>
+
+          <div class="summary-card">
+            <p>WHOLESALE SALES</p>
+            <h2 id="salesWholesaleCount">0</h2>
+            <span>No data</span>
+          </div>
+
+          <div class="summary-card">
+            <p>RETAIL SALES</p>
+            <h2 id="salesRetailCount">0</h2>
+            <span>No data</span>
+          </div>
+        </section>
+
+        <!-- Monthly Sales Overview -->
+        <section class="report-panel">
+          <h3>Monthly Sales Overview</h3>
+          <div class="panel-body">
+            <!-- chart container -->
+            <div class="mini-col-chart" id="salesMonthlyChart"></div>
+
+            <!-- empty state -->
+            <div class="reports-empty is-hidden" id="salesMonthlyEmpty">
+              <div class="reports-empty-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M4 19V5M4 19H20" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" />
+                  <path d="M7 14l3-3 3 2 4-5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </div>
+              <h4>No sales data yet</h4>
+              <p>Monthly sales chart will appear here once you have sales transactions.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ✅ MISSING PANEL ADDED: Top-Selling Products -->
+        <section class="report-panel" id="topProductsPanel">
+          <h3>Top-Selling Products (by Revenue)</h3>
+          <div class="panel-body">
+            <!-- chart container -->
+            <div class="bars-chart" id="salesTopProductsChart"></div>
+
+            <!-- empty state -->
+            <div class="reports-empty is-hidden" id="salesTopProductsEmpty">
+              <div class="reports-empty-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 3h10v18H7z" stroke="currentColor" stroke-width="1.6" fill="none" />
+                  <path d="M9 8h6M9 12h6M9 16h6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" />
+                </svg>
+              </div>
+              <h4>No product data yet</h4>
+              <p>Top-selling products chart will appear here once sales are recorded.</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Sales Transactions Detail -->
+        <section class="report-panel">
+          <h3>Sales Transactions Detail</h3>
+
+          <div class="table-wrapper">
+            <table class="transactions-table">
+              <thead>
+                <tr>
+                  <th>TRANSACTION ID</th>
+                  <th>DATE</th>
+                  <th>CUSTOMER</th>
+                  <th>TYPE</th>
+                  <th>TOTAL</th>
+                  <th>STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="salesTransactionsTbody"></tbody>
+            </table>
+
+            <div class="reports-empty" id="salesTransactionsEmpty">
+              <div class="reports-empty-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M7 3h10v18H7z" stroke="currentColor" stroke-width="1.6" fill="none" />
+                  <path d="M9 8h6M9 12h6M9 16h6" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" />
+                </svg>
+              </div>
+              <h4>No sales records yet</h4>
+              <p>Sales transaction records will appear here once they are added to the system.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- shared js -->
+  <script src="sidebar.js"></script>
+  <script src="topbar.js"></script>
+  <script src="new-transaction.js"></script>
+
+  <!-- page js -->
+  <script src="reports(Sales Reports).js"></script>
+</body>
+</html>
