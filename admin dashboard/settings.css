@@ -1,507 +1,603 @@
 /* =========================
-   GENERAL
+   GENERAL AND LAYOUT
 ========================= */
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
 html,
 body {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-    min-height: 100vh;
-
-    background-color: #f3f4f5;
-    color: #272829;
-
-    font-family: "Geologica", sans-serif;
+  min-height: 100vh;
+  background-color: #f3f4f5;
+  color: #272829;
+  font-family: "Geologica", sans-serif;
 }
 
-
-/* =========================
-   MAIN
-========================= */
+.settings-main,
+.settings-content,
+.settings-content *,
+.settings-content *::before,
+.settings-content *::after {
+  box-sizing: border-box;
+}
 
 .settings-main {
-    min-height: 100vh;
-
-    margin-left: 230px;
-
-    background-color: #f3f4f5;
+  min-height: 100vh;
+  margin-left: 230px;
+  background-color: #f3f4f5;
 }
 
-
-/* =========================
-   CONTENT
-========================= */
+.settings-main > #topbar {
+  min-height: 58px;
+}
 
 .settings-content {
-    width: 100%;
-    max-width: 1250px;
-
-    margin: 0 auto;
-
-    padding: 35px 32px 60px;
+  width: 100%;
+  margin: 0;
+  padding: 35px 29px 32px 32px;
+  font-size: 12px;
 }
 
+.settings-content button,
+.settings-content input {
+  font-family: inherit;
+}
 
 /* =========================
    HEADER
 ========================= */
 
 .settings-header {
-    margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .settings-header h1 {
-    margin-bottom: 5px;
-
-    color: #272829;
-
-    font-size: 29px;
-    font-weight: 600;
+  margin: 0 0 4px;
+  color: #272829;
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
 }
 
 .settings-header p {
-    color: #7b7f83;
-
-    font-size: 12px;
-    line-height: 1.5;
+  margin: 0;
+  color: #7b7f83;
+  font-size: 12px;
+  line-height: 1.5;
 }
-
 
 /* =========================
-   TABS
+   SETTINGS NAVIGATION
 ========================= */
 
-.settings-tabs {
-    display: flex;
-
-    gap: 10px;
-
-    margin-bottom: 18px;
+.settings-content .settings-tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
 }
 
-.tab-btn {
-    height: 34px;
+.settings-content .settings-tab-btn {
+  min-height: 36px;
+  padding: 0 16px;
 
-    padding: 0 16px;
+  color: #4c5053;
+  background-color: #ffffff;
 
-    background-color: #ffffff;
-    color: #4c5053;
+  border: 1px solid #dfe2e5;
+  border-radius: 6px;
 
-    border: 1px solid #e0e1e2;
-    border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
 
-    font-family: "Geologica", sans-serif;
-
-    font-size: 10px;
-    font-weight: 500;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        border-color 0.2s ease,
-        color 0.2s ease;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
 
-.tab-btn:hover {
-    border-color: #cfd1d3;
-
-    background-color: #fafafa;
+.settings-content .settings-tab-btn:hover {
+  background-color: #f8f9fa;
+  border-color: #b9c0c8;
 }
 
-.tab-btn.active {
-    background-color: #272829;
-    border-color: #272829;
-
-    color: #ffffff;
+.settings-content .settings-tab-btn.active {
+  color: #ffffff;
+  background-color: #272829;
+  border-color: #272829;
 }
 
+/* The hidden attribute controls panel visibility. */
+.settings-content > .settings-panel {
+  display: block;
+}
+
+.settings-content > .settings-panel[hidden] {
+  display: none;
+}
 
 /* =========================
-   PANELS
+   CARDS
 ========================= */
 
-.tab-panel {
-    display: none;
+.settings-content .settings-card {
+  margin-bottom: 18px;
+  padding: 20px;
+
+  background-color: #ffffff;
+  border: 1px solid #d7dbe0;
+  border-radius: 7px;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.025);
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.tab-panel.show {
-    display: block;
+.settings-content .settings-card:hover {
+  border-color: #c8cdd3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
-
-/* =========================
-   CARD
-========================= */
-
-.settings-card {
-    margin-bottom: 18px;
-
-    padding: 20px;
-
-    background-color: #ffffff;
-
-    border: 1px solid #d8dadd;
-    border-radius: 7px;
-
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.025);
+.settings-content .settings-card-header h2 {
+  margin: 0 0 16px;
+  color: #343638;
+  font-size: 14px;
+  font-weight: 600;
 }
-
-
-/* =========================
-   CARD HEADER
-========================= */
-
-.settings-card-header h2 {
-    margin: 0 0 16px;
-
-    color: #343638;
-
-    font-size: 14px;
-    font-weight: 600;
-}
-
 
 /* =========================
    ACCOUNT SUMMARY
 ========================= */
 
-.account-summary {
-    display: flex;
-    align-items: center;
-
-    gap: 14px;
-
-    margin-bottom: 18px;
+.settings-content .account-summary {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
 }
 
-.avatar {
-    width: 50px;
-    height: 50px;
+.settings-content .avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 
-    flex-shrink: 0;
+  width: 50px;
+  height: 50px;
 
-    background-color: #1f2225;
-
-    border-radius: 50%;
+  color: #ffffff;
+  background-color: #272829;
+  border-radius: 50%;
 }
 
-.account-meta {
-    min-width: 0;
+.settings-content .avatar svg {
+  width: 26px;
+  height: 26px;
 
-    display: flex;
-    flex-direction: column;
-
-    gap: 3px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
 }
 
-.account-meta strong {
-    color: #272829;
-
-    font-size: 13px;
-    font-weight: 600;
+.settings-content .account-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
 }
 
-.account-meta span {
-    color: #7b7f83;
-
-    font-size: 10px;
+.settings-content .account-meta strong {
+  color: #272829;
+  font-size: 13px;
+  font-weight: 600;
 }
 
+.settings-content .account-meta span {
+  color: #7b7f83;
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+
+.settings-content .account-meta .role-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+  margin-top: 5px;
+  padding: 5px 9px;
+
+  color: #ffffff;
+  background-color: #272829;
+  border-radius: 20px;
+
+  font-size: 9px;
+  font-weight: 600;
+}
 
 /* =========================
-   ROLE BADGE
+   FORMS
 ========================= */
 
-.role-badge {
-    width: fit-content;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-top: 5px;
-
-    padding: 5px 9px;
-
-    background-color: #272829;
-    color: #ffffff;
-
-    border-radius: 20px;
-
-    font-size: 9px;
-    font-weight: 600;
+.settings-content .settings-form {
+  margin: 0;
 }
 
+.settings-content .settings-form .field {
+  margin-bottom: 14px;
+}
+
+.settings-content .settings-form label {
+  display: block;
+  margin-bottom: 7px;
+
+  color: #6b6f73;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.settings-content .settings-form input {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+
+  color: #272829;
+  background-color: #ffffff;
+
+  border: 1px solid #d5d7da;
+  border-radius: 5px;
+
+  font-size: 12px;
+  outline: none;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.settings-content .settings-form input::placeholder {
+  color: #a1a4a7;
+}
+
+.settings-content .settings-form input:hover {
+  border-color: #a9afb6;
+}
+
+.settings-content .settings-form input:focus {
+  border-color: #747d88;
+  box-shadow: 0 0 0 3px rgba(39, 40, 41, 0.07);
+}
+
+.settings-content .form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
 
 /* =========================
-   FORM
+   PASSWORD FIELDS
 ========================= */
 
-.settings-form .field {
-    margin-bottom: 14px;
+.settings-content .password-field {
+  position: relative;
 }
 
-.settings-form label {
-    display: block;
-
-    margin-bottom: 7px;
-
-    color: #6b6f73;
-
-    font-size: 10px;
-    font-weight: 600;
+.settings-content .password-field input {
+  padding-right: 48px;
 }
 
-.settings-form input {
-    width: 100%;
-    height: 38px;
-
-    padding: 0 12px;
-
-    background-color: #ffffff;
-    color: #272829;
-
-    border: 1px solid #d5d7da;
-    border-radius: 5px;
-
-    font-family: "Geologica", sans-serif;
-    font-size: 11px;
-
-    outline: none;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+.settings-content .password-field input::-ms-reveal {
+  display: none;
 }
 
-.settings-form input::placeholder {
-    color: #a1a4a7;
+.settings-content .password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 5px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 32px;
+  height: 32px;
+  padding: 0;
+
+  color: #858c95;
+  background-color: transparent;
+
+  border: none;
+  border-radius: 5px;
+
+  transform: translateY(-50%);
+  cursor: pointer;
+
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease;
 }
 
-.settings-form input:focus {
-    border-color: #85898d;
-
-    box-shadow: 0 0 0 3px rgba(39, 40, 41, 0.05);
+.settings-content .password-toggle:hover {
+  color: #272829;
+  background-color: #f0f2f4;
 }
 
+.settings-content .password-toggle[aria-pressed="true"] {
+  color: #272829;
+  background-color: #eceff2;
+}
+
+.settings-content .password-toggle svg {
+  width: 18px;
+  height: 18px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  pointer-events: none;
+}
 
 /* =========================
-   FORM GRID
+   BUTTONS
 ========================= */
 
-.form-grid {
-    display: grid;
+.settings-content .settings-form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
 
-    grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 18px;
+  padding-top: 18px;
 
-    gap: 14px;
+  border-top: 1px solid #eceef0;
 }
 
+.settings-content .save-settings-btn,
+.settings-content .settings-secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 40px;
+  padding: 0 18px;
+
+  border: 1px solid transparent;
+  border-radius: 5px;
+
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.settings-content .save-settings-btn {
+  color: #ffffff;
+  background-color: #272829;
+}
+
+.settings-content .save-settings-btn:hover {
+  background-color: #3b3d40;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.settings-content .settings-secondary-btn {
+  color: #555e69;
+  background-color: #ffffff;
+  border-color: #d3d8df;
+}
+
+.settings-content .settings-secondary-btn:hover {
+  color: #272829;
+  background-color: #f5f6f7;
+  border-color: #a9afb6;
+}
+
+.settings-content .save-settings-btn:active,
+.settings-content .settings-secondary-btn:active {
+  box-shadow: none;
+}
 
 /* =========================
-   NOTIFICATION SETTINGS
+   NOTIFICATIONS
 ========================= */
 
-.notif-list {
-    margin-top: 2px;
-
-    border-top: 1px solid #eeeeee;
+.settings-content .notif-list {
+  border-top: 1px solid #eeeeee;
 }
 
-.notif-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.settings-content .notif-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 
-    gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #eeeeee;
 
-    padding: 16px 0;
-
-    border-bottom: 1px solid #eeeeee;
+  transition: background-color 0.15s ease;
 }
 
-.notif-text {
-    min-width: 0;
+.settings-content .notif-item:hover {
+  background-color: #fafbfc;
 }
 
-.notif-text strong {
-    display: block;
-
-    margin-bottom: 5px;
-
-    color: #343638;
-
-    font-size: 12px;
-    font-weight: 600;
+.settings-content .notif-text {
+  min-width: 0;
 }
 
-.notif-text p {
-    margin: 0;
+.settings-content .notif-text strong {
+  display: block;
+  margin-bottom: 5px;
 
-    color: #8b8f92;
-
-    font-size: 10px;
-    line-height: 1.5;
+  color: #343638;
+  font-size: 12px;
+  font-weight: 600;
 }
 
+.settings-content .notif-text p {
+  margin: 0;
+  color: #8b8f92;
+  font-size: 10px;
+  line-height: 1.5;
+}
 
 /* =========================
-   TOGGLE SWITCH
+   NOTIFICATION SWITCHES
 ========================= */
 
-.switch {
-    position: relative;
+.settings-content .switch {
+  position: relative;
+  display: inline-block;
+  flex-shrink: 0;
 
-    width: 40px;
-    height: 22px;
-
-    flex-shrink: 0;
+  width: 40px;
+  height: 22px;
 }
 
-.switch input {
-    width: 0;
-    height: 0;
+.settings-content .switch input {
+  position: absolute;
+  inset: 0;
 
-    opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+
+  opacity: 0;
+  cursor: pointer;
 }
 
-.slider {
-    position: absolute;
+.settings-content .slider {
+  position: absolute;
+  inset: 0;
 
-    inset: 0;
+  background-color: #d7dadc;
+  border-radius: 999px;
 
-    background-color: #d7dadc;
-
-    border-radius: 999px;
-
-    cursor: pointer;
-
-    transition: background-color 0.2s ease;
+  pointer-events: none;
+  transition: background-color 0.2s ease;
 }
 
-.slider::before {
-    content: "";
+.settings-content .slider::before {
+  content: "";
 
-    position: absolute;
+  position: absolute;
+  top: 3px;
+  left: 3px;
 
-    width: 16px;
-    height: 16px;
+  width: 16px;
+  height: 16px;
 
-    left: 3px;
-    top: 50%;
+  background-color: #ffffff;
+  border-radius: 50%;
 
-    transform: translateY(-50%);
-
-    background-color: #ffffff;
-
-    border-radius: 50%;
-
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-
-    transition: transform 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
 }
 
-.switch input:checked + .slider {
-    background-color: #272829;
+.settings-content .switch input:checked + .slider {
+  background-color: #272829;
 }
 
-.switch input:checked + .slider::before {
-    transform: translate(18px, -50%);
+.settings-content .switch input:checked + .slider::before {
+  transform: translateX(18px);
 }
-
 
 /* =========================
-   SAVE BUTTON
+   MESSAGES AND FOCUS
 ========================= */
 
-.save-settings-btn {
-    height: 38px;
+.settings-content .settings-message {
+  margin: 12px 0 0;
+  padding: 10px 12px;
 
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+  color: #526477;
+  background-color: #f0f4f8;
 
-    margin-top: 16px;
+  border: 1px solid #dce4ec;
+  border-radius: 5px;
 
-    padding: 0 18px;
-
-    background-color: #272829;
-    color: #ffffff;
-
-    border: none;
-    border-radius: 5px;
-
-    font-family: "Geologica", sans-serif;
-
-    font-size: 11px;
-    font-weight: 500;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+  font-size: 11px;
+  line-height: 1.6;
 }
 
-.save-settings-btn:hover {
-    background-color: #3b3d40;
-
-    transform: translateY(-1px);
-
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+.settings-content .settings-message:empty {
+  display: none;
 }
 
+.settings-content button:focus-visible,
+.settings-content .switch input:focus-visible + .slider {
+  outline: 2px solid #8a9fb8;
+  outline-offset: 3px;
+}
 
 /* =========================
    RESPONSIVE
 ========================= */
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
+  /* Assumes the shared sidebar uses an overlay on mobile. */
+  .settings-main {
+    margin-left: 0;
+  }
 
-    .settings-main {
-        margin-left: 200px;
-    }
+  .settings-content {
+    padding: 24px 18px;
+  }
 
-    .settings-content {
-        padding: 25px;
-    }
-
+  .settings-header h1 {
+    font-size: 24px;
+  }
 }
 
-
 @media (max-width: 600px) {
+  .settings-content .settings-tabs {
+    flex-wrap: wrap;
+  }
 
-    .settings-header h1 {
-        font-size: 25px;
-    }
+  .settings-content .settings-tab-btn {
+    flex: 1;
+    min-width: 120px;
+  }
 
-    .settings-tabs {
-        flex-wrap: wrap;
-    }
+  .settings-content .form-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
 
-    .tab-btn {
-        flex: 1;
+  .settings-content .settings-card {
+    padding: 18px;
+  }
+}
 
-        min-width: 120px;
-    }
+@media (max-width: 480px) {
+  .settings-header h1 {
+    font-size: 21px;
+  }
 
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
+  .settings-content .settings-form-actions > button {
+    flex: 1;
+  }
+}
 
-    .settings-card {
-        padding: 18px;
-    }
-
+@media (prefers-reduced-motion: reduce) {
+  .settings-content *,
+  .settings-content *::before,
+  .settings-content *::after {
+    transition: none !important;
+  }
 }

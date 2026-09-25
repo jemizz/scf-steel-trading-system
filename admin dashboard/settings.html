@@ -6,8 +6,14 @@
 
   <title>Settings - SCF Steel Trading</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap"
+    rel="stylesheet"
+  >
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
+    rel="stylesheet"
+  >
 
   <link rel="stylesheet" href="sidebar.css">
   <link rel="stylesheet" href="topbar.css">
@@ -17,39 +23,49 @@
 </head>
 
 <body>
-
-  <!-- SIDEBAR (component) -->
+  <!-- SIDEBAR -->
   <div id="sidebar"></div>
 
-  <!-- MAIN -->
   <main class="settings-main">
-
-    <!-- TOPBAR (component) -->
+    <!-- TOPBAR -->
     <div id="topbar" data-page-title="Settings"></div>
 
-    <!-- CONTENT -->
     <div class="settings-content">
-
       <!-- PAGE HEADER -->
-      <section class="settings-header">
+      <header class="settings-header">
         <h1>Settings</h1>
         <p>System configuration and preferences</p>
-      </section>
+      </header>
 
-      <!-- TABS -->
-      <section class="settings-tabs" aria-label="Settings tabs">
-        <button type="button" class="tab-btn active" data-tab="account">
+      <!-- SETTINGS NAVIGATION -->
+      <nav class="settings-tabs" aria-label="Settings sections">
+        <button
+          type="button"
+          class="settings-tab-btn active"
+          data-settings-tab="account"
+          aria-controls="tab-account"
+          aria-pressed="true"
+        >
           User Account
         </button>
 
-        <button type="button" class="tab-btn" data-tab="notification">
+        <button
+          type="button"
+          class="settings-tab-btn"
+          data-settings-tab="notification"
+          aria-controls="tab-notification"
+          aria-pressed="false"
+        >
           Notification
         </button>
-      </section>
+      </nav>
 
-      <!-- TAB: ACCOUNT -->
-      <section class="tab-panel show" id="tab-account">
-
+      <!-- ACCOUNT PANEL -->
+      <section
+        class="settings-panel"
+        id="tab-account"
+        aria-label="User account settings"
+      >
         <!-- ACCOUNT INFORMATION -->
         <div class="settings-card">
           <div class="settings-card-header">
@@ -57,7 +73,12 @@
           </div>
 
           <div class="account-summary">
-            <div class="avatar"></div>
+            <div class="avatar" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>
+              </svg>
+            </div>
 
             <div class="account-meta">
               <strong>Administrator</strong>
@@ -66,22 +87,38 @@
             </div>
           </div>
 
-          <form class="settings-form" autocomplete="off">
+          <form
+            class="settings-form"
+            id="accountForm"
+            method="post"
+          >
             <div class="form-grid">
               <div class="field">
                 <label for="firstName">First Name</label>
-                <input id="firstName" type="text" />
+                <input
+                  id="firstName"
+                  type="text"
+                  autocomplete="given-name"
+                >
               </div>
 
               <div class="field">
                 <label for="lastName">Last Name</label>
-                <input id="lastName" type="text" />
+                <input
+                  id="lastName"
+                  type="text"
+                  autocomplete="family-name"
+                >
               </div>
             </div>
 
             <div class="field">
               <label for="emailAddress">Email Address</label>
-              <input id="emailAddress" type="email" />
+              <input
+                id="emailAddress"
+                type="email"
+                autocomplete="email"
+              >
             </div>
           </form>
         </div>
@@ -92,123 +129,248 @@
             <h2>Change Password</h2>
           </div>
 
-          <form class="settings-form" autocomplete="off">
+          <form
+            class="settings-form"
+            id="changePasswordForm"
+            method="post"
+          >
             <div class="field">
               <label for="currentPassword">Current Password</label>
-              <input id="currentPassword" type="password" />
+
+              <div class="password-field">
+                <input
+                  id="currentPassword"
+                  type="password"
+                  autocomplete="current-password"
+                  placeholder="Enter your current password"
+                  required
+                >
+
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-password-target="currentPassword"
+                  aria-label="Show current password"
+                  aria-controls="currentPassword"
+                  aria-pressed="false"
+                ></button>
+              </div>
             </div>
 
             <div class="field">
               <label for="newPassword">New Password</label>
-              <input id="newPassword" type="password" />
+
+              <div class="password-field">
+                <input
+                  id="newPassword"
+                  type="password"
+                  autocomplete="new-password"
+                  placeholder="Enter your new password"
+                  required
+                >
+
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-password-target="newPassword"
+                  aria-label="Show new password"
+                  aria-controls="newPassword"
+                  aria-pressed="false"
+                ></button>
+              </div>
             </div>
 
             <div class="field">
               <label for="confirmPassword">Confirm Password</label>
-              <input id="confirmPassword" type="password" />
+
+              <div class="password-field">
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  autocomplete="new-password"
+                  placeholder="Re-enter your new password"
+                  required
+                >
+
+                <button
+                  type="button"
+                  class="password-toggle"
+                  data-password-target="confirmPassword"
+                  aria-label="Show confirm password"
+                  aria-controls="confirmPassword"
+                  aria-pressed="false"
+                ></button>
+              </div>
+            </div>
+
+            <p
+              class="settings-message"
+              id="passwordMessage"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+            <div class="settings-form-actions">
+              <button
+                type="reset"
+                class="settings-secondary-btn"
+              >
+                Clear
+              </button>
+
+              <button
+                type="submit"
+                class="save-settings-btn"
+                id="changePasswordBtn"
+              >
+                Change Password
+              </button>
             </div>
           </form>
         </div>
-
       </section>
+      <!-- ACCOUNT PANEL ENDS HERE -->
 
-      <!-- TAB: NOTIFICATION -->
-      <section class="tab-panel" id="tab-notification">
-
+      <!-- NOTIFICATION PANEL: separate from Account -->
+      <section
+        class="settings-panel"
+        id="tab-notification"
+        aria-label="Notification settings"
+        hidden
+      >
         <div class="settings-card">
-
           <div class="settings-card-header">
             <h2>Notification Settings</h2>
           </div>
 
           <div class="notif-list">
-
             <div class="notif-item">
               <div class="notif-text">
-                <strong>Low Stock Alerts</strong>
-                <p>When product stock falls below reorder level</p>
+                <strong id="lowStockLabel">Low Stock Alerts</strong>
+                <p id="lowStockDescription">
+                  When product stock falls below reorder level
+                </p>
               </div>
 
               <label class="switch">
-                <input type="checkbox" id="notifLowStock">
-                <span class="slider"></span>
+                <input
+                  type="checkbox"
+                  id="notifLowStock"
+                  aria-labelledby="lowStockLabel"
+                  aria-describedby="lowStockDescription"
+                >
+                <span class="slider" aria-hidden="true"></span>
               </label>
             </div>
 
             <div class="notif-item">
               <div class="notif-text">
-                <strong>New Fabrication Requests</strong>
-                <p>When a new job request is submitted</p>
+                <strong id="fabricationLabel">
+                  New Fabrication Requests
+                </strong>
+                <p id="fabricationDescription">
+                  When a new job request is submitted
+                </p>
               </div>
 
               <label class="switch">
-                <input type="checkbox" id="notifFabrication">
-                <span class="slider"></span>
+                <input
+                  type="checkbox"
+                  id="notifFabrication"
+                  aria-labelledby="fabricationLabel"
+                  aria-describedby="fabricationDescription"
+                >
+                <span class="slider" aria-hidden="true"></span>
               </label>
             </div>
 
             <div class="notif-item">
               <div class="notif-text">
-                <strong>Purchase Order Delivery</strong>
-                <p>When expected PO delivery date arrives</p>
+                <strong id="poDeliveryLabel">
+                  Purchase Order Delivery
+                </strong>
+                <p id="poDeliveryDescription">
+                  When expected PO delivery date arrives
+                </p>
               </div>
 
               <label class="switch">
-                <input type="checkbox" id="notifPoDelivery">
-                <span class="slider"></span>
+                <input
+                  type="checkbox"
+                  id="notifPoDelivery"
+                  aria-labelledby="poDeliveryLabel"
+                  aria-describedby="poDeliveryDescription"
+                >
+                <span class="slider" aria-hidden="true"></span>
               </label>
             </div>
 
             <div class="notif-item">
               <div class="notif-text">
-                <strong>Daily Sales Summary</strong>
-                <p>End-of-day sales report notification</p>
+                <strong id="dailySalesLabel">Daily Sales Summary</strong>
+                <p id="dailySalesDescription">
+                  End-of-day sales report notification
+                </p>
               </div>
 
               <label class="switch">
-                <input type="checkbox" id="notifDailySales">
-                <span class="slider"></span>
+                <input
+                  type="checkbox"
+                  id="notifDailySales"
+                  aria-labelledby="dailySalesLabel"
+                  aria-describedby="dailySalesDescription"
+                >
+                <span class="slider" aria-hidden="true"></span>
               </label>
             </div>
 
             <div class="notif-item">
               <div class="notif-text">
-                <strong>Payment Due Reminders</strong>
-                <p>For outstanding wholesale credit payments</p>
+                <strong id="paymentDueLabel">
+                  Payment Due Reminders
+                </strong>
+                <p id="paymentDueDescription">
+                  For outstanding wholesale credit payments
+                </p>
               </div>
 
               <label class="switch">
-                <input type="checkbox" id="notifPaymentDue">
-                <span class="slider"></span>
+                <input
+                  type="checkbox"
+                  id="notifPaymentDue"
+                  aria-labelledby="paymentDueLabel"
+                  aria-describedby="paymentDueDescription"
+                >
+                <span class="slider" aria-hidden="true"></span>
               </label>
             </div>
-
           </div>
 
-          <button
-            type="button"
-            class="save-settings-btn"
-            id="saveNotificationSettings"
-          >
-            Save Notifications Settings
-          </button>
+          <p
+            class="settings-message"
+            id="notificationMessage"
+            role="status"
+            aria-live="polite"
+          ></p>
 
+          <div class="settings-form-actions">
+            <button
+              type="button"
+              class="save-settings-btn"
+              id="saveNotificationSettings"
+            >
+              Save Notification Settings
+            </button>
+          </div>
         </div>
-
       </section>
-
+      <!-- NOTIFICATION PANEL ENDS HERE -->
     </div>
   </main>
 
-   <!-- =========================
-         MODALS
-    ========================== -->
-
-    <!-- NEW TRANSACTION MODAL -->
-    <div id="newTransactionModal"></div>
-
-    <!-- NEW PURCHASE ORDER MODAL -->
-    <div id="newPurchaseOrderModal"></div>
+  <!-- SHARED MODALS -->
+  <div id="newTransactionModal"></div>
+  <div id="newPurchaseOrderModal"></div>
 
   <script src="sidebar.js"></script>
   <script src="topbar.js"></script>
