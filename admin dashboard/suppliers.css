@@ -434,6 +434,8 @@ body {
 }
 
 
+
+
 /* =========================
    RESPONSIVE
 ========================= */
@@ -476,5 +478,108 @@ body {
 
   .suppliers-header h1 {
     font-size: 23px;
+  }
+}
+
+/* =========================
+   FONT SIZES — MATCH SALES
+========================= */
+
+.suppliers-content {
+  font-size: 12px;
+}
+
+.suppliers-header h1 {
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+}
+
+.suppliers-header p {
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* Add Supplier button */
+.add-supplier-btn {
+  height: 40px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.add-supplier-btn .plus {
+  font-size: 17px;
+}
+
+/* Search */
+.suppliers-toolbar .search-box input {
+  height: 39px;
+  font-size: 11px;
+}
+
+/* Filters */
+.supplier-filters select {
+  height: 39px;
+  font-size: 10px;
+}
+
+/* Table headings */
+.suppliers-table th {
+  height: 48px;
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.35px;
+}
+
+/* Table records */
+.suppliers-table td {
+  font-size: 11px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+/* Table action buttons */
+.suppliers-table td button {
+  font-family: inherit;
+  font-size: 10px;
+}
+
+/* Empty state */
+.suppliers-empty h3 {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.suppliers-empty p {
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+/* Footer */
+.suppliers-table-footer p {
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* Pagination */
+.suppliers-table-footer .pagination button,
+.suppliers-table-footer .pagination span {
+  font-family: inherit;
+  font-size: 10px;
+}
+
+/* Smaller screens */
+@media (max-width: 768px) {
+  .suppliers-header h1 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .suppliers-header h1 {
+    font-size: 21px;
   }
 }
