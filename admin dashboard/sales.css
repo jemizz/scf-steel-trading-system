@@ -1,938 +1,766 @@
 /* =========================
-   GENERAL
+   PAGE SETTINGS
 ========================= */
+
+:root {
+  --sales-sidebar-width: 230px;
+  --sales-topbar-height: 58px;
+
+  --sales-background: #f3f4f5;
+  --sales-white: #ffffff;
+  --sales-text: #272829;
+  --sales-muted: #818894;
+  --sales-border: #d7dbe0;
+}
 
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html,
-body {
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    min-height: 100vh;
-    background-color: #f3f4f5;
-    color: #272829;
-    font-family: "Geologica", sans-serif;
+  margin: 0;
+  background: var(--sales-background);
 }
 
-
-/* =========================
-   MAIN
-========================= */
-
-.sales-main {
-    min-height: 100vh;
-    margin-left: 230px;
-    background-color: #f3f4f5;
+.sales-shell {
+  min-height: 100vh;
+  margin-left: var(--sales-sidebar-width);
 }
 
-
-/* =========================
-   CONTENT
-========================= */
-
-.sales-content {
-    width: 100%;
-    max-width: 1250px;
-    margin: 0 auto;
-    padding: 35px 32px 60px;
+/* Reserves space for the existing topbar. */
+.sales-shell > #topbar {
+  min-height: var(--sales-topbar-height);
 }
 
+.sales-page {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 35px 29px 32px 32px;
 
-/* =========================
-   PAGE HEADER
-========================= */
-
-.sales-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 25px;
+  color: var(--sales-text);
+  font-family: "Geologica", "Segoe UI", Arial, sans-serif;
+  font-size: 12px;
 }
 
-.sales-header h1 {
-    margin-bottom: 5px;
-
-    color: #272829;
-
-    font-size: 29px;
-    font-weight: 600;
-}
-
-.sales-header p {
-    color: #7b7f83;
-
-    font-size: 12px;
-    line-height: 1.5;
-}
-
-
-/* =========================
-   BUTTON (same sizing as inventory primary)
-========================= */
-
-.add-sale-btn {
-    height: 40px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 7px;
-
-    min-width: 110px;
-
-    padding: 0 16px;
-
-    background-color: #272829;
-    color: #ffffff;
-
-    border: 1px solid #272829;
-    border-radius: 5px;
-
-    font-family: "Geologica", sans-serif;
-
-    font-size: 11px;
-    font-weight: 500;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.2s ease,
-        background-color 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.add-sale-btn:hover {
-    background-color: #3b3d40;
-    transform: translateY(-1px);
-
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
-}
-
-.add-sale-btn .plus,
-.plus {
-    font-size: 17px;
-    font-weight: 300;
-    line-height: 1;
-}
-
-
-/* =========================
-   SALES SUMMARY (match inventory)
-========================= */
-
-.sales-summary {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-
-    gap: 16px;
-
-    margin-bottom: 28px;
-}
-
-
-/* =========================
-   SUMMARY CARD
-   SAME AS INVENTORY
-========================= */
-
-.sales-summary .summary-card {
-    min-width: 0;
-    min-height: 110px;
-
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-
-    padding: 18px;
-
-    background-color: #ffffff;
-
-    border: 1px solid #d9dbdd;
-    border-radius: 6px;
-
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.025);
-
-    transition:
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
-}
-
-.sales-summary .summary-card:hover {
-    transform: translateY(-2px);
-
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.06);
-}
-
-
-/* =========================
-   SUMMARY INFORMATION
-========================= */
-
-.sales-summary .summary-info {
-    min-width: 0;
-
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-
-/* =========================
-   CARD TEXT (match inventory sizing)
-========================= */
-
-.sales-summary .summary-title {
-    margin: 0 2 8px;
-
-    color: #7b7f82;
-
-    font-size: 11px;
-    font-weight: 500;
-
-    letter-spacing: 0.3px;
-
-    line-height: normal;
-
-    white-space: nowrap;
-
-    border: none;
-}
-
-
-/* SUMMARY NUMBER */
-
-.sales-summary .summary-number {
-    margin: 0 0 5px;
-    padding: 0;
-
-    color: #272829;
-
-    font-size: 26px;
-    font-weight: 600;
-
-    line-height: normal;
-
-    border: none;
-}
-
-.sales-summary .summary-subtext {
-    color: #96999c;
-    font-size: 7.5px;
+.sales-page button,
+.sales-page input,
+.sales-page select {
+  font-family: inherit;
 }
 
 /* =========================
-   TODAY'S SALES AMOUNT
+   PAGE HEADING
 ========================= */
 
-.sales-summary .sales-amount {
-    position: static;
+.sales-page .page-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
-    display: block;
-
-    margin: 0 0 5px;
-    padding: 0;
-
-    color: #272829;
-
-    font-size: 26px;
-    font-weight: 600;
-
-    line-height: normal;
-
-    border: none;
-    text-decoration: none;
+  min-height: 51px;
+  gap: 20px;
+  margin: 0 0 24px;
 }
 
+.sales-page .page-heading h1 {
+  margin: 0;
 
-/* REMOVE DECORATIVE LINES */
-
-.sales-summary .summary-number::before,
-.sales-summary .summary-number::after,
-.sales-summary .sales-amount::before,
-.sales-summary .sales-amount::after {
-    display: none !important;
-
-    content: none !important;
+  color: var(--sales-text);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.5px;
 }
 
+.sales-page .page-description {
+  margin: 4px 0 0;
+
+  color: #737b86;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+/* Removes additions that are not in your reference. */
+.sales-page .page-heading .eyebrow,
+.sales-page .section-heading,
+.sales-page .table-footer {
+  display: none;
+}
 
 /* =========================
-   SUMMARY SUBTEXT
+   NEW SALE BUTTON
 ========================= */
 
-.sales-summary .summary-subtext {
-    margin: 0;
+.sales-page .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
 
-    color: #96999c;
+  min-width: 110px;
+  height: 40px;
+  min-height: 40px;
+  padding: 0 17px;
 
-    font-size: 10px;
-    font-weight: 400;
+  border: 1px solid transparent;
+  border-radius: 5px;
 
-    line-height: normal;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
 
-    white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
 }
 
+.sales-page .button-primary {
+  color: #ffffff;
+  background: #272829;
+}
+
+.sales-page .button-primary:hover {
+  background: #3b3d3f;
+}
+
+.sales-page .button-primary span {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1;
+}
 
 /* =========================
-   SUMMARY ICONS
-   SAME AS INVENTORY
+   SUMMARY CARDS
 ========================= */
 
-.sales-summary .summary-icon {
-    width: 38px;
-    height: 38px;
+.sales-page .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin: 0;
-
-    border-radius: 6px;
+  margin: 0 0 28px;
 }
 
-.sales-summary .summary-icon svg {
-    width: 19px;
-    height: 19px;
+.sales-page .stat-card {
+  position: relative;
+  display: block;
 
-    fill: none;
+  height: 118px;
+  min-height: 118px;
+  padding: 18px;
 
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
+  background: var(--sales-white);
+  border: 1px solid var(--sales-border);
+  border-radius: 6px;
+
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.025);
 }
 
-/* inventory-like palette */
-.sales-icon { background-color: #edf2f5; }
-.sales-icon svg { stroke: #647783; }
-
-/* TODAY'S SALES */
-
-.sales-summary .sales-icon {
-    background-color: #e8f5f1;
+.sales-page .stat-copy {
+  min-width: 0;
 }
 
-.sales-summary .sales-icon svg {
-    stroke: #3a927a;
+.sales-page .stat-label {
+  margin: 0 44px 7px 0;
+
+  color: #747d88;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.2px;
+  text-transform: uppercase;
 }
 
+.sales-page .stat-value {
+  margin: 0;
 
-/* TOTAL TRANSACTIONS */
-
-.sales-summary .transaction-icon {
-    background-color: #edf2f5;
+  color: #272829;
+  font-size: 27px;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: -0.6px;
+  font-variant-numeric: tabular-nums;
 }
 
-.sales-summary .transaction-icon svg {
-    stroke: #647783;
+.sales-page .stat-note {
+  margin: 8px 0 0;
+
+  color: #8a929d;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 15px;
 }
 
+.sales-page .stat-icon {
+  position: absolute;
+  top: 18px;
+  right: 18px;
 
-/* PENDING PAYMENT */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-.sales-summary .pending-icon {
-    background-color: #fff0e8;
+  width: 38px;
+  height: 38px;
+
+  border-radius: 7px;
+
+  font-size: 19px;
+  font-weight: 400;
 }
 
-.sales-summary .pending-icon svg {
-    stroke: #b56c4d;
+.sales-page .icon-green {
+  color: #26987f;
+  background: #e7f4ef;
 }
 
-
-/* WHOLESALES */
-
-.sales-summary .wholesale-icon {
-    background-color: #eef0f6;
+.sales-page .icon-yellow {
+  color: #9c8632;
+  background: #f8f3df;
 }
 
-.sales-summary .wholesale-icon svg {
-    stroke: #69738b;
+.sales-page .icon-red {
+  color: #db5547;
+  background: #fff0e9;
 }
 
+.sales-page .icon-blue {
+  color: #617c8e;
+  background: #edf2f6;
+}
 
 /* =========================
-   SALES PANEL
+   TRANSACTIONS CONTAINER
 ========================= */
 
-.sales-panel {
-    overflow: hidden;
+.sales-page .transactions-card {
+  overflow: hidden;
 
-    background-color: #ffffff;
+  background: var(--sales-white);
+  border: 1px solid var(--sales-border);
+  border-radius: 7px;
 
-    border: 1px solid #d8dadd;
-    border-radius: 7px;
-
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.025);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.025);
 }
-
 
 /* =========================
-   TOOLBAR
+   SEARCH AND FILTERS
 ========================= */
 
-.sales-toolbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.sales-page .table-tools {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
-    gap: 18px;
-
-    padding: 18px;
-
-    border-bottom: 1px solid #e8e9ea;
+  min-height: 75px;
+  padding: 18px;
 }
 
+.sales-page .search-box {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  gap: 10px;
 
-/* =========================
-   SEARCH (match inventory)
-========================= */
+  width: 100%;
+  max-width: 620px;
+  min-width: 0;
+  height: 39px;
+  padding: 0 13px;
 
-.search-box {
-    position: relative;
+  color: #87909b;
+  background: #ffffff;
 
-    flex: 1;
-
-    max-width: 620px;
+  border: 1px solid #d3d8df;
+  border-radius: 5px;
 }
 
-.search-box svg {
-    position: absolute;
+.sales-page .search-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-    top: 50%;
-    left: 13px;
+  width: 15px;
+  flex-shrink: 0;
 
-    width: 15px;
-    height: 15px;
-
-    transform: translateY(-50%);
-
-    fill: none;
-    stroke: #8a8e91;
-
-    stroke-width: 1.7;
-    stroke-linecap: round;
-
-    pointer-events: none;
+  font-size: 20px;
+  line-height: 1;
 }
 
-.search-box input {
-    width: 100%;
-    height: 38px;
+.sales-page .search-box input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  padding: 0;
 
-    padding: 0 14px 0 38px;
+  color: #333a44;
+  background: transparent;
 
-    background-color: #ffffff;
-    color: #272829;
+  border: none;
+  outline: none;
 
-    border: 1px solid #d5d7da;
-    border-radius: 5px;
-
-    font-family: "Geologica", sans-serif;
-    font-size: 11px;
-
-    outline: none;
-
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+  font-size: 11px;
+  font-weight: 400;
 }
 
-.search-box input::placeholder {
-    color: #a1a4a7;
+.sales-page .search-box input::placeholder {
+  color: #929aa6;
+  opacity: 1;
 }
 
-.search-box input:focus {
-    border-color: #85898d;
-    box-shadow: 0 0 0 3px rgba(39, 40, 41, 0.05);
+.sales-page .search-box:focus-within {
+  border-color: #8794a3;
 }
 
-
-/* =========================
-   FILTERS (match inventory sizing)
-========================= */
-
-.sales-filters {
-    display: flex;
-    gap: 10px;
+.sales-page .filter-label {
+  flex: 0 0 135px;
 }
 
-.sales-filters select,
-.sales-filters input {
-    min-width: 135px;
-    height: 38px;
-
-    padding: 0 12px;
-
-    background-color: #ffffff;
-    color: #55595c;
-
-    border: 1px solid #d5d7da;
-    border-radius: 5px;
-
-    font-family: "Geologica", sans-serif;
-    font-size: 10px;
-
-    outline: none;
-
-    cursor: pointer;
+/* Pushes both filters to the right. */
+.sales-page .search-box + .filter-label {
+  margin-left: auto;
 }
 
-.sales-filters select {
-    padding-right: 30px;
+.sales-page .filter-label select {
+  width: 100%;
+  min-width: 0;
+  height: 39px;
+  padding: 0 12px;
+
+  color: #3c4653;
+  background: #ffffff;
+
+  border: 1px solid #d3d8df;
+  border-radius: 5px;
+
+  font-size: 10px;
+  font-weight: 400;
+
+  cursor: pointer;
 }
-
-.sales-filters select:hover,
-.sales-filters select:focus,
-.sales-filters input:hover,
-.sales-filters input:focus {
-    border-color: #969a9e;
-}
-
-
-/* =========================
-   TABLE WRAPPER
-========================= */
-
-.table-wrapper {
-    width: 100%;
-    overflow-x: auto;
-}
-
 
 /* =========================
    SALES TABLE
 ========================= */
 
-.sales-table {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
+.sales-page .table-scroll {
+  width: 100%;
+  min-height: 290px;
+  overflow-x: auto;
 }
 
+.sales-page .sales-table {
+  width: 100%;
+  margin: 0;
 
-/* =========================
-   TABLE HEADER
-========================= */
-
-.sales-table th {
-    height: 47px;
-
-    padding: 0 14px;
-
-    background-color: #fafafa;
-    color: #5c6064;
-
-    border-bottom: 1px solid #e2e3e4;
-
-    font-size: 9px;
-    font-weight: 600;
-
-    letter-spacing: 0.3px;
-
-    text-align: left;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: nowrap;
 }
 
-
-/* =========================
-   TABLE DATA
-========================= */
-
-.sales-table td {
-    height: 64px;
-
-    padding: 8px 14px;
-
-    color: #55595d;
-
-    border-bottom: 1px solid #eeeeee;
-
-    font-size: 10px;
-
-    vertical-align: middle;
+.sales-page .sales-table thead {
+  background: #f9f9fa;
 }
 
+.sales-page .sales-table th {
+  height: 48px;
+  padding: 0 14px;
 
-/* =========================
-   TABLE COLUMN WIDTHS
-========================= */
+  color: #455469;
 
-.sales-table th:nth-child(1) { width: 12%; }
-.sales-table th:nth-child(2) { width: 12%; }
-.sales-table th:nth-child(3) { width: 20%; }
-.sales-table th:nth-child(4) { width: 10%; }
-.sales-table th:nth-child(5) { width: 13%; }
-.sales-table th:nth-child(6) { width: 12%; }
-.sales-table th:nth-child(7) { width: 12%; }
-.sales-table th:nth-child(8) { width: 9%; }
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #dfe3e8;
 
-
-/* =========================
-   TABLE ROW
-========================= */
-
-.sales-table tbody tr {
-    transition: background-color 0.15s ease;
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
 }
 
-.sales-table tbody tr:hover {
-    background-color: #fafafa;
+.sales-page .sales-table td {
+  height: 49px;
+  padding: 0 14px;
+
+  color: #3d4652;
+  background: transparent;
+
+  border-bottom: 1px solid #edf0f2;
+
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
 }
 
-
-/* =========================
-   STATUS BADGES
-========================= */
-
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    min-width: 72px;
-
-    padding: 6px 9px;
-
-    border-radius: 20px;
-
-    font-size: 8.5px;
-    font-weight: 500;
+.sales-page .sales-table tbody tr:last-child td {
+  border-bottom: none;
 }
 
-.status-completed {
-    background-color: #e4f5ed;
-    color: #25845e;
+.sales-page .sales-table tbody tr:hover {
+  background: #fafbfc;
 }
 
-.status-pending {
-    background-color: #fff3d9;
-    color: #ad7911;
+.sales-page .transaction-id {
+  color: #303844;
+  font-weight: 500;
 }
 
-.status-cancelled {
-    background-color: #fde6e6;
-    color: #c64c4c;
+.sales-page .customer-name {
+  font-weight: 400;
 }
 
+.sales-page .type-label {
+  color: #3977e9;
+  font-weight: 400;
+}
+
+.sales-page .item-count {
+  color: #8a929d;
+}
+
+.sales-page .numeric {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.sales-page .actions-heading,
+.sales-page .action-cell {
+  text-align: center;
+}
 
 /* =========================
    PAYMENT BADGES
 ========================= */
 
-.payment-badge {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+.sales-page .status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 
-    min-width: 72px;
+  min-height: 22px;
+  padding: 3px 8px;
 
-    padding: 6px 9px;
+  border-radius: 4px;
 
-    border-radius: 20px;
-
-    font-size: 8.5px;
-    font-weight: 500;
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
 }
 
-.payment-paid {
-    background-color: #e4f5ed;
-    color: #25845e;
+.sales-page .status-paid {
+  color: #279160;
+  background: #e6f5eb;
 }
 
-.payment-partial {
-    background-color: #fff3d9;
-    color: #ad7911;
+.sales-page .status-partial {
+  color: #ae7b1c;
+  background: #fff4da;
 }
 
-.payment-unpaid {
-    background-color: #fde6e6;
-    color: #c64c4c;
+.sales-page .status-pending {
+  color: #d95858;
+  background: #fde9e9;
 }
-
 
 /* =========================
-   ACTIONS
+   VIEW BUTTON
 ========================= */
 
-.actions-heading {
-    text-align: center !important;
+.sales-page .view-button {
+  padding: 6px 8px;
+
+  color: #6e7782;
+  background: transparent;
+
+  border: none;
+  border-radius: 4px;
+
+  font-size: 10px;
+  font-weight: 400;
+
+  cursor: pointer;
 }
 
-.sale-actions {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 5px;
+.sales-page .view-button:hover {
+  color: #272829;
+  background: #f0f2f4;
 }
-
-.action-btn {
-    width: 31px;
-    height: 31px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background-color: transparent;
-    color: #62666a;
-
-    border: none;
-    border-radius: 4px;
-
-    cursor: pointer;
-
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease;
-}
-
-.action-btn:hover {
-    background-color: #eeeeee;
-
-    color: #272829;
-}
-
-.action-btn.delete:hover {
-    background-color: #fdeaea;
-
-    color: #bd4747;
-}
-
-.action-btn svg {
-    width: 15px;
-    height: 15px;
-
-    fill: none;
-    stroke: currentColor;
-
-    stroke-width: 1.6;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-}
-
 
 /* =========================
-   EMPTY STATE (match inventory)
+   EMPTY STATE
 ========================= */
 
-.sales-empty {
-    min-height: 270px;
+.sales-page .empty-state {
+  padding: 80px 20px 45px;
 
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    color: #8c9094;
-    text-align: center;
+  color: #87919e;
+  text-align: center;
 }
 
-.empty-icon {
-    width: 48px;
-    height: 48px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-bottom: 14px;
-
-    background-color: #f0f1f2;
-    border-radius: 50%;
+.sales-page .empty-state[hidden] {
+  display: none;
 }
 
-.empty-icon svg {
-    width: 21px;
-    height: 21px;
+.sales-page .empty-state > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    fill: none;
-    stroke: #73777a;
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 14px;
 
-    stroke-width: 1.5;
+  color: #7c858f;
+  background: #f0f1f2;
+
+  border-radius: 50%;
+  font-size: 25px;
 }
 
-.sales-empty h3 {
-    margin-bottom: 6px;
+.sales-page .empty-state strong {
+  display: block;
 
-    color: #4c5053;
-
-    font-size: 13px;
-    font-weight: 500;
+  color: #46546a;
+  font-size: 13px;
+  font-weight: 500;
 }
 
-.sales-empty p {
-    max-width: 300px;
+.sales-page .empty-state p {
+  max-width: 320px;
+  margin: 6px auto 0;
 
-    color: #8c9094;
-
-    font-size: 10px;
-    line-height: 1.5;
+  color: #87919e;
+  font-size: 10px;
+  line-height: 1.6;
 }
-
 
 /* =========================
-   TABLE FOOTER (match inventory)
+   TRANSACTION DETAILS
 ========================= */
 
-.sales-table-footer {
-    min-height: 58px;
+.sale-dialog {
+  width: min(460px, calc(100% - 32px));
+  padding: 0;
 
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  color: #272829;
+  background: #ffffff;
 
-    padding: 0 18px;
+  border: none;
+  border-radius: 8px;
 
-    border-top: 1px solid #e8e9ea;
+  font-family: "Geologica", "Segoe UI", Arial, sans-serif;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.2);
 }
 
-.sales-table-footer p {
-    color: #898d90;
-
-    font-size: 10px;
+.sale-dialog::backdrop {
+  background: rgba(16, 19, 24, 0.5);
 }
 
-.sales-table-footer strong {
-    color: #5b5f62;
-
-    font-weight: 600;
+.sale-dialog .dialog-inner {
+  position: relative;
+  padding: 27px;
 }
 
+.sale-dialog .eyebrow {
+  margin: 0 0 7px;
+
+  color: #818894;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.6px;
+}
+
+.sale-dialog h2 {
+  margin: 0 0 22px;
+
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.sale-dialog .dialog-close {
+  position: absolute;
+  top: 12px;
+  right: 15px;
+
+  padding: 4px 8px;
+
+  color: #747d88;
+  background: transparent;
+  border: none;
+
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.sale-dialog .details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+
+  margin: 0 0 24px;
+}
+
+.sale-dialog .details-grid div {
+  min-width: 0;
+}
+
+.sale-dialog .details-grid dt {
+  color: #818894;
+  font-size: 11px;
+}
+
+.sale-dialog .details-grid dd {
+  margin: 5px 0 0;
+
+  color: #303844;
+  font-size: 13px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.sale-dialog .button-secondary {
+  width: 100%;
+  height: 39px;
+
+  color: #303844;
+  background: #ffffff;
+
+  border: 1px solid #d3d8df;
+  border-radius: 5px;
+
+  font-family: inherit;
+  font-size: 12px;
+
+  cursor: pointer;
+}
+
+.sale-dialog .button-secondary:hover {
+  background: #f4f5f6;
+}
 
 /* =========================
-   PAGINATION (match inventory)
+   ACCESSIBILITY
 ========================= */
 
-.pagination {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.sales-page .visually-hidden {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: none;
 }
 
-.pagination button,
-.pagination span {
-    width: 30px;
-    height: 30px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 4px;
+.sales-page button:focus-visible,
+.sales-page a:focus-visible,
+.sales-page select:focus-visible,
+.sale-dialog button:focus-visible {
+  outline: 2px solid #8a9fb8;
+  outline-offset: 3px;
 }
-
-.pagination button {
-    background-color: #ffffff;
-    color: #666a6e;
-
-    border: 1px solid #dddddd;
-
-    font-family: "Geologica", sans-serif;
-    font-size: 15px;
-
-    cursor: pointer;
-}
-
-.pagination button:disabled {
-    opacity: 0.4;
-    cursor: default;
-}
-
-.pagination span {
-    background-color: #272829;
-    color: #ffffff;
-
-    font-size: 10px;
-    font-weight: 500;
-}
-
 
 /* =========================
-   RESPONSIVE (same breakpoints as inventory)
+   SMALLER SCREENS
 ========================= */
 
 @media (max-width: 1100px) {
-    .sales-summary {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  .sales-page {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+
+  .sales-page .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .sales-page .search-box {
+    max-width: none;
+  }
+
+  .sales-page .filter-label {
+    flex-basis: 120px;
+  }
 }
 
+@media (max-width: 768px) {
+  /*
+    This assumes your existing sidebar switches
+    to a hidden or overlay menu on mobile.
+  */
+  .sales-shell {
+    margin-left: 0;
+  }
 
+  .sales-page {
+    padding: 24px 18px;
+  }
 
-@media (max-width: 900px) {
+  .sales-page .page-heading h1 {
+    font-size: 24px;
+  }
 
-    .sales-toolbar {
-        align-items: stretch;
+  .sales-page .table-tools {
+    flex-wrap: wrap;
+  }
 
-        flex-direction: column;
-    }
+  .sales-page .search-box {
+    flex: 1 0 100%;
+  }
 
-    .search-box {
-        max-width: none;
-    }
+  .sales-page .filter-label {
+    flex: 1;
+  }
 
-    .sales-filters select,
-    .sales-filters input {
-        flex: 1;
-    }
+  .sales-page .search-box + .filter-label {
+    margin-left: 0;
+  }
 }
 
-@media (max-width: 800px) {
-    .sales-main {
-        margin-left: 200px;
-    }
+@media (max-width: 480px) {
+  .sales-page .page-heading {
+    align-items: flex-start;
+    gap: 12px;
+  }
 
-    .sales-content {
-        padding: 25px;
-    }
-}
+  .sales-page .page-heading h1 {
+    font-size: 21px;
+  }
 
-@media (max-width: 600px) {
-    .sales-header {
-        align-items: flex-start;
+  .sales-page .button {
+    min-width: 94px;
+    padding: 0 12px;
+  }
 
-        flex-direction: column;
-        gap: 18px;
-    }
+  .sales-page .stats-grid {
+    gap: 12px;
+  }
 
-    .sales-header h1 {
-        font-size: 25px;
-    }
+  .sales-page .stat-card {
+    padding: 14px;
+  }
 
-    .add-sale-btn {
-        width: 100%;
-    }
+  .sales-page .stat-label {
+    font-size: 9px;
+  }
 
-    .sales-summary {
-        grid-template-columns: 1fr;
-    }
+  .sales-page .stat-value {
+    font-size: 23px;
+  }
 
-    .add-sale-btn {
-        width: 100%;
-    }
+  .sales-page .stat-icon {
+    top: 14px;
+    right: 14px;
 
-    .sales-table {
-        min-width: 900px;
-    }
-
-    .sales-table-footer {
-        align-items: flex-start;
-
-        flex-direction: column;
-
-        gap: 12px;
-
-        padding: 14px 18px;
-    }
-
+    width: 30px;
+    height: 30px;
+    font-size: 16px;
+  }
 }

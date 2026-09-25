@@ -1,420 +1,457 @@
-// =========================
-// DATE AND TIME
-// =========================
+(() => {
+  "use strict";
 
-function updateDateTime() {
+  /*
+   * Sales records will come from your backend later.
+   * No sample transactions are added automatically.
+   */
+  let salesTransactions = [];
 
-    const now = new Date();
+  const elements = {
+    search: document.getElementById("salesSearch"),
+    type: document.getElementById("typeFilter"),
+    status: document.getElementById("statusFilter"),
 
-    const date = now.toLocaleDateString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-        year: "numeric"
+    tableBody: document.getElementById("salesTableBody"),
+    emptyState: document.getElementById("emptyState"),
+    resultCount: document.getElementById("resultCount"),
+    tableSummary: document.getElementById("tableSummary"),
+
+    todaySales: document.getElementById("todaySales"),
+    totalTransactions: document.getElementById("totalTransactions"),
+    pendingPayment: document.getElementById("pendingPayment"),
+    pendingCount: document.getElementById("pendingCount"),
+    wholesaleCount: document.getElementById("wholesaleCount"),
+
+    dialog: document.getElementById("saleDialog"),
+    details: document.getElementById("saleDetails")
+  };
+
+  const currencyFormatter = new Intl.NumberFormat("en-PH", {
+    style: "currency",
+    currency: "PHP",
+    minimumFractionDigits: 2
+  });
+
+  const dateFormatter = new Intl.DateTimeFormat("en-PH", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit"
+  });
+
+  /*
+   * EXPECTED RECORD FORMAT
+   *
+   * id          : Unique transaction ID
+   * date        : Sale date in YYYY-MM-DD format
+   * customer    : Customer name
+   * type        : "Retail" or "Wholesale"
+   * items       : Number of items
+   * total       : Total sale amount
+   * amountPaid  : Actual amount already paid
+   * method      : Payment method
+   * reference   : Receipt or invoice reference
+   *
+   * total and amountPaid must be numbers without commas or ₱.
+   * Payment status and remaining balance are calculated below.
+   */
+
+  function formatCurrency(amount) {
+    return currencyFormatter.format(amount);
+  }
+
+  function formatDate(dateString) {
+    const date = new Date(`${dateString}T00:00:00`);
+
+    if (Number.isNaN(date.getTime())) {
+      return dateString;
+    }
+
+    return dateFormatter.format(date);
+  }
+
+  function getTodayDate() {
+    const today = new Date();
+
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  }
+
+  function getBalance(sale) {
+    return Math.max(0, sale.total - sale.amountPaid);
+  }
+
+  function getPaymentStatus(sale) {
+    if (getBalance(sale) === 0) {
+      return "Paid";
+    }
+
+    if (sale.amountPaid > 0) {
+      return "Partial";
+    }
+
+    return "Pending";
+  }
+
+  function escapeHtml(value) {
+    const characters = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#039;"
+    };
+
+    return String(value ?? "").replace(
+      /[&<>"']/g,
+      (character) => characters[character]
+    );
+  }
+
+  /* =========================
+     SUMMARY CARDS
+  ========================= */
+
+  function updateSummary() {
+    const today = getTodayDate();
+
+    // Matches the card's "Completed today" description.
+    const todayTotal = salesTransactions
+      .filter((sale) => {
+        return (
+          sale.date === today &&
+          getPaymentStatus(sale) === "Paid"
+        );
+      })
+      .reduce((total, sale) => total + sale.total, 0);
+
+    const unpaidTransactions = salesTransactions.filter(
+      (sale) => getBalance(sale) > 0
+    );
+
+    // Partial payments contribute only their remaining balance.
+    const outstandingBalance = unpaidTransactions.reduce(
+      (total, sale) => total + getBalance(sale),
+      0
+    );
+
+    const wholesaleTransactions = salesTransactions.filter(
+      (sale) => sale.type === "Wholesale"
+    );
+
+    elements.todaySales.textContent = formatCurrency(todayTotal);
+
+    elements.totalTransactions.textContent =
+      salesTransactions.length;
+
+    elements.pendingPayment.textContent =
+      formatCurrency(outstandingBalance);
+
+    elements.pendingCount.textContent =
+      `${unpaidTransactions.length} transactions`;
+
+    elements.wholesaleCount.textContent =
+      wholesaleTransactions.length;
+  }
+
+  /* =========================
+     SEARCH AND FILTERS
+  ========================= */
+
+  function getFilteredTransactions() {
+    const searchText = elements.search.value.trim().toLowerCase();
+    const selectedType = elements.type.value;
+    const selectedStatus = elements.status.value;
+
+    return salesTransactions.filter((sale) => {
+      const paymentStatus = getPaymentStatus(sale);
+
+      const searchableText = [
+        sale.id,
+        sale.customer,
+        sale.reference
+      ].join(" ").toLowerCase();
+
+      const matchesSearch = searchableText.includes(searchText);
+
+      const matchesType =
+        selectedType === "all" ||
+        sale.type === selectedType;
+
+      const matchesStatus =
+        selectedStatus === "all" ||
+        paymentStatus === selectedStatus;
+
+      return matchesSearch && matchesType && matchesStatus;
+    });
+  }
+
+  /* =========================
+     EMPTY STATE
+  ========================= */
+
+  function updateEmptyState(visibleCount) {
+    elements.emptyState.hidden = visibleCount > 0;
+
+    if (visibleCount > 0) {
+      return;
+    }
+
+    const title = elements.emptyState.querySelector("strong");
+    const description = elements.emptyState.querySelector("p");
+
+    if (salesTransactions.length === 0) {
+      title.textContent = "No sales records yet";
+
+      description.textContent =
+        "Sales transactions will appear here once they are recorded.";
+    } else {
+      title.textContent = "No matching transactions";
+
+      description.textContent =
+        "Try a different search or change your filters.";
+    }
+  }
+
+  /* =========================
+     TRANSACTIONS TABLE
+  ========================= */
+
+  function renderSales() {
+    const filteredTransactions = getFilteredTransactions();
+
+    elements.tableBody.innerHTML = filteredTransactions
+      .map((sale) => {
+        const paymentStatus = getPaymentStatus(sale);
+        const statusClass = paymentStatus.toLowerCase();
+
+        return `
+          <tr>
+            <td>
+              <span class="transaction-id">
+                ${escapeHtml(sale.id)}
+              </span>
+            </td>
+
+            <td>
+              ${escapeHtml(formatDate(sale.date))}
+            </td>
+
+            <td>
+              <span class="customer-name">
+                ${escapeHtml(sale.customer)}
+              </span>
+            </td>
+
+            <td>
+              <span class="type-label">
+                ${escapeHtml(sale.type)}
+              </span>
+            </td>
+
+            <td>
+              <span class="item-count">
+                ${sale.items} items
+              </span>
+            </td>
+
+            <td class="numeric">
+              ${formatCurrency(sale.total)}
+            </td>
+
+            <td>
+              <span class="status-badge status-${statusClass}">
+                ${paymentStatus}
+              </span>
+            </td>
+
+            <td class="action-cell">
+              <button
+                class="view-button"
+                type="button"
+                data-sale-id="${escapeHtml(sale.id)}"
+                aria-label="View transaction ${escapeHtml(sale.id)}"
+              >
+                View
+              </button>
+            </td>
+          </tr>
+        `;
+      })
+      .join("");
+
+    elements.resultCount.textContent =
+      `${filteredTransactions.length} transactions`;
+
+    elements.tableSummary.textContent =
+      `Showing ${filteredTransactions.length} of ` +
+      `${salesTransactions.length} transactions`;
+
+    updateEmptyState(filteredTransactions.length);
+  }
+
+  /* =========================
+     TRANSACTION DETAILS
+  ========================= */
+
+  function showSaleDetails(sale) {
+    const fields = [
+      ["Transaction ID", sale.id],
+      ["Date", formatDate(sale.date)],
+      ["Customer", sale.customer],
+      ["Sale Type", sale.type],
+      ["Items", `${sale.items} items`],
+      ["Total Amount", formatCurrency(sale.total)],
+      ["Amount Paid", formatCurrency(sale.amountPaid)],
+      ["Remaining Balance", formatCurrency(getBalance(sale))],
+      ["Payment Status", getPaymentStatus(sale)],
+      ["Payment Method", sale.method || "—"],
+      ["Reference", sale.reference || "—"]
+    ];
+
+    elements.details.innerHTML = fields
+      .map(([label, value]) => {
+        return `
+          <div>
+            <dt>${escapeHtml(label)}</dt>
+            <dd>${escapeHtml(value)}</dd>
+          </div>
+        `;
+      })
+      .join("");
+
+    elements.dialog.showModal();
+  }
+
+  /* =========================
+     BACKEND CONNECTION POINT
+  ========================= */
+
+  function setTransactions(records) {
+    if (!Array.isArray(records)) {
+      throw new TypeError("Sales records must be an array.");
+    }
+
+    const transactionIds = new Set();
+
+    // Validate all records before replacing the displayed data.
+    const preparedRecords = records.map((record) => {
+      if (!record || typeof record !== "object") {
+        throw new TypeError("Each sales record must be an object.");
+      }
+
+      if (
+        record.id == null ||
+        String(record.id).trim() === "" ||
+        typeof record.date !== "string" ||
+        !/^\d{4}-\d{2}-\d{2}$/.test(record.date)
+      ) {
+        throw new Error("Each sale needs an ID and a YYYY-MM-DD date.");
+      }
+
+      const id = String(record.id);
+
+      if (transactionIds.has(id)) {
+        throw new Error(`Duplicate transaction ID: ${id}`);
+      }
+
+      transactionIds.add(id);
+
+      if (!["Retail", "Wholesale"].includes(record.type)) {
+        throw new Error(`Invalid sale type for transaction ${id}.`);
+      }
+
+      if (
+        !Number.isFinite(record.total) ||
+        !Number.isFinite(record.amountPaid) ||
+        record.total < 0 ||
+        record.amountPaid < 0 ||
+        record.amountPaid > record.total
+      ) {
+        throw new Error(`Invalid payment amounts for transaction ${id}.`);
+      }
+
+      if (!Number.isInteger(record.items) || record.items < 0) {
+        throw new Error(`Invalid item count for transaction ${id}.`);
+      }
+
+      return {
+        ...record,
+        id,
+        customer: record.customer || "Walk-in Customer"
+      };
     });
 
-    const time = now.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true
-    });
+    salesTransactions = preparedRecords;
 
-    document.getElementById("currentDate").textContent = date;
-    document.getElementById("currentTime").textContent = time;
-}
-
-
-updateDateTime();
-
-setInterval(updateDateTime, 1000);
-
-
-// =========================
-// SALES ELEMENTS
-// =========================
-
-const salesTableBody =
-    document.getElementById("salesTableBody");
-
-const emptyState =
-    document.getElementById("salesEmptyState");
-
-const totalSaleCount =
-    document.getElementById("totalSaleCount");
-
-const visibleSaleCount =
-    document.getElementById("visibleSaleCount");
-
-const salesSearch =
-    document.getElementById("salesSearch");
-
-const statusFilter =
-    document.getElementById("statusFilter");
-
-const paymentFilter =
-    document.getElementById("paymentFilter");
-
-const dateFilter =
-    document.getElementById("dateFilter");
-
-
-// =========================
-// SUMMARY ELEMENTS
-// =========================
-
-const todaySales =
-    document.getElementById("todaySales");
-
-const todayTransactions =
-    document.getElementById("todayTransactions");
-
-const totalTransactions =
-    document.getElementById("totalTransactions");
-
-const pendingPayment =
-    document.getElementById("pendingPayment");
-
-const pendingTransactions =
-    document.getElementById("pendingTransactions");
-
-const totalWholesales =
-    document.getElementById("totalWholesales");
-
-
-// =========================
-// TEMPORARY SALES ARRAY
-// =========================
-
-// Later this will come from your database.
-let sales = [];
-
-
-// =========================
-// SALES SUMMARY
-// =========================
-
-function displaySalesSummary() {
-
-    todaySales.textContent = "₱0";
-
-    todayTransactions.textContent = "0";
-
-    totalTransactions.textContent = "0";
-
-    pendingPayment.textContent = "₱0";
-
-    pendingTransactions.textContent = "0";
-
-    totalWholesales.textContent = "0";
-
-}
-
-
-// =========================
-// DISPLAY SALES
-// =========================
-
-function displaySales(salesList) {
-
-    salesTableBody.innerHTML = "";
-
-    totalSaleCount.textContent =
-        sales.length;
-
-    visibleSaleCount.textContent =
-        salesList.length;
-
-
-    // No sales
-    if (salesList.length === 0) {
-
-        emptyState.style.display = "flex";
-
-        return;
+    if (elements.dialog.open) {
+      elements.dialog.close();
     }
 
+    updateSummary();
+    renderSales();
+  }
 
-    emptyState.style.display = "none";
+  /*
+   * Your backend integration can call:
+   *
+   * window.SalesPage.setTransactions(recordsFromDatabase);
+   *
+   * Pass an empty array when there are no sales records.
+   */
+  window.SalesPage = {
+    setTransactions
+  };
 
+  /* =========================
+     EVENT LISTENERS
+  ========================= */
 
-    salesList.forEach(sale => {
+  elements.search.addEventListener("input", renderSales);
+  elements.type.addEventListener("change", renderSales);
+  elements.status.addEventListener("change", renderSales);
 
-        const row =
-            document.createElement("tr");
+  elements.tableBody.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-sale-id]");
 
-
-        row.innerHTML = `
-            <td>
-                ${sale.saleId}
-            </td>
-
-            <td>
-                ${sale.date}
-            </td>
-
-            <td>
-                ${sale.customer}
-            </td>
-
-            <td>
-                ${sale.items}
-            </td>
-
-            <td>
-                ₱${Number(sale.total).toLocaleString()}
-            </td>
-
-            <td>
-                ${createPaymentBadge(sale.payment)}
-            </td>
-
-            <td>
-                ${createStatusBadge(sale.status)}
-            </td>
-
-            <td>
-                ${createActions(sale.saleId)}
-            </td>
-        `;
-
-
-        salesTableBody.appendChild(row);
-
-    });
-
-}
-
-
-// =========================
-// STATUS BADGE
-// =========================
-
-function createStatusBadge(status) {
-
-    if (status === "completed") {
-
-        return `
-            <span class="status-badge status-completed">
-                Completed
-            </span>
-        `;
-
+    if (!button) {
+      return;
     }
 
+    const selectedSale = salesTransactions.find(
+      (sale) => sale.id === button.dataset.saleId
+    );
 
-    if (status === "pending") {
+    if (selectedSale) {
+      showSaleDetails(selectedSale);
+    }
+  });
 
-        return `
-            <span class="status-badge status-pending">
-                Pending
-            </span>
-        `;
-
+  elements.dialog.addEventListener("click", (event) => {
+    if (event.target !== elements.dialog) {
+      return;
     }
 
+    const bounds = elements.dialog.getBoundingClientRect();
 
-    return `
-        <span class="status-badge status-cancelled">
-            Cancelled
-        </span>
-    `;
+    const clickedOutside =
+      event.clientX < bounds.left ||
+      event.clientX > bounds.right ||
+      event.clientY < bounds.top ||
+      event.clientY > bounds.bottom;
 
-}
-
-
-// =========================
-// PAYMENT BADGE
-// =========================
-
-function createPaymentBadge(payment) {
-
-    if (payment === "paid") {
-
-        return `
-            <span class="payment-badge payment-paid">
-                Paid
-            </span>
-        `;
-
+    if (clickedOutside) {
+      elements.dialog.close();
     }
+  });
 
+  /* =========================
+     INITIAL PAGE DISPLAY
+  ========================= */
 
-    if (payment === "partial") {
-
-        return `
-            <span class="payment-badge payment-partial">
-                Partial
-            </span>
-        `;
-
-    }
-
-
-    return `
-        <span class="payment-badge payment-unpaid">
-            Unpaid
-        </span>
-    `;
-
-}
-
-
-// =========================
-// ACTION BUTTONS
-// =========================
-
-function createActions(saleId) {
-
-    return `
-        <div class="sale-actions">
-
-            <button
-                class="action-btn"
-                type="button"
-                title="View"
-                data-id="${saleId}"
-            >
-
-                <svg viewBox="0 0 24 24">
-                    <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12"></path>
-                    <circle cx="12" cy="12" r="3"></circle>
-                </svg>
-
-            </button>
-
-
-            <button
-                class="action-btn"
-                type="button"
-                title="Edit"
-                data-id="${saleId}"
-            >
-
-                <svg viewBox="0 0 24 24">
-                    <path d="M4 20h4L19 9l-4-4L4 16v4z"></path>
-                    <path d="M13 7l4 4"></path>
-                </svg>
-
-            </button>
-
-
-            <button
-                class="action-btn delete"
-                type="button"
-                title="Delete"
-                data-id="${saleId}"
-            >
-
-                <svg viewBox="0 0 24 24">
-                    <path d="M4 7h16"></path>
-                    <path d="M9 7V4h6v3"></path>
-                    <path d="M7 7l1 13h8l1-13"></path>
-                    <path d="M10 11v5"></path>
-                    <path d="M14 11v5"></path>
-                </svg>
-
-            </button>
-
-        </div>
-    `;
-
-}
-
-
-// =========================
-// FILTER SALES
-// =========================
-
-function filterSales() {
-
-    const search =
-        salesSearch.value.toLowerCase().trim();
-
-    const status =
-        statusFilter.value;
-
-    const payment =
-        paymentFilter.value;
-
-    const selectedDate =
-        dateFilter.value;
-
-
-    const filteredSales =
-        sales.filter(sale => {
-
-            const saleId =
-                String(sale.saleId || "").toLowerCase();
-
-            const customer =
-                String(sale.customer || "").toLowerCase();
-
-
-            const matchesSearch =
-                saleId.includes(search) ||
-                customer.includes(search);
-
-
-            const matchesStatus =
-                status === "" ||
-                sale.status === status;
-
-
-            const matchesPayment =
-                payment === "" ||
-                sale.payment === payment;
-
-
-            const matchesDate =
-                selectedDate === "" ||
-                sale.date === selectedDate;
-
-
-            return (
-                matchesSearch &&
-                matchesStatus &&
-                matchesPayment &&
-                matchesDate
-            );
-
-        });
-
-
-    displaySales(filteredSales);
-
-}
-
-
-// =========================
-// EVENTS
-// =========================
-
-salesSearch.addEventListener(
-    "input",
-    filterSales
-);
-
-statusFilter.addEventListener(
-    "change",
-    filterSales
-);
-
-paymentFilter.addEventListener(
-    "change",
-    filterSales
-);
-
-dateFilter.addEventListener(
-    "change",
-    filterSales
-);
-
-
-// =========================
-// INITIAL DISPLAY
-// =========================
-
-displaySalesSummary();
-
-displaySales(sales);
+  updateSummary();
+  renderSales();
+})();

@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#25272a">
+  <title>Sales | SCF Steel Trading</title>
 
-    <title>Sales - SCF Steel Trading</title>
-
-    <link
+  <link
         href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap"
         rel="stylesheet"
     >
@@ -17,402 +16,159 @@
         rel="stylesheet"
     >
 
-    <link rel="stylesheet" href="sidebar.css">
-    <link rel="stylesheet" href="topbar.css">
-    <link rel="stylesheet" href="new-transaction.css">
-    <link rel="stylesheet" href="new-purchase-order.css">
-    <link rel="stylesheet" href="sales.css">
+  <link rel="stylesheet" href="sidebar.css">
+  <link rel="stylesheet" href="topbar.css">
+  <link rel="stylesheet" href="new-transaction.css">
+  <link rel="stylesheet" href="new-purchase-order.css">
+  <link rel="stylesheet" href="sales.css">
 </head>
-
 <body>
-
-    <!-- =========================
-         SIDEBAR
-    ========================== -->
-    <div id="sidebar"></div>
-
-
-    <!-- =========================
-         MAIN
-    ========================== -->
-    <main class="sales-main">
-
-
-        <!-- TOP BAR -->
-        <div
-            id="topbar"
-            data-page-title="Sales"
-        ></div>
-
-
-        <!-- =========================
-             CONTENT
-        ========================== -->
-        <div class="sales-content">
-
-
-            <!-- PAGE HEADER -->
-            <section class="sales-header">
-
-                <div>
-
-                    <h1>Sales Management</h1>
-
-                    <p>
-                        Wholesale and retail transaction tracking
-                    </p>
-
-                </div>
-
-
-                <button
-                    type="button"
-                    class="add-sale-btn"
-                    id="addSaleBtn"
-                >
-                    <span class="plus">+</span>
-                    New Sale
-                </button>
-
-            </section>
-
-
-            <!-- =========================
-                 SALES SUMMARY
-            ========================== -->
-            <section class="sales-summary">
-
-
-                <!-- TODAY'S SALES -->
-                <div class="summary-card">
-
-                    <div class="summary-info">
-
-                        <p class="summary-title">
-                            TODAY'S SALES
-                        </p>
-
-                        <h2
-                            class="summary-number sales-amount"
-                            id="todaySales"
-                        >
-                            ₱0
-                        </h2>
-
-                        <p class="summary-subtext">
-                            <span id="todayTransactions">0</span>
-                            Transactions
-                        </p>
-
-                    </div>
-
-
-                    <div class="summary-icon sales-icon">
-
-                        <svg viewBox="0 0 24 24">
-                            <circle cx="12" cy="12" r="8"></circle>
-                            <path d="M9 8h4a3 3 0 0 1 0 6H9"></path>
-                            <path d="M9 6v12"></path>
-                            <path d="M7 10h7"></path>
-                        </svg>
-
-                    </div>
-
-                </div>
-
-
-                <!-- TOTAL TRANSACTIONS -->
-                <div class="summary-card">
-
-                    <div class="summary-info">
-
-                        <p class="summary-title">
-                            TOTAL TRANSACTIONS
-                        </p>
-
-                        <h2
-                            class="summary-number"
-                            id="totalTransactions"
-                        >
-                            0
-                        </h2>
-
-                        <p class="summary-subtext">
-                            All time
-                        </p>
-
-                    </div>
-
-
-                    <div class="summary-icon transaction-icon">
-
-                        <svg viewBox="0 0 24 24">
-                            <path d="M7 4h10v16H7z"></path>
-                            <path d="M9 8h6"></path>
-                            <path d="M9 11h6"></path>
-                            <path d="M9 14h6"></path>
-                            <path d="M9 17h4"></path>
-                            <path d="M4 7v12"></path>
-                        </svg>
-
-                    </div>
-
-                </div>
-
-
-                <!-- PENDING PAYMENT -->
-                <div class="summary-card">
-
-                    <div class="summary-info">
-
-                        <p class="summary-title">
-                            PENDING PAYMENT
-                        </p>
-
-                        <h2
-                            class="summary-number"
-                            id="pendingPayment"
-                        >
-                            ₱0
-                        </h2>
-
-                        <p class="summary-subtext">
-                            <span id="pendingTransactions">0</span>
-                            Transactions
-                        </p>
-
-                    </div>
-
-
-                    <div class="summary-icon pending-icon">
-
-                        <svg viewBox="0 0 24 24">
-                            <path d="M10.3 4.2L3.5 16a2 2 0 0 0 1.7 3h13.6a2 2 0 0 0 1.7-3L13.7 4.2a2 2 0 0 0-3.4 0z"></path>
-                            <path d="M12 9v4"></path>
-                            <path d="M12 16h.01"></path>
-                        </svg>
-
-                    </div>
-
-                </div>
-
-
-                <!-- WHOLESALES -->
-                <div class="summary-card">
-
-                    <div class="summary-info">
-
-                        <p class="summary-title">
-                            WHOLESALES
-                        </p>
-
-                        <h2
-                            class="summary-number"
-                            id="totalWholesales"
-                        >
-                            0
-                        </h2>
-
-                        <p class="summary-subtext">
-                            Bulk Orders
-                        </p>
-
-                    </div>
-
-
-                    <div class="summary-icon wholesale-icon">
-
-                        <svg viewBox="0 0 24 24">
-                            <path d="M4 7l8-4 8 4-8 4-8-4z"></path>
-                            <path d="M4 7v10l8 4 8-4V7"></path>
-                            <path d="M12 11v10"></path>
-                        </svg>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =========================
-                 SALES PANEL
-            ========================== -->
-            <section class="sales-panel">
-
-
-                <!-- TOOLBAR -->
-                <div class="sales-toolbar">
-
-
-                    <!-- SEARCH -->
-                    <div class="search-box">
-
-                        <svg viewBox="0 0 24 24">
-                            <circle cx="11" cy="11" r="7"></circle>
-                            <path d="M20 20l-4-4"></path>
-                        </svg>
-
-                        <input
-                            type="search"
-                            id="salesSearch"
-                            placeholder="Search sale, customer, reference..."
-                            autocomplete="off"
-                        >
-
-                    </div>
-
-
-                    <!-- FILTERS -->
-                    <div class="sales-filters">
-
-                        <select id="statusFilter">
-                            <option value="">All Status</option>
-                            <option value="completed">Completed</option>
-                            <option value="pending">Pending</option>
-                            <option value="cancelled">Cancelled</option>
-                        </select>
-
-
-                        <select id="paymentFilter">
-                            <option value="">All Payments</option>
-                            <option value="paid">Paid</option>
-                            <option value="partial">Partial</option>
-                            <option value="unpaid">Unpaid</option>
-                        </select>
-
-
-                        <input
-                            type="date"
-                            id="dateFilter"
-                            aria-label="Filter by date"
-                        >
-
-                    </div>
-
-                </div>
-
-
-                <!-- =========================
-                     TABLE
-                ========================== -->
-                <div class="table-wrapper">
-
-                    <table class="sales-table">
-
-                        <thead>
-
-                            <tr>
-                                <th>SALE ID</th>
-                                <th>DATE</th>
-                                <th>CUSTOMER</th>
-                                <th>ITEMS</th>
-                                <th>TOTAL</th>
-                                <th>PAYMENT</th>
-                                <th>STATUS</th>
-                                <th class="actions-heading">ACTIONS</th>
-                            </tr>
-
-                        </thead>
-
-
-                        <!-- SALES FROM DATABASE -->
-                        <tbody id="salesTableBody"></tbody>
-
-                    </table>
-
-
-                    <!-- EMPTY STATE -->
-                    <div
-                        class="sales-empty"
-                        id="salesEmptyState"
-                    >
-
-                        <div class="empty-icon">
-
-                            <svg viewBox="0 0 24 24">
-                                <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3z"></path>
-                                <path d="M9 8h6"></path>
-                                <path d="M9 12h6"></path>
-                            </svg>
-
-                        </div>
-
-                        <h3>No sales yet</h3>
-
-                        <p>
-                            Sales transactions will appear here.
-                        </p>
-
-                    </div>
-
-                </div>
-
-
-                <!-- =========================
-                     TABLE FOOTER
-                ========================== -->
-                <div class="sales-table-footer">
-
-                    <p>
-                        Showing
-                        <strong id="visibleSaleCount">0</strong>
-                        of
-                        <strong id="totalSaleCount">0</strong>
-                        sales
-                    </p>
-
-
-                    <div class="pagination">
-
-                        <button
-                            type="button"
-                            id="previousPage"
-                            disabled
-                        >
-                            ‹
-                        </button>
-
-                        <span id="currentPage">1</span>
-
-                        <button
-                            type="button"
-                            id="nextPage"
-                            disabled
-                        >
-                            ›
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </section>
-
+  <!-- Existing sidebar.js and topbar.js inject their markup into these areas. -->
+  <div id="sidebar"></div>
+
+  <div class="sales-shell">
+    <div id="topbar"></div>
+
+    <main class="sales-page" id="salesPage">
+      <header class="page-heading">
+        <div>
+          <p class="eyebrow">SALES &amp; TRANSACTIONS</p>
+          <h1>Sales Management</h1>
+          <p class="page-description">Wholesale and retail transaction tracking</p>
         </div>
 
+        <a class="button button-primary" href="new-transaction.html" aria-label="Create a new sale">
+          <span aria-hidden="true">＋</span>
+          New Sale
+        </a>
+      </header>
+
+      <section class="stats-grid" aria-label="Sales summary">
+        <article class="stat-card">
+          <div class="stat-copy">
+            <p class="stat-label">Today's Sales</p>
+            <p class="stat-value" id="todaySales">₱0.00</p>
+            <p class="stat-note">Completed today</p>
+          </div>
+          <span class="stat-icon icon-green" aria-hidden="true">₱</span>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-copy">
+            <p class="stat-label">Total Transactions</p>
+            <p class="stat-value" id="totalTransactions">0</p>
+            <p class="stat-note">All recorded sales</p>
+          </div>
+          <span class="stat-icon icon-yellow" aria-hidden="true">▤</span>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-copy">
+            <p class="stat-label">Pending Payment</p>
+            <p class="stat-value" id="pendingPayment">₱0.00</p>
+            <p class="stat-note" id="pendingCount">0 transactions</p>
+          </div>
+          <span class="stat-icon icon-red" aria-hidden="true">!</span>
+        </article>
+
+        <article class="stat-card">
+          <div class="stat-copy">
+            <p class="stat-label">Wholesale</p>
+            <p class="stat-value" id="wholesaleCount">0</p>
+            <p class="stat-note">Bulk orders</p>
+          </div>
+          <span class="stat-icon icon-blue" aria-hidden="true">▣</span>
+        </article>
+      </section>
+
+      <section class="transactions-card" aria-labelledby="transactionsHeading">
+        <div class="section-heading">
+          <div>
+            <h2 id="transactionsHeading">Transactions</h2>
+            <p>Review and manage customer sales</p>
+          </div>
+          <span class="result-count" id="resultCount" aria-live="polite">0 transactions</span>
+        </div>
+
+        <div class="table-tools">
+          <label class="search-box">
+            <span class="search-icon" aria-hidden="true">⌕</span>
+            <span class="visually-hidden">Search transactions</span>
+            <input
+              id="salesSearch"
+              type="search"
+              placeholder="Search transaction, customer…"
+              autocomplete="off"
+            >
+          </label>
+
+          <label class="filter-label">
+            <span class="visually-hidden">Filter by sale type</span>
+            <select id="typeFilter">
+              <option value="all">All Types</option>
+              <option value="Wholesale">Wholesale</option>
+              <option value="Retail">Retail</option>
+            </select>
+          </label>
+
+          <label class="filter-label">
+            <span class="visually-hidden">Filter by payment status</span>
+            <select id="statusFilter">
+              <option value="all">All Statuses</option>
+              <option value="Paid">Paid</option>
+              <option value="Partial">Partial</option>
+              <option value="Pending">Pending</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="table-scroll">
+          <table class="sales-table">
+            <thead>
+              <tr>
+                <th scope="col">Transaction ID</th>
+                <th scope="col">Date</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Sale Type</th>
+                <th scope="col">Items</th>
+                <th scope="col" class="numeric">Total Amount</th>
+                <th scope="col">Payment</th>
+                <th scope="col" class="actions-heading">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="salesTableBody"></tbody>
+          </table>
+
+          <div class="empty-state" id="emptyState" hidden>
+            <span aria-hidden="true">⌕</span>
+            <strong>No transactions found</strong>
+            <p>Try changing your search or filters.</p>
+          </div>
+        </div>
+
+        <footer class="table-footer">
+          <span id="tableSummary">Showing 0 transactions</span>
+          <span class="demo-note">
+            Sample transactions — connect your sales data source to use live records.
+          </span>
+        </footer>
+      </section>
     </main>
+  </div>
 
-     <!-- =========================
-         MODALS
-    ========================== -->
+  <dialog class="sale-dialog" id="saleDialog" aria-labelledby="dialogTitle">
+    <form method="dialog" class="dialog-inner">
+      <button class="dialog-close" aria-label="Close details">×</button>
+      <p class="eyebrow">TRANSACTION DETAILS</p>
+      <h2 id="dialogTitle">Sale details</h2>
+      <dl class="details-grid" id="saleDetails"></dl>
+      <button class="button button-secondary dialog-done">Done</button>
+    </form>
+  </dialog>
 
-    <!-- NEW TRANSACTION MODAL -->
-    <div id="newTransactionModal"></div>
-
-    <!-- NEW PURCHASE ORDER MODAL -->
-    <div id="newPurchaseOrderModal"></div>
-
-
-    <!-- =========================
-         SCRIPTS
-    ========================== -->
-    <script src="sidebar.js"></script>
-    <script src="topbar.js"></script>
-    <script src="new-transaction.js"></script>
-    <script src="new-purchase-order.js"></script>
-    <script src="sales.js"></script>
-
+  <script src="sidebar.js" defer></script>
+  <script src="topbar.js" defer></script>
+  <script src="new-transaction.js"></script>
+  <script src="sales.js" defer></script>
 </body>
-
 </html>
