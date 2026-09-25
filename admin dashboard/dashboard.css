@@ -1,6 +1,7 @@
 /* =========================
    GENERAL
 ========================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -28,6 +29,7 @@ body {
 
     background-color: #f2f3f4;
 }
+
 
 /* =========================
    CONTENT
@@ -58,9 +60,9 @@ body {
 }
 
 .summary-card {
-    min-height: 100px;
+    min-height: 110px;
 
-    padding: 18px;
+    padding: 19px;
 
     background-color: #ffffff;
 
@@ -71,29 +73,29 @@ body {
 }
 
 .summary-label {
-    margin-bottom: 8px;
+    margin-bottom: 9px;
 
     color: #777b7f;
 
-    font-size: 8px;
+    font-size: 11px;
     font-weight: 600;
 
     letter-spacing: 0.5px;
 }
 
 .summary-card h2 {
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 
     color: #272829;
 
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 600;
 }
 
 .summary-subtext {
     color: #8a8e92;
 
-    font-size: 8px;
+    font-size: 10px;
 }
 
 
@@ -116,21 +118,21 @@ body {
 ========================= */
 
 .card-header {
-    min-height: 55px;
+    min-height: 60px;
 
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
 
-    padding: 16px 18px 10px;
+    padding: 16px 18px 11px;
 }
 
 .card-header h3 {
-    margin-bottom: 3px;
+    margin-bottom: 4px;
 
     color: #343638;
 
-    font-size: 11px;
+    font-size: 14px;
     font-weight: 600;
 }
 
@@ -138,13 +140,14 @@ body {
 .card-period {
     color: #92969a;
 
-    font-size: 7px;
+    font-size: 10px;
 }
 
 .card-header a {
     color: #686c70;
 
-    font-size: 8px;
+    font-size: 10px;
+    font-weight: 500;
 
     text-decoration: none;
 }
@@ -191,7 +194,7 @@ body {
 
     border-top: 1px solid #f0f0f0;
 
-    font-size: 9px;
+    font-size: 11px;
 }
 
 
@@ -211,7 +214,9 @@ body {
 }
 
 
-/* TEMPORARY DONUT */
+/* =========================
+   TEMPORARY DONUT
+========================= */
 
 .donut-placeholder {
     width: 95px;
@@ -241,7 +246,9 @@ body {
 }
 
 
-/* LEGEND */
+/* =========================
+   INVENTORY LEGEND
+========================= */
 
 .inventory-legend {
     width: 100%;
@@ -250,20 +257,20 @@ body {
 .inventory-legend div {
     display: grid;
 
-    grid-template-columns: 8px 1fr auto;
+    grid-template-columns: 10px 1fr auto;
 
     align-items: center;
 
-    margin-bottom: 5px;
+    margin-bottom: 7px;
 
     color: #74787c;
 
-    font-size: 7px;
+    font-size: 10px;
 }
 
 .legend-dot {
-    width: 5px;
-    height: 5px;
+    width: 6px;
+    height: 6px;
 
     border-radius: 50%;
 }
@@ -283,7 +290,7 @@ body {
 .inventory-legend strong {
     color: #55595d;
 
-    font-size: 7px;
+    font-size: 10px;
     font-weight: 500;
 }
 
@@ -331,7 +338,7 @@ body {
 
     color: #a0a3a6;
 
-    font-size: 8px;
+    font-size: 11px;
 
     text-align: center;
 }
@@ -350,8 +357,8 @@ body {
 
     color: #343638;
 
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 17px;
+    font-weight: 600;
 }
 
 .algorithm-grid {
@@ -363,27 +370,29 @@ body {
 }
 
 .algorithm-card {
-    min-height: 210px;
+    min-height: 220px;
 
-    padding: 17px;
+    padding: 18px;
 }
 
 
-/* ALGORITHM HEADER */
+/* =========================
+   ALGORITHM HEADER
+========================= */
 
 .algorithm-header {
     display: grid;
 
-    grid-template-columns: 26px 1fr;
+    grid-template-columns: 32px 1fr;
 
-    gap: 9px;
+    gap: 11px;
 
     margin-bottom: 15px;
 }
 
 .algorithm-icon {
-    width: 25px;
-    height: 25px;
+    width: 32px;
+    height: 32px;
 
     display: flex;
     align-items: center;
@@ -391,11 +400,11 @@ body {
 
     background-color: #f1f2f3;
 
-    border-radius: 4px;
+    border-radius: 5px;
 
     color: #505458;
 
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .algorithm-header h3 {
@@ -403,22 +412,24 @@ body {
 
     color: #343638;
 
-    font-size: 9px;
+    font-size: 12px;
     font-weight: 600;
 }
 
 .algorithm-header p {
     color: #92969a;
 
-    font-size: 7px;
+    font-size: 10px;
     line-height: 1.5;
 }
 
 
-/* ALGORITHM CONTENT */
+/* =========================
+   ALGORITHM CONTENT
+========================= */
 
 .algorithm-content {
-    min-height: 90px;
+    min-height: 95px;
 
     background-color: #f7f7f7;
 
@@ -426,11 +437,13 @@ body {
 }
 
 .algorithm-content .empty-state {
-    min-height: 90px;
+    min-height: 95px;
 }
 
 
-/* ALGORITHM LINK */
+/* =========================
+   ALGORITHM LINK
+========================= */
 
 .algorithm-link {
     display: inline-block;
@@ -439,7 +452,8 @@ body {
 
     color: #6f7377;
 
-    font-size: 7px;
+    font-size: 10px;
+    font-weight: 500;
 
     text-decoration: none;
 }

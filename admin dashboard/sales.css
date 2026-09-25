@@ -8,6 +8,12 @@
     box-sizing: border-box;
 }
 
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
 body {
     min-height: 100vh;
 
@@ -29,6 +35,7 @@ body {
 
     background-color: #f3f4f5;
 }
+
 
 /* =========================
    CONTENT
@@ -53,22 +60,23 @@ body {
     align-items: center;
     justify-content: space-between;
 
-    margin-bottom: 30px;
+    margin-bottom: 25px;
 }
 
 .sales-header h1 {
-    margin-bottom: 4px;
+    margin-bottom: 5px;
 
     color: #272829;
 
-    font-size: 27px;
+    font-size: 29px;
     font-weight: 600;
 }
 
 .sales-header p {
     color: #7b7f83;
 
-    font-size: 10px;
+    font-size: 12px;
+    line-height: 1.5;
 }
 
 
@@ -77,31 +85,34 @@ body {
 ========================= */
 
 .add-sale-btn {
-    height: 38px;
+    height: 40px;
 
     display: flex;
     align-items: center;
+    justify-content: center;
 
     gap: 7px;
+
+    min-width: 110px;
 
     padding: 0 16px;
 
     background-color: #272829;
     color: #ffffff;
 
-    border: none;
+    border: 1px solid #272829;
     border-radius: 5px;
 
     font-family: "Geologica", sans-serif;
 
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 500;
 
     cursor: pointer;
 
     transition:
-        background-color 0.2s ease,
         transform 0.2s ease,
+        background-color 0.2s ease,
         box-shadow 0.2s ease;
 }
 
@@ -110,11 +121,12 @@ body {
 
     transform: translateY(-1px);
 
-    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.1);
 }
 
+.add-sale-btn .plus,
 .plus {
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 300;
 
     line-height: 1;
@@ -130,101 +142,145 @@ body {
 
     grid-template-columns: repeat(4, 1fr);
 
-    gap: 14px;
+    gap: 16px;
 
-    margin-bottom: 20px;
+    margin-bottom: 28px;
 }
 
 
 /* =========================
    SUMMARY CARD
+   SAME AS INVENTORY
 ========================= */
 
-.summary-card {
+.sales-summary .summary-card {
     min-width: 0;
-    min-height: 118px;
+    min-height: 110px;
 
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
 
-    gap: 12px;
-
-    padding: 18px 16px;
+    padding: 18px;
 
     background-color: #ffffff;
 
-    border: 1px solid #c9cbcd;
-    border-radius: 8px;
+    border: 1px solid #d9dbdd;
+    border-radius: 6px;
 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.025);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
-.summary-info {
+.sales-summary .summary-card:hover {
+    transform: translateY(-2px);
+
+    box-shadow: 0 5px 12px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================
+   SUMMARY INFORMATION
+========================= */
+
+.sales-summary .summary-info {
     min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 
 /* SUMMARY TITLE */
 
-.summary-title {
-    margin-bottom: 7px;
+.sales-summary .summary-title {
+    margin: 0 2 8px;
 
-    color: #55595d;
+    color: #7b7f82;
 
-    font-size: 9px;
-    font-weight: 400;
+    font-size: 11px;
+    font-weight: 500;
+
+    letter-spacing: 0.3px;
+
+    line-height: normal;
 
     white-space: nowrap;
+
+    border: none;
 }
 
 
-/* SUMMARY VALUE */
+/* SUMMARY NUMBER */
 
-.summary-number {
-    margin: 0 0 6px;
+.sales-summary .summary-number {
+    margin: 0 0 5px;
+    padding: 0;
 
     color: #272829;
 
-    font-size: 24px;
+    font-size: 26px;
     font-weight: 600;
 
-    line-height: 1;
+    line-height: normal;
+
+    border: none;
 }
 
 
-/* TODAY SALES BLUE LINE */
+/* =========================
+   TODAY'S SALES AMOUNT
+========================= */
 
-.sales-amount {
-    position: relative;
+.sales-summary .sales-amount {
+    position: static;
 
-    display: inline-block;
+    display: block;
 
-    padding-bottom: 3px;
+    margin: 0 0 5px;
+    padding: 0;
+
+    color: #272829;
+
+    font-size: 26px;
+    font-weight: 600;
+
+    line-height: normal;
+
+    border: none;
+    text-decoration: none;
 }
 
-.sales-amount::after {
-    content: "";
 
-    position: absolute;
+/* REMOVE DECORATIVE LINES */
 
-    left: 0;
-    bottom: 0;
+.sales-summary .summary-number::before,
+.sales-summary .summary-number::after,
+.sales-summary .sales-amount::before,
+.sales-summary .sales-amount::after {
+    display: none !important;
 
-    width: 100%;
-    height: 3px;
-
-    background-color: #278bd3;
+    content: none !important;
 }
 
 
-/* SUMMARY SUBTEXT */
+/* =========================
+   SUMMARY SUBTEXT
+========================= */
 
-.summary-subtext {
-    color: #777b7e;
+.sales-summary .summary-subtext {
+    margin: 0;
 
-    font-size: 8px;
+    color: #96999c;
+
+    font-size: 10px;
     font-weight: 400;
+
+    line-height: normal;
 
     white-space: nowrap;
 }
@@ -232,11 +288,12 @@ body {
 
 /* =========================
    SUMMARY ICONS
+   SAME AS INVENTORY
 ========================= */
 
-.summary-icon {
-    width: 34px;
-    height: 34px;
+.sales-summary .summary-icon {
+    width: 38px;
+    height: 38px;
 
     flex-shrink: 0;
 
@@ -244,15 +301,16 @@ body {
     align-items: center;
     justify-content: center;
 
-    border-radius: 9px;
+    margin: 0;
+
+    border-radius: 6px;
 }
 
-.summary-icon svg {
-    width: 21px;
-    height: 21px;
+.sales-summary .summary-icon svg {
+    width: 19px;
+    height: 19px;
 
     fill: none;
-    stroke: #272829;
 
     stroke-width: 1.5;
     stroke-linecap: round;
@@ -260,22 +318,47 @@ body {
 }
 
 
-/* ICON COLORS */
+/* TODAY'S SALES */
 
-.sales-icon {
-    background-color: #c9efc8;
+.sales-summary .sales-icon {
+    background-color: #e8f5f1;
 }
 
-.transaction-icon {
-    background-color: #f2f19c;
+.sales-summary .sales-icon svg {
+    stroke: #3a927a;
 }
 
-.pending-icon {
-    background-color: #f3c3c3;
+
+/* TOTAL TRANSACTIONS */
+
+.sales-summary .transaction-icon {
+    background-color: #edf2f5;
 }
 
-.wholesale-icon {
-    background-color: #dbe6f0;
+.sales-summary .transaction-icon svg {
+    stroke: #647783;
+}
+
+
+/* PENDING PAYMENT */
+
+.sales-summary .pending-icon {
+    background-color: #fff0e8;
+}
+
+.sales-summary .pending-icon svg {
+    stroke: #b56c4d;
+}
+
+
+/* WHOLESALES */
+
+.sales-summary .wholesale-icon {
+    background-color: #eef0f6;
+}
+
+.sales-summary .wholesale-icon svg {
+    stroke: #69738b;
 }
 
 
@@ -320,7 +403,8 @@ body {
     position: relative;
 
     flex: 1;
-    max-width: 500px;
+
+    max-width: 620px;
 }
 
 .search-box svg {
@@ -329,8 +413,8 @@ body {
     top: 50%;
     left: 13px;
 
-    width: 14px;
-    height: 14px;
+    width: 15px;
+    height: 15px;
 
     transform: translateY(-50%);
 
@@ -339,23 +423,24 @@ body {
 
     stroke-width: 1.7;
     stroke-linecap: round;
+
+    pointer-events: none;
 }
 
 .search-box input {
     width: 100%;
-    height: 36px;
+    height: 38px;
 
     padding: 0 14px 0 38px;
 
     background-color: #ffffff;
+    color: #272829;
 
     border: 1px solid #d5d7da;
     border-radius: 5px;
 
-    color: #272829;
-
     font-family: "Geologica", sans-serif;
-    font-size: 9px;
+    font-size: 11px;
 
     outline: none;
 
@@ -387,8 +472,8 @@ body {
 
 .sales-filters select,
 .sales-filters input {
-    min-width: 120px;
-    height: 36px;
+    min-width: 135px;
+    height: 38px;
 
     padding: 0 12px;
 
@@ -399,7 +484,7 @@ body {
     border-radius: 5px;
 
     font-family: "Geologica", sans-serif;
-    font-size: 8px;
+    font-size: 10px;
 
     outline: none;
 
@@ -419,7 +504,7 @@ body {
 
 
 /* =========================
-   TABLE
+   TABLE WRAPPER
 ========================= */
 
 .table-wrapper {
@@ -427,6 +512,11 @@ body {
 
     overflow-x: auto;
 }
+
+
+/* =========================
+   SALES TABLE
+========================= */
 
 .sales-table {
     width: 100%;
@@ -436,8 +526,13 @@ body {
     table-layout: fixed;
 }
 
+
+/* =========================
+   TABLE HEADER
+========================= */
+
 .sales-table th {
-    height: 45px;
+    height: 47px;
 
     padding: 0 14px;
 
@@ -446,16 +541,21 @@ body {
 
     border-bottom: 1px solid #e2e3e4;
 
-    font-size: 7px;
+    font-size: 9px;
     font-weight: 600;
 
-    letter-spacing: 0.25px;
+    letter-spacing: 0.3px;
 
     text-align: left;
 }
 
+
+/* =========================
+   TABLE DATA
+========================= */
+
 .sales-table td {
-    height: 62px;
+    height: 64px;
 
     padding: 9px 14px;
 
@@ -463,13 +563,15 @@ body {
 
     border-bottom: 1px solid #eeeeee;
 
-    font-size: 8px;
+    font-size: 10px;
 
     vertical-align: middle;
 }
 
 
-/* COLUMN WIDTHS */
+/* =========================
+   TABLE COLUMN WIDTHS
+========================= */
 
 .sales-table th:nth-child(1) {
     width: 12%;
@@ -504,7 +606,9 @@ body {
 }
 
 
-/* TABLE ROW */
+/* =========================
+   TABLE ROW
+========================= */
 
 .sales-table tbody tr {
     transition: background-color 0.15s ease;
@@ -516,7 +620,7 @@ body {
 
 
 /* =========================
-   STATUS
+   STATUS BADGES
 ========================= */
 
 .status-badge {
@@ -524,13 +628,13 @@ body {
     align-items: center;
     justify-content: center;
 
-    min-width: 65px;
+    min-width: 72px;
 
-    padding: 5px 8px;
+    padding: 6px 9px;
 
     border-radius: 20px;
 
-    font-size: 6.5px;
+    font-size: 8.5px;
     font-weight: 500;
 }
 
@@ -551,7 +655,7 @@ body {
 
 
 /* =========================
-   PAYMENT
+   PAYMENT BADGES
 ========================= */
 
 .payment-badge {
@@ -559,13 +663,13 @@ body {
     align-items: center;
     justify-content: center;
 
-    min-width: 58px;
+    min-width: 72px;
 
-    padding: 5px 8px;
+    padding: 6px 9px;
 
     border-radius: 20px;
 
-    font-size: 6.5px;
+    font-size: 8.5px;
     font-weight: 500;
 }
 
@@ -602,19 +706,18 @@ body {
 }
 
 .action-btn {
-    width: 28px;
-    height: 28px;
+    width: 31px;
+    height: 31px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
     background-color: transparent;
+    color: #62666a;
 
     border: none;
     border-radius: 4px;
-
-    color: #62666a;
 
     cursor: pointer;
 
@@ -625,17 +728,19 @@ body {
 
 .action-btn:hover {
     background-color: #eeeeee;
+
     color: #272829;
 }
 
 .action-btn.delete:hover {
     background-color: #fdeaea;
+
     color: #bd4747;
 }
 
 .action-btn svg {
-    width: 13px;
-    height: 13px;
+    width: 15px;
+    height: 15px;
 
     fill: none;
     stroke: currentColor;
@@ -664,14 +769,14 @@ body {
 }
 
 .empty-icon {
-    width: 45px;
-    height: 45px;
+    width: 48px;
+    height: 48px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    margin-bottom: 13px;
+    margin-bottom: 14px;
 
     background-color: #f0f1f2;
 
@@ -679,28 +784,31 @@ body {
 }
 
 .empty-icon svg {
-    width: 20px;
-    height: 20px;
+    width: 21px;
+    height: 21px;
 
     fill: none;
     stroke: #73777a;
 
     stroke-width: 1.5;
-    stroke-linecap: round;
-    stroke-linejoin: round;
 }
 
 .sales-empty h3 {
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 
     color: #4c5053;
 
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 500;
 }
 
 .sales-empty p {
-    font-size: 8px;
+    max-width: 300px;
+
+    color: #8c9094;
+
+    font-size: 10px;
+    line-height: 1.5;
 }
 
 
@@ -709,7 +817,7 @@ body {
 ========================= */
 
 .sales-table-footer {
-    min-height: 55px;
+    min-height: 58px;
 
     display: flex;
     align-items: center;
@@ -723,13 +831,13 @@ body {
 .sales-table-footer p {
     color: #898d90;
 
-    font-size: 7.5px;
+    font-size: 10px;
 }
 
 .sales-table-footer strong {
     color: #5b5f62;
 
-    font-weight: 500;
+    font-weight: 600;
 }
 
 
@@ -744,19 +852,26 @@ body {
     gap: 6px;
 }
 
-.pagination button {
-    width: 27px;
-    height: 27px;
+.pagination button,
+.pagination span {
+    width: 30px;
+    height: 30px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
+    border-radius: 4px;
+}
+
+.pagination button {
     background-color: #ffffff;
     color: #666a6e;
 
     border: 1px solid #dddddd;
-    border-radius: 4px;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 15px;
 
     cursor: pointer;
 }
@@ -772,19 +887,11 @@ body {
 }
 
 .pagination span {
-    min-width: 27px;
-    height: 27px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
     background-color: #272829;
     color: #ffffff;
 
-    border-radius: 4px;
-
-    font-size: 8px;
+    font-size: 10px;
+    font-weight: 500;
 }
 
 
@@ -798,8 +905,14 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 
+}
+
+
+@media (max-width: 900px) {
+
     .sales-toolbar {
         align-items: stretch;
+
         flex-direction: column;
     }
 
@@ -836,17 +949,18 @@ body {
 
     .sales-header {
         align-items: flex-start;
+
         flex-direction: column;
 
         gap: 18px;
     }
 
     .sales-header h1 {
-        font-size: 23px;
+        font-size: 25px;
     }
 
-    .sales-topbar {
-        padding: 0 20px;
+    .add-sale-btn {
+        width: 100%;
     }
 
     .sales-summary {
@@ -862,8 +976,13 @@ body {
         width: 100%;
     }
 
+    .sales-table {
+        min-width: 900px;
+    }
+
     .sales-table-footer {
         align-items: flex-start;
+
         flex-direction: column;
 
         gap: 12px;

@@ -30,6 +30,7 @@ body {
     background-color: #f3f4f5;
 }
 
+
 /* =========================
    CONTENT
 ========================= */
@@ -57,18 +58,19 @@ body {
 }
 
 .inventory-header h2 {
-    margin-bottom: 4px;
+    margin-bottom: 5px;
 
     color: #272829;
 
-    font-size: 27px;
+    font-size: 29px;
     font-weight: 600;
 }
 
 .inventory-header p {
     color: #7b7f83;
 
-    font-size: 10px;
+    font-size: 12px;
+    line-height: 1.5;
 }
 
 
@@ -83,7 +85,7 @@ body {
 }
 
 .inventory-btn {
-    height: 37px;
+    height: 40px;
 
     display: flex;
     align-items: center;
@@ -91,15 +93,15 @@ body {
 
     gap: 7px;
 
-    min-width: 105px;
+    min-width: 110px;
 
-    padding: 0 15px;
+    padding: 0 16px;
 
     border-radius: 5px;
 
     font-family: "Geologica", sans-serif;
 
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 500;
 
     cursor: pointer;
@@ -111,7 +113,7 @@ body {
 }
 
 .inventory-btn span {
-    font-size: 14px;
+    font-size: 17px;
     font-weight: 300;
 }
 
@@ -159,7 +161,7 @@ body {
 }
 
 .summary-card {
-    min-height: 105px;
+    min-height: 110px;
 
     display: flex;
     align-items: flex-start;
@@ -186,14 +188,16 @@ body {
 }
 
 
-/* CARD TEXT */
+/* =========================
+   SUMMARY CARD TEXT
+========================= */
 
 .summary-card-content p {
     margin-bottom: 8px;
 
     color: #7b7f82;
 
-    font-size: 8px;
+    font-size: 11px;
     font-weight: 500;
 
     letter-spacing: 0.3px;
@@ -204,14 +208,14 @@ body {
 
     color: #272829;
 
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 600;
 }
 
 .summary-card-content span {
     color: #96999c;
 
-    font-size: 7.5px;
+    font-size: 10px;
 }
 
 
@@ -220,8 +224,8 @@ body {
 ========================= */
 
 .summary-icon {
-    width: 34px;
-    height: 34px;
+    width: 38px;
+    height: 38px;
 
     display: flex;
     align-items: center;
@@ -231,8 +235,8 @@ body {
 }
 
 .summary-icon svg {
-    width: 17px;
-    height: 17px;
+    width: 19px;
+    height: 19px;
 
     fill: none;
 
@@ -336,8 +340,8 @@ body {
     top: 50%;
     left: 13px;
 
-    width: 14px;
-    height: 14px;
+    width: 15px;
+    height: 15px;
 
     transform: translateY(-50%);
 
@@ -350,7 +354,7 @@ body {
 
 .inventory-search input {
     width: 100%;
-    height: 36px;
+    height: 38px;
 
     padding: 0 14px 0 38px;
 
@@ -361,7 +365,7 @@ body {
     border-radius: 5px;
 
     font-family: "Geologica", sans-serif;
-    font-size: 9px;
+    font-size: 11px;
 
     outline: none;
 
@@ -392,8 +396,8 @@ body {
 }
 
 .inventory-filters select {
-    min-width: 130px;
-    height: 36px;
+    min-width: 135px;
+    height: 38px;
 
     padding: 0 30px 0 12px;
 
@@ -404,7 +408,7 @@ body {
     border-radius: 5px;
 
     font-family: "Geologica", sans-serif;
-    font-size: 8px;
+    font-size: 10px;
 
     outline: none;
 
@@ -435,8 +439,13 @@ body {
     table-layout: fixed;
 }
 
+
+/* =========================
+   TABLE HEADER
+========================= */
+
 .inventory-table th {
-    height: 45px;
+    height: 47px;
 
     padding: 0 14px;
 
@@ -445,30 +454,37 @@ body {
 
     border-bottom: 1px solid #e2e3e4;
 
-    font-size: 7px;
+    font-size: 9px;
     font-weight: 600;
 
-    letter-spacing: 0.2px;
+    letter-spacing: 0.3px;
 
     text-align: left;
 }
 
-.inventory-table td {
-    height: 58px;
 
-    padding: 8px 14px;
+/* =========================
+   TABLE DATA
+========================= */
+
+.inventory-table td {
+    height: 64px;
+
+    padding: 9px 14px;
 
     color: #55595d;
 
     border-bottom: 1px solid #eeeeee;
 
-    font-size: 8px;
+    font-size: 10px;
 
     vertical-align: middle;
 }
 
 
-/* COLUMN WIDTHS */
+/* =========================
+   COLUMN WIDTHS
+========================= */
 
 .inventory-table th:nth-child(1) {
     width: 11%;
@@ -503,7 +519,9 @@ body {
 }
 
 
-/* ROW */
+/* =========================
+   TABLE ROW
+========================= */
 
 .inventory-table tbody tr {
     transition: background-color 0.15s ease;
@@ -521,6 +539,7 @@ body {
 .stock-quantity {
     color: #272829;
 
+    font-size: 10px;
     font-weight: 500;
 }
 
@@ -534,13 +553,13 @@ body {
     align-items: center;
     justify-content: center;
 
-    min-width: 68px;
+    min-width: 72px;
 
-    padding: 5px 8px;
+    padding: 6px 9px;
 
     border-radius: 20px;
 
-    font-size: 6.5px;
+    font-size: 8.5px;
     font-weight: 500;
 }
 
@@ -577,8 +596,8 @@ body {
 }
 
 .inventory-action-btn {
-    width: 28px;
-    height: 28px;
+    width: 31px;
+    height: 31px;
 
     display: flex;
     align-items: center;
@@ -604,8 +623,8 @@ body {
 }
 
 .inventory-action-btn svg {
-    width: 13px;
-    height: 13px;
+    width: 15px;
+    height: 15px;
 
     fill: none;
     stroke: currentColor;
@@ -621,7 +640,7 @@ body {
 ========================= */
 
 .inventory-empty {
-    min-height: 270px;
+    min-height: 280px;
 
     display: flex;
     flex-direction: column;
@@ -634,14 +653,14 @@ body {
 }
 
 .empty-icon {
-    width: 45px;
-    height: 45px;
+    width: 48px;
+    height: 48px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    margin-bottom: 13px;
+    margin-bottom: 14px;
 
     background-color: #f0f1f2;
 
@@ -649,8 +668,8 @@ body {
 }
 
 .empty-icon svg {
-    width: 20px;
-    height: 20px;
+    width: 21px;
+    height: 21px;
 
     fill: none;
     stroke: #73777a;
@@ -659,18 +678,18 @@ body {
 }
 
 .inventory-empty h3 {
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 
     color: #4c5053;
 
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 500;
 }
 
 .inventory-empty p {
     max-width: 300px;
 
-    font-size: 8px;
+    font-size: 10px;
     line-height: 1.5;
 }
 
@@ -680,7 +699,7 @@ body {
 ========================= */
 
 .inventory-table-footer {
-    min-height: 55px;
+    min-height: 58px;
 
     display: flex;
     align-items: center;
@@ -694,13 +713,13 @@ body {
 .inventory-table-footer p {
     color: #898d90;
 
-    font-size: 7.5px;
+    font-size: 10px;
 }
 
 .inventory-table-footer strong {
     color: #5b5f62;
 
-    font-weight: 500;
+    font-weight: 600;
 }
 
 
@@ -717,8 +736,8 @@ body {
 
 .pagination button,
 .pagination span {
-    width: 27px;
-    height: 27px;
+    width: 30px;
+    height: 30px;
 
     display: flex;
     align-items: center;
@@ -733,7 +752,13 @@ body {
 
     border: 1px solid #dddddd;
 
+    font-size: 15px;
+
     cursor: pointer;
+}
+
+.pagination button:hover:not(:disabled) {
+    background-color: #f2f3f4;
 }
 
 .pagination button:disabled {
@@ -746,7 +771,8 @@ body {
     background-color: #272829;
     color: #ffffff;
 
-    font-size: 8px;
+    font-size: 10px;
+    font-weight: 500;
 }
 
 
@@ -772,6 +798,10 @@ body {
 
     .inventory-search {
         max-width: none;
+    }
+
+    .inventory-filters {
+        width: 100%;
     }
 
     .inventory-filters select {
@@ -803,6 +833,10 @@ body {
         gap: 18px;
     }
 
+    .inventory-header h2 {
+        font-size: 25px;
+    }
+
     .inventory-summary {
         grid-template-columns: 1fr;
     }
@@ -813,6 +847,14 @@ body {
 
     .inventory-btn {
         flex: 1;
+    }
+
+    .inventory-filters {
+        flex-direction: column;
+    }
+
+    .inventory-filters select {
+        width: 100%;
     }
 
 }

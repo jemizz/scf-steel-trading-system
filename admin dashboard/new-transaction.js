@@ -365,21 +365,21 @@ function updateTransactionFooter() {
     if (currentTransactionStep === 1) {
 
         nextButton.textContent =
-            "Next: Add Items →";
+            "Next  →";
 
     }
 
     else if (currentTransactionStep === 2) {
 
         nextButton.textContent =
-            "Next: Fabrication →";
+            "Next  →";
 
     }
 
     else if (currentTransactionStep === 3) {
 
         nextButton.textContent =
-            "Next: Payment →";
+            "Next  →";
 
     }
 
