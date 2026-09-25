@@ -39,26 +39,62 @@
       </section>
 
       <!-- SUMMARY -->
-      <section class="sr-summary-grid">
+      <section class="sr-summary-grid" aria-label="Stock replenishment summary">
+
         <div class="sr-summary-card urgent">
-          <p class="sr-summary-label">URGENT STOCK</p>
+          <p class="sr-summary-label">Urgent Stock</p>
           <h2 id="urgentCount">0</h2>
+          <p class="sr-summary-note">Needs immediate restocking</p>
+
+          <span class="sr-summary-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3 2 21h20L12 3z"></path>
+              <path d="M12 9v5"></path>
+              <path d="M12 17h.01"></path>
+            </svg>
+          </span>
         </div>
 
         <div class="sr-summary-card recommended">
-          <p class="sr-summary-label">RECOMMENDED</p>
+          <p class="sr-summary-label">Recommended</p>
           <h2 id="recommendedCount">0</h2>
+          <p class="sr-summary-note">Suggested for restocking</p>
+
+          <span class="sr-summary-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 3 3 8l9 5 9-5-9-5z"></path>
+              <path d="M3 8v9l9 5 9-5V8"></path>
+              <path d="M12 13v9"></path>
+            </svg>
+          </span>
         </div>
 
         <div class="sr-summary-card monitor">
-          <p class="sr-summary-label">UNDER MONITOR</p>
+          <p class="sr-summary-label">Under Monitor</p>
           <h2 id="monitorCount">0</h2>
+          <p class="sr-summary-note">Watch stock movement</p>
+
+          <span class="sr-summary-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </span>
         </div>
 
         <div class="sr-summary-card ok">
-          <p class="sr-summary-label">OK / SUFFICIENT</p>
+          <p class="sr-summary-label">OK / Sufficient</p>
           <h2 id="okCount">0</h2>
+          <p class="sr-summary-note">Stock levels are sufficient</p>
+
+          <span class="sr-summary-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="8"></circle>
+              <path d="m8 12 3 3 5-6"></path>
+            </svg>
+          </span>
         </div>
+
       </section>
 
       <!-- RECOMMENDATION CARDS AREA -->
