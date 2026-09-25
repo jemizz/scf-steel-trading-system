@@ -1,0 +1,776 @@
+<!-- =========================
+     NEW TRANSACTION MODAL
+========================= -->
+
+<div class="transaction-overlay" id="transactionOverlay">
+
+    <div class="transaction-modal">
+
+        <!-- =========================
+             MODAL HEADER
+        ========================== -->
+
+        <div class="transaction-header">
+
+            <div>
+                <h2>New Transaction</h2>
+
+                <p>
+                    Create a sales transaction with optional
+                    fabrication services.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="transaction-close"
+                id="closeTransactionBtn"
+                aria-label="Close"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             STEPS
+        ========================== -->
+
+        <div class="transaction-steps">
+
+            <div class="transaction-step active" data-step="1">
+                <div class="step-number">1</div>
+                <span>Customer</span>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="transaction-step" data-step="2">
+                <div class="step-number">2</div>
+                <span>Items</span>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="transaction-step" data-step="3">
+                <div class="step-number">3</div>
+
+                <span>
+                    Fabrication
+                    <small>Optional</small>
+                </span>
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="transaction-step" data-step="4">
+                <div class="step-number">4</div>
+                <span>Payment</span>
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             MODAL BODY
+        ========================== -->
+
+        <div class="transaction-body">
+
+            <!-- LEFT SIDE -->
+            <div class="transaction-main">
+
+
+                <!-- =========================
+                     STEP 1 - CUSTOMER
+                ========================== -->
+
+                <section
+                    class="transaction-page active"
+                    id="transactionStep1"
+                >
+
+                    <div class="transaction-section">
+
+                        <div class="section-heading">
+                            <div class="section-symbol">C</div>
+
+                            <div>
+                                <h3>Customer Information</h3>
+
+                                <p>
+                                    Enter customer details or continue
+                                    as a walk-in customer.
+                                </p>
+                            </div>
+                        </div>
+
+
+                        <div class="customer-type">
+
+                            <label class="type-option active">
+
+                                <input
+                                    type="radio"
+                                    name="customerType"
+                                    value="walk-in"
+                                    checked
+                                >
+
+                                <span class="radio-circle"></span>
+
+                                <span>
+                                    <strong>Walk-in</strong>
+                                    <small>
+                                        Direct customer purchase
+                                    </small>
+                                </span>
+
+                            </label>
+
+
+                            <label class="type-option">
+
+                                <input
+                                    type="radio"
+                                    name="customerType"
+                                    value="named"
+                                >
+
+                                <span class="radio-circle"></span>
+
+                                <span>
+                                    <strong>Named Customer</strong>
+                                    <small>
+                                        Record customer information
+                                    </small>
+                                </span>
+
+                            </label>
+
+                        </div>
+
+
+                        <div
+                            class="customer-fields"
+                            id="customerFields"
+                        >
+
+                            <div class="form-group">
+                                <label for="customerName">
+                                    Customer Name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customerName"
+                                    placeholder="Enter customer name"
+                                >
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="customerContact">
+                                    Contact Number
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customerContact"
+                                    placeholder="Enter contact number"
+                                >
+                            </div>
+
+
+                            <div class="form-group full-width">
+                                <label for="customerAddress">
+                                    Address
+                                    <span>(Optional)</span>
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="customerAddress"
+                                    placeholder="Enter customer address"
+                                >
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- NOTES -->
+
+                    <div class="transaction-section">
+
+                        <div class="section-heading small-heading">
+
+                            <div class="section-symbol">N</div>
+
+                            <div>
+                                <h3>Transaction Notes</h3>
+                                <p>Optional</p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <textarea
+                                id="transactionNotes"
+                                placeholder="Add notes about this transaction..."
+                            ></textarea>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================
+                     STEP 2 - ITEMS
+                ========================== -->
+
+                <section
+                    class="transaction-page"
+                    id="transactionStep2"
+                >
+
+                    <div class="transaction-section">
+
+                        <div class="section-heading">
+
+                            <div class="section-symbol">P</div>
+
+                            <div>
+                                <h3>Add Products</h3>
+
+                                <p>
+                                    Select products and enter the agreed
+                                    selling price.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <!-- PRODUCT SEARCH -->
+
+                        <div class="product-search-row">
+
+                            <div class="form-group">
+
+                                <label for="transactionProduct">
+                                    Product
+                                </label>
+
+                                <select id="transactionProduct">
+
+                                    <option value="">
+                                        Select product
+                                    </option>
+
+                                    <!-- Database products later -->
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group quantity-field">
+
+                                <label for="transactionQuantity">
+                                    Quantity
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="transactionQuantity"
+                                    value="1"
+                                    min="1"
+                                >
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="add-item-btn"
+                                id="addTransactionItem"
+                            >
+                                + Add Item
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- ITEMS TABLE -->
+
+                    <div class="transaction-section items-section">
+
+                        <div class="items-header">
+
+                            <div>
+                                <h3>Transaction Items</h3>
+
+                                <p>
+                                    Selling price can be adjusted for
+                                    negotiated or bulk pricing.
+                                </p>
+                            </div>
+
+                            <span id="itemCount">
+                                0 Items
+                            </span>
+
+                        </div>
+
+
+                        <div class="transaction-table-wrapper">
+
+                            <table class="transaction-items-table">
+
+                                <thead>
+                                    <tr>
+                                        <th>PRODUCT</th>
+                                        <th>QTY</th>
+                                        <th>REFERENCE PRICE</th>
+                                        <th>SELLING PRICE</th>
+                                        <th>TOTAL</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+
+                                <tbody id="transactionItemsBody">
+
+                                    <!-- Items inserted by JS -->
+
+                                </tbody>
+
+                            </table>
+
+
+                            <div
+                                class="items-empty"
+                                id="itemsEmptyState"
+                            >
+
+                                <div class="empty-symbol">+</div>
+
+                                <strong>No products added</strong>
+
+                                <p>
+                                    Select a product above to begin
+                                    the transaction.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================
+                     STEP 3 - FABRICATION
+                ========================== -->
+
+                <section
+                    class="transaction-page"
+                    id="transactionStep3"
+                >
+
+                    <div class="transaction-section">
+
+                        <div class="section-heading">
+
+                            <div class="section-symbol">F</div>
+
+                            <div>
+                                <h3>Fabrication Services</h3>
+
+                                <p>
+                                    Add fabrication only when requested
+                                    by the customer.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="fabrication-question">
+
+                            <div>
+                                <strong>
+                                    Does this transaction require fabrication?
+                                </strong>
+
+                                <p>
+                                    You can skip this step if the customer
+                                    only purchased products.
+                                </p>
+                            </div>
+
+
+                            <label class="switch">
+
+                                <input
+                                    type="checkbox"
+                                    id="fabricationToggle"
+                                >
+
+                                <span class="slider"></span>
+
+                            </label>
+
+                        </div>
+
+
+                        <!-- FABRICATION FORM -->
+
+                        <div
+                            class="fabrication-form"
+                            id="fabricationForm"
+                        >
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+                                    <label for="fabricationProduct">
+                                        Product
+                                    </label>
+
+                                    <select id="fabricationProduct">
+                                        <option value="">
+                                            Select purchased product
+                                        </option>
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="fabricationService">
+                                        Service
+                                    </label>
+
+                                    <select id="fabricationService">
+
+                                        <option value="">
+                                            Select service
+                                        </option>
+
+                                        <option value="Cutting">
+                                            Cutting
+                                        </option>
+
+                                        <option value="Bending">
+                                            Bending
+                                        </option>
+
+                                        <option value="Drilling">
+                                            Drilling
+                                        </option>
+
+                                        <option value="Custom Fabrication">
+                                            Custom Fabrication
+                                        </option>
+
+                                    </select>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="fabricationQuantity">
+                                        Quantity
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="fabricationQuantity"
+                                        min="1"
+                                        value="1"
+                                    >
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="fabricationPrice">
+                                        Service Charge
+                                    </label>
+
+                                    <input
+                                        type="number"
+                                        id="fabricationPrice"
+                                        min="0"
+                                        step="0.01"
+                                        placeholder="0.00"
+                                    >
+                                </div>
+
+
+                                <div class="form-group full-width">
+
+                                    <label for="fabricationSpecification">
+                                        Specifications
+                                    </label>
+
+                                    <textarea
+                                        id="fabricationSpecification"
+                                        placeholder="Enter measurements, cutting instructions, bending details, or other specifications..."
+                                    ></textarea>
+
+                                </div>
+
+                            </div>
+
+
+                            <button
+                                type="button"
+                                class="add-fabrication-btn"
+                                id="addFabricationBtn"
+                            >
+                                + Add Fabrication Service
+                            </button>
+
+
+                            <div
+                                class="fabrication-list"
+                                id="fabricationList"
+                            ></div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- =========================
+                     STEP 4 - PAYMENT
+                ========================== -->
+
+                <section
+                    class="transaction-page"
+                    id="transactionStep4"
+                >
+
+                    <div class="transaction-section">
+
+                        <div class="section-heading">
+
+                            <div class="section-symbol">₱</div>
+
+                            <div>
+                                <h3>Payment</h3>
+
+                                <p>
+                                    Review the transaction and record
+                                    the customer's payment.
+                                </p>
+                            </div>
+
+                        </div>
+
+
+                        <div class="payment-grid">
+
+                            <div class="form-group">
+
+                                <label for="paymentMethod">
+                                    Payment Method
+                                </label>
+
+                                <select id="paymentMethod">
+
+                                    <option value="Cash">
+                                        Cash
+                                    </option>
+
+                                    <option value="GCash">
+                                        GCash
+                                    </option>
+
+                                    <option value="Bank Transfer">
+                                        Bank Transfer
+                                    </option>
+
+                                    <option value="Other">
+                                        Other
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label for="amountPaid">
+                                    Amount Paid
+                                </label>
+
+                                <input
+                                    type="number"
+                                    id="amountPaid"
+                                    min="0"
+                                    step="0.01"
+                                    placeholder="0.00"
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="payment-result">
+
+                            <span>Change</span>
+
+                            <strong id="changeAmount">
+                                ₱0.00
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+
+            <!-- =========================
+                 ORDER SUMMARY
+            ========================== -->
+
+            <aside class="transaction-summary">
+
+                <div class="summary-title">
+
+                    <div>
+                        <h3>Order Summary</h3>
+
+                        <p>
+                            Current transaction
+                        </p>
+                    </div>
+
+                    <span id="summaryItemCount">
+                        0
+                    </span>
+
+                </div>
+
+
+                <div
+                    class="summary-products"
+                    id="summaryProducts"
+                >
+
+                    <div
+                        class="summary-empty"
+                        id="summaryEmpty"
+                    >
+
+                        <div class="summary-empty-symbol">
+                            +
+                        </div>
+
+                        <strong>No items yet</strong>
+
+                        <p>
+                            Add products to this transaction.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="summary-calculation">
+
+                    <div>
+                        <span>Products</span>
+
+                        <strong id="productsSubtotal">
+                            ₱0.00
+                        </strong>
+                    </div>
+
+
+                    <div>
+                        <span>Fabrication</span>
+
+                        <strong id="fabricationSubtotal">
+                            ₱0.00
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="summary-total">
+
+                    <span>Total Amount</span>
+
+                    <strong id="transactionTotal">
+                        ₱0.00
+                    </strong>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+
+        <!-- =========================
+             FOOTER
+        ========================== -->
+
+        <div class="transaction-footer">
+
+            <button
+                type="button"
+                class="transaction-secondary-btn"
+                id="transactionBackBtn"
+            >
+                Back
+            </button>
+
+
+            <div class="transaction-footer-right">
+
+                <button
+                    type="button"
+                    class="transaction-cancel-btn"
+                    id="transactionCancelBtn"
+                >
+                    Cancel
+                </button>
+
+
+                <button
+                    type="button"
+                    class="transaction-next-btn"
+                    id="transactionNextBtn"
+                >
+                    Next: Add Items →
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
