@@ -764,3 +764,86 @@ body {
     font-size: 16px;
   }
 }
+
+/* =========================
+   SUBTLE HOVER EFFECTS
+========================= */
+
+.sales-page .stat-card {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.sales-page .button-primary {
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.sales-page .filter-label select,
+.sales-page .view-button {
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.sales-page .sales-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+/* Hover effects for devices with a mouse. */
+@media (hover: hover) {
+    .sales-page .stat-card:hover {
+        transform: translateY(-3px);
+        border-color: #b8bdc6;
+        box-shadow: 0 6px 16px rgba(39, 40, 41, 0.08);
+    }
+
+    .sales-page .button-primary:hover:not(:disabled) {
+        transform: translateY(-2px);
+        background-color: #3b3d40;
+        box-shadow: 0 5px 12px rgba(39, 40, 41, 0.16);
+    }
+
+    .sales-page .filter-label select:hover {
+        background-color: #fafbfc;
+        border-color: #969ca8;
+    }
+
+    .sales-page .sales-table tbody tr:hover {
+        background-color: #f4f5f7;
+    }
+
+    .sales-page .view-button:hover:not(:disabled) {
+        background-color: #eceef2;
+        border-color: #969ca8;
+        box-shadow: 0 2px 5px rgba(39, 40, 41, 0.06);
+    }
+}
+
+/* Small press effect when clicking. */
+.sales-page .button-primary:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Respect reduced-motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+    .sales-page .stat-card,
+    .sales-page .button-primary,
+    .sales-page .filter-label select,
+    .sales-page .view-button,
+    .sales-page .sales-table tbody tr {
+        transition: none;
+    }
+
+    .sales-page .stat-card:hover,
+    .sales-page .button-primary:hover:not(:disabled),
+    .sales-page .button-primary:active:not(:disabled) {
+        transform: none;
+    }
+}
