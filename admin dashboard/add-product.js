@@ -154,7 +154,7 @@
             <td>
                 <input
                     type="text"
-                    aria-label="SKU"
+                    aria-label="Product ID"
                     placeholder="ST-001"
                     required
                 >
