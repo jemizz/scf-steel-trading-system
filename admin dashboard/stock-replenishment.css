@@ -745,3 +745,96 @@ body {
     flex-direction: column;
   }
 }
+
+/* =========================
+   SUBTLE HOVER EFFECTS
+========================= */
+
+.sr-summary-card {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.sr-toolbar .search-box input,
+.sr-filters select,
+.sr-table-footer .pagination button {
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.sr-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.sr-table button {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+/* Hover effects for devices with a mouse. */
+@media (hover: hover) {
+    .sr-summary-card:hover {
+        transform: translateY(-3px);
+        border-color: #b8bdc6;
+        box-shadow: 0 6px 16px rgba(39, 40, 41, 0.08);
+    }
+
+    .sr-toolbar .search-box input:hover:not(:focus) {
+        border-color: #969ca8;
+    }
+
+    .sr-filters select:hover {
+        background-color: #fafbfc;
+        border-color: #969ca8;
+    }
+
+    .sr-table tbody tr:hover {
+        background-color: #f4f5f7;
+    }
+
+    .sr-table button:hover:not(:disabled) {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 5px rgba(39, 40, 41, 0.08);
+    }
+
+    .sr-table-footer .pagination button:hover:not(:disabled) {
+        background-color: #eceef2;
+        border-color: #969ca8;
+        box-shadow: 0 2px 5px rgba(39, 40, 41, 0.06);
+    }
+}
+
+/* Search field focus. */
+.sr-toolbar .search-box input:focus {
+    border-color: #61677a;
+    box-shadow: 0 0 0 3px rgba(97, 103, 122, 0.1);
+}
+
+/* Small press effect when clicking. */
+.sr-table button:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Respect reduced-motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+    .sr-summary-card,
+    .sr-toolbar .search-box input,
+    .sr-filters select,
+    .sr-table tbody tr,
+    .sr-table button,
+    .sr-table-footer .pagination button {
+        transition: none;
+    }
+
+    .sr-summary-card:hover,
+    .sr-table button:hover:not(:disabled),
+    .sr-table button:active:not(:disabled) {
+        transform: none;
+    }
+}
