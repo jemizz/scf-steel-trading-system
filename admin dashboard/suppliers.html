@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="new-transaction.css">
   <link rel="stylesheet" href="new-purchase-order.css">
   <link rel="stylesheet" href="suppliers.css">
+
 </head>
 
 <body>
@@ -37,6 +38,7 @@
           <p><span id="supplierRegisteredCount">0</span> Suppliers Registered</p>
         </div>
 
+        <!-- This ID is used by add-supplier.js to open the modal -->
         <button type="button" class="add-supplier-btn" id="addSupplierBtn">
           <span class="plus">+</span>
           Supplier
@@ -130,20 +132,29 @@
     </div>
   </main>
 
-   <!-- =========================
-         MODALS
-    ========================== -->
+  <!-- =========================
+       MODALS
+  ========================== -->
 
-    <!-- NEW TRANSACTION MODAL -->
-    <div id="newTransactionModal"></div>
+  <!-- NEW TRANSACTION MODAL -->
+  <div id="newTransactionModal"></div>
 
-    <!-- NEW PURCHASE ORDER MODAL -->
-    <div id="newPurchaseOrderModal"></div>
+  <!-- NEW PURCHASE ORDER MODAL -->
+  <div id="newPurchaseOrderModal"></div>
+
+  <!--
+    Add Supplier Modal will be injected into <body> automatically
+    by add-supplier.js (it fetches add-supplier.html)
+  -->
 
   <script src="sidebar.js"></script>
   <script src="topbar.js"></script>
   <script src="new-transaction.js"></script>
   <script src="new-purchase-order.js"></script>
+
+  <!-- ADDED: Add Supplier modal loader -->
+  <script src="add-suppliers.js"></script>
+
   <script src="suppliers.js"></script>
 </body>
 </html>

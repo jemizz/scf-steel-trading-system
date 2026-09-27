@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Supplier Modal - SCF Steel Trading</title>
+
+  <!-- Fonts (optional; ok kahit naka-load na sa main page) -->
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+
+  <!-- Modal CSS -->
+  <link rel="stylesheet" href="add-suppliers.css" />
+</head>
+
+<body>
+
+  <!-- Modal dialog (this is what we will extract + inject to main page) -->
+  <dialog
+  class="as-modal"
+  id="addSupplierModal"
+  aria-labelledby="asTitle"
+>
+  <form id="asForm">
+
+    <!-- HEADER -->
+    <header class="as-header">
+      <div>
+        <h2 id="asTitle">Add a supplier</h2>
+        <p>Register supplier details and products they provide.</p>
+      </div>
+
+      <button
+        type="button"
+        class="as-close"
+        data-as-close
+        aria-label="Close Add Supplier"
+      >
+        ×
+      </button>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="as-body">
+
+      <section class="as-section">
+        <div class="as-section-title">
+          <span class="as-number">1</span>
+          <h3>Supplier details</h3>
+        </div>
+
+        <div class="as-fields">
+          <label class="as-wide">
+            Business name <span class="req">*</span>
+            <input
+              type="text"
+              name="businessName"
+              maxlength="150"
+              placeholder="e.g. ABC Steel Trading"
+              required
+            >
+          </label>
+
+          <label>
+            Contact person
+            <input
+              type="text"
+              name="contactPerson"
+              maxlength="120"
+              placeholder="e.g. Juan Dela Cruz"
+            >
+          </label>
+
+          <label>
+            Phone
+            <input
+              type="tel"
+              name="phone"
+              maxlength="40"
+              placeholder="e.g. 09xx xxx xxxx"
+            >
+          </label>
+
+          <label>
+            Email
+            <input
+              type="email"
+              name="email"
+              maxlength="120"
+              placeholder="e.g. supplier@email.com"
+            >
+          </label>
+
+          <label>
+            Payment terms
+            <select name="paymentTerms">
+              <option value="COD">COD</option>
+              <option value="NET7">NET 7</option>
+              <option value="NET15">NET 15</option>
+              <option value="NET30">NET 30</option>
+            </select>
+          </label>
+
+          <label class="as-wide">
+            Address
+            <textarea
+              name="address"
+              rows="3"
+              maxlength="300"
+              placeholder="Complete address"
+            ></textarea>
+          </label>
+        </div>
+      </section>
+
+      <section class="as-section">
+        <div class="as-section-title as-spread">
+          <div>
+            <span class="as-number">2</span>
+            <h3>Supplies which products</h3>
+          </div>
+
+          <span id="asSelectedCount" class="as-help">0 selected</span>
+        </div>
+
+        <div class="as-checkgrid">
+          <label class="as-check">
+            <input type="checkbox" name="products" value="GI Sheet">
+            GI Sheet
+          </label>
+
+          <label class="as-check">
+            <input type="checkbox" name="products" value="C-Purlin">
+            C-Purlin
+          </label>
+
+          <label class="as-check">
+            <input type="checkbox" name="products" value="Steel Plate">
+            Steel Plate
+          </label>
+
+          <label class="as-check">
+            <input type="checkbox" name="products" value="Angle Bar">
+            Angle Bar
+          </label>
+
+          <label class="as-check">
+            <input type="checkbox" name="products" value="Flat Bar">
+            Flat Bar
+          </label>
+
+          <label class="as-check">
+            <input type="checkbox" name="products" value="B.I. Pipe">
+            B.I. Pipe
+          </label>
+        </div>
+      </section>
+
+      <p id="asError" class="as-error" role="alert" hidden></p>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="as-footer">
+      <span class="as-help">Front-end preview only.</span>
+
+      <div>
+        <button type="button" class="as-secondary" data-as-close>
+          Cancel
+        </button>
+
+        <button type="submit" class="as-primary" id="asSave">
+          Add supplier
+        </button>
+      </div>
+    </footer>
+
+  </form>
+</dialog>
+
+  <!-- Optional: if you open this HTML directly, it will auto-open the dialog -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const dlg = document.getElementById("addSupplierModal");
+      if (dlg && !dlg.open) dlg.showModal();
+    });
+  </script>
+
+</body>
+</html>

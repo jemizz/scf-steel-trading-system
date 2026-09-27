@@ -1,0 +1,231 @@
+.as-modal {
+  width: min(900px, calc(100% - 40px));
+  max-height: calc(100dvh - 40px);
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: #f7f8f9;
+  color: #272829;
+  font: 14px "Geologica", sans-serif;
+  box-shadow: 0 20px 60px #0004;
+}
+
+.as-modal::backdrop {
+  background: rgba(20, 22, 24, 0.68);
+}
+
+.as-modal * { box-sizing: border-box; }
+
+.as-modal form {
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 40px);
+}
+
+.as-modal button,
+.as-modal input,
+.as-modal select,
+.as-modal textarea { font: inherit; }
+
+.as-modal button { cursor: pointer; }
+.as-modal button:disabled { opacity: .45; cursor: not-allowed; }
+
+.as-modal :focus-visible {
+  outline: 2px solid #61677a;
+  outline-offset: 2px;
+}
+
+.req { color: #9f251c; }
+
+/* Header/Footer */
+.as-header,
+.as-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 20px 24px;
+  background: #fff;
+  flex-shrink: 0;
+}
+
+.as-header { border-bottom: 1px solid #e2e4e6; }
+.as-footer { border-top: 1px solid #e2e4e6; }
+
+.as-modal h2 {
+  margin: 0 0 6px;
+  font-size: 23px;
+  font-weight: 600;
+}
+
+.as-header p,
+.as-help {
+  margin: 0;
+  color: #61677a;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.as-close {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  font-size: 28px !important;
+}
+.as-close:hover { background: #eeeeee; }
+
+/* Body */
+.as-body {
+  /* IMPORTANT: scroll inside modal instead of growing the modal */
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+.as-section {
+  margin-bottom: 18px;
+  padding: 20px;
+  border: 1px solid #e2e4e6;
+  border-radius: 7px;
+  background: #ffffff;
+}
+
+.as-section-title,
+.as-section-title > div {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.as-section-title { margin-bottom: 18px; }
+.as-spread { justify-content: space-between; }
+
+.as-section h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.as-number {
+  display: inline-grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #272829;
+  color: #ffffff;
+  font-size: 12px;
+}
+
+/* Fields */
+.as-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.as-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.as-wide { grid-column: 1 / -1; }
+
+.as-modal input:not([type="checkbox"]),
+.as-modal select,
+.as-modal textarea {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 11px;
+  border: 1px solid #d8d9da;
+  border-radius: 5px;
+  background: #ffffff;
+  color: #272829;
+}
+
+.as-modal textarea { resize: vertical; }
+
+/* Product checkbox grid */
+.as-checkgrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px 14px;
+}
+
+.as-check {
+  flex-direction: row !important;
+  align-items: center;
+  gap: 10px !important;
+  padding: 10px 12px;
+  border: 1px solid #e2e4e6;
+  border-radius: 6px;
+  background: #fafbfc;
+  cursor: pointer;
+}
+
+.as-check input {
+  width: 18px;
+  height: 18px;
+  accent-color: #272829;
+  flex-shrink: 0;
+}
+
+/* Buttons */
+.as-primary,
+.as-secondary {
+  padding: 10px 16px;
+  border-radius: 5px;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+}
+
+.as-primary {
+  border: 1px solid #272829;
+  background: #272829;
+  color: #ffffff;
+}
+
+.as-secondary {
+  border: 1px solid #d8d9da;
+  background: #ffffff;
+  color: #272829;
+}
+
+.as-footer > span {
+  color: #61677a;
+  font-size: 12px;
+}
+
+.as-footer > div {
+  display: flex;
+  gap: 10px;
+}
+
+.as-error {
+  padding: 12px;
+  border-radius: 5px;
+  background: #fff0ee;
+  color: #9f251c;
+  line-height: 1.5;
+}
+
+@media (max-width: 650px) {
+  .as-modal {
+    width: calc(100% - 16px);
+    max-height: calc(100dvh - 16px);
+  }
+
+  .as-modal form { max-height: calc(100dvh - 16px); }
+
+  .as-header, .as-footer { padding: 16px; }
+  .as-body { padding: 12px; }
+  .as-section { padding: 14px; }
+
+  .as-fields { grid-template-columns: 1fr; }
+  .as-checkgrid { grid-template-columns: 1fr; }
+}
