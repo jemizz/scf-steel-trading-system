@@ -99,16 +99,10 @@ body {
   justify-content: center;
   gap: 7px;
 
-<<<<<<< HEAD
   min-width: 110px;
   height: 40px;
   min-height: 40px;
   padding: 0 17px;
-=======
-    display: flex;  
-    align-items: center;
-    justify-content: center;
->>>>>>> a27816e (Save latest project changes)
 
   border: 1px solid transparent;
   border-radius: 5px;
@@ -277,13 +271,8 @@ body {
   height: 39px;
   padding: 0 13px;
 
-<<<<<<< HEAD
   color: #87909b;
   background: #ffffff;
-=======
-.sales-summary .summary-title {
-    margin: 0 0 8px;
->>>>>>> a27816e (Save latest project changes)
 
   border: 1px solid #d3d8df;
   border-radius: 5px;
