@@ -20,8 +20,12 @@ function updateDateTime() {
         hour12: true
     });
 
-    document.getElementById("currentDate").textContent = date;
-    document.getElementById("currentTime").textContent = time;
+    const dateEl = document.getElementById("currentDate");
+const timeEl = document.getElementById("currentTime");
+
+if (dateEl) dateEl.textContent = date;
+if (timeEl) timeEl.textContent = time;
+
 }
 
 
@@ -132,18 +136,6 @@ function displayProducts(productList) {
 
             <td>
                 ₱${Number(product.price).toLocaleString()}
-            </td>
-
-            <td>
-
-                <span class="stock-value">
-                    ${product.stock}
-                </span>
-
-                <span class="stock-minimum">
-                    Min: ${product.minimumStock}
-                </span>
-
             </td>
 
             <td>
@@ -313,30 +305,24 @@ function filterProducts() {
     displayProducts(filteredProducts);
 
 }
-
-
 // =========================
 // EVENTS
 // =========================
+if (productSearch) {
+    productSearch.addEventListener("input", filterProducts);
+}
 
-productSearch.addEventListener(
-    "input",
-    filterProducts
-);
+if (categoryFilter) {
+    categoryFilter.addEventListener("change", filterProducts);
+}
 
-categoryFilter.addEventListener(
-    "change",
-    filterProducts
-);
-
-statusFilter.addEventListener(
-    "change",
-    filterProducts
-);
-
+if (statusFilter) {
+    statusFilter.addEventListener("change", filterProducts);
+}
 
 // =========================
 // INITIAL DISPLAY
 // =========================
-
-displayProducts(products);
+if (productsTableBody) {
+    displayProducts(products);
+}

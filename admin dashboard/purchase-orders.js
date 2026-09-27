@@ -60,10 +60,15 @@ document.addEventListener("DOMContentLoaded", () => {
   if (statusFilter) statusFilter.addEventListener("change", renderEmptyUI);
 
   if (createPoBtn) {
-    createPoBtn.addEventListener("click", () => {
-      console.log("Create PO clicked (UI only).");
-    });
-  }
+  createPoBtn.addEventListener("click", () => {
+    if (typeof openNewPurchaseOrder === "function") {
+      openNewPurchaseOrder(); // same modal ng Quick Access → New Purchase Order
+    } else {
+      // fallback kung sakaling hindi pa loaded si topbar.js
+      window.location.href = "new-purchase-order.html";
+    }
+  });
+}
 
   renderEmptyUI();
 });

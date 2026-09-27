@@ -111,6 +111,17 @@
     );
   }
 
+  const newSaleBtn = document.getElementById("newSaleBtn");
+
+newSaleBtn?.addEventListener("click", () => {
+  // gamitin mismo yung function ng Quick Access
+  if (typeof openNewTransaction === "function") {
+    openNewTransaction();
+  } else {
+    // fallback
+    window.location.href = "new-transaction.html";
+  }
+});
   /* =========================
      SUMMARY CARDS
   ========================= */
