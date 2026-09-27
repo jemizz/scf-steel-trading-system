@@ -768,3 +768,98 @@ body {
     flex-direction: column;
   }
 }
+
+/* =========================
+   SUBTLE HOVER EFFECTS
+========================= */
+
+.fab-summary-card {
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.fab-header .new-request-btn {
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.fab-filters select,
+.fab-table .view-button,
+.fab-table .view-btn,
+.fab-table-footer .pagination button {
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.fab-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+/* Hover effects for devices with a mouse. */
+@media (hover: hover) {
+    .fab-summary-card:hover {
+        transform: translateY(-3px);
+        border-color: #b8bdc6;
+        box-shadow: 0 6px 16px rgba(39, 40, 41, 0.08);
+    }
+
+    .fab-header .new-request-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        background-color: #3b3d40;
+        box-shadow: 0 5px 12px rgba(39, 40, 41, 0.16);
+    }
+
+    .fab-filters select:hover {
+        background-color: #fafbfc;
+        border-color: #969ca8;
+    }
+
+    .fab-table tbody tr:hover {
+        background-color: #f4f5f7;
+    }
+
+    .fab-table .view-button:hover:not(:disabled),
+    .fab-table .view-btn:hover:not(:disabled) {
+        color: #272829;
+        background-color: #eceef2;
+        box-shadow: 0 2px 5px rgba(39, 40, 41, 0.06);
+    }
+
+    .fab-table-footer .pagination button:hover:not(:disabled) {
+        background-color: #eceef2;
+        border-color: #969ca8;
+        box-shadow: 0 2px 5px rgba(39, 40, 41, 0.06);
+    }
+}
+
+/* Small press effect when clicking. */
+.fab-header .new-request-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Respect reduced-motion preferences. */
+@media (prefers-reduced-motion: reduce) {
+    .fab-summary-card,
+    .fab-header .new-request-btn,
+    .fab-filters select,
+    .fab-table .view-button,
+    .fab-table .view-btn,
+    .fab-table tbody tr,
+    .fab-table-footer .pagination button {
+        transition: none;
+    }
+
+    .fab-summary-card:hover,
+    .fab-header .new-request-btn:hover:not(:disabled),
+    .fab-header .new-request-btn:active:not(:disabled) {
+        transform: none;
+    }
+}
