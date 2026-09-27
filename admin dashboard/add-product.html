@@ -1,0 +1,244 @@
+<dialog
+    class="ap-modal"
+    id="addProductModal"
+    aria-labelledby="apTitle"
+>
+    <form id="apForm">
+
+        <!-- HEADER -->
+        <header class="ap-header">
+
+            <div>
+                <h2 id="apTitle">Add Product</h2>
+
+                <p>
+                    Register a product and the specifications you sell.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="ap-close"
+                data-ap-close
+                aria-label="Close Add Product"
+            >
+                ×
+            </button>
+
+        </header>
+
+        <!-- CONTENT -->
+        <div class="ap-body">
+
+            <p class="ap-notice">
+                Demo mode — saved only in this browser.
+                Database connection is pending.
+            </p>
+
+            <!-- PRODUCT INFORMATION -->
+            <section class="ap-section">
+
+                <div class="ap-section-title">
+                    <span class="ap-number">1</span>
+                    <h3>Product information</h3>
+                </div>
+
+                <div class="ap-details">
+
+                    <div class="ap-fields">
+
+                        <label>
+                            Product name *
+
+                            <input
+                                type="text"
+                                name="name"
+                                maxlength="100"
+                                placeholder="e.g. Square Tube"
+                                required
+                            >
+                        </label>
+
+                        <label>
+                            Category *
+
+                            <select name="category" required>
+                                <option value="">
+                                    Select a category
+                                </option>
+
+                                <option>Steel Products</option>
+                                <option>Roofing Materials</option>
+                                <option>Hardware Materials</option>
+                                <option>Construction Materials</option>
+                            </select>
+                        </label>
+
+                        <label class="ap-wide">
+                            Description
+
+                            <textarea
+                                name="description"
+                                rows="3"
+                                maxlength="1000"
+                                placeholder="Describe the product and its uses."
+                            ></textarea>
+                        </label>
+
+                    </div>
+
+                    <!-- IMAGE -->
+                    <div class="ap-image-box">
+
+                        <img
+                            id="apImagePreview"
+                            alt="Product image preview"
+                            hidden
+                        >
+
+                        <label>
+                            Product image
+
+                            <input
+                                id="apImage"
+                                type="file"
+                                accept="image/png,image/jpeg,image/webp"
+                            >
+                        </label>
+
+                        <small>
+                            PNG, JPG or WebP · up to 500 KB
+                        </small>
+
+                        <button
+                            type="button"
+                            id="apRemoveImage"
+                            class="ap-text-btn"
+                            hidden
+                        >
+                            Remove image
+                        </button>
+
+                    </div>
+
+                </div>
+
+                <!-- CATALOG VISIBILITY -->
+                <label class="ap-catalog">
+
+                    <input
+                        type="checkbox"
+                        name="showInCatalog"
+                    >
+
+                    <span>
+                        <strong>
+                            Show in Public Catalog
+                        </strong>
+
+                        <small>
+                            One product card with all its variants.
+                            Stock quantities stay off the catalog.
+                        </small>
+                    </span>
+
+                </label>
+
+            </section>
+
+            <!-- VARIANTS -->
+            <section class="ap-section">
+
+                <div class="ap-section-title ap-spread">
+
+                    <div>
+                        <span class="ap-number">2</span>
+                        <h3>Product variants</h3>
+                    </div>
+
+                    <button
+                        type="button"
+                        id="apAddVariant"
+                        class="ap-secondary"
+                    >
+                        + Add Variant
+                    </button>
+
+                </div>
+
+                <p class="ap-help">
+                    Add one row per specification. Include units,
+                    for example: 1 × 1 inch, 1.2 mm thick, 6 m long.
+                    For items without variants, enter “Standard”.
+                </p>
+
+                <div class="ap-table-wrap">
+
+                    <table class="ap-table">
+
+                        <thead>
+                            <tr>
+                                <th>SKU *</th>
+                                <th>Specifications *</th>
+                                <th>Unit *</th>
+                                <th>Price (₱) *</th>
+                                <th>Min. stock</th>
+
+                                <th>
+                                    <span class="ap-sr-only">
+                                        Remove
+                                    </span>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="apVariants"></tbody>
+
+                    </table>
+
+                </div>
+
+                <p class="ap-help">
+                    New variants start at 0 stock.
+                    Record received quantities through
+                    Stock In / Receive Purchase Order.
+                </p>
+
+            </section>
+
+            <p
+                id="apError"
+                class="ap-error"
+                role="alert"
+                hidden
+            ></p>
+
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="ap-footer">
+
+            <span id="apVariantCount">1 variant</span>
+
+            <div>
+                <button
+                    type="button"
+                    class="ap-secondary"
+                    data-ap-close
+                >
+                    Cancel
+                </button>
+
+                <button
+                    type="submit"
+                    class="ap-primary"
+                    id="apSave"
+                >
+                    Save Product
+                </button>
+            </div>
+
+        </footer>
+
+    </form>
+</dialog>

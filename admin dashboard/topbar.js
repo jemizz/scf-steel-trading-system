@@ -335,9 +335,7 @@ function setupQuickAccess() {
 
                 closeTopbarMenus();
 
-                console.log(
-                    "Add Product selected"
-                );
+                openProductWindow();
 
             }
         );
@@ -994,3 +992,14 @@ document.addEventListener(
 
     }
 );
+
+// Load the Add Product floating window.
+
+if (!document.getElementById("addProductScript")) {
+    const script = document.createElement("script");
+
+    script.id = "addProductScript";
+    script.src = "add-product.js";
+
+    document.body.appendChild(script);
+}
