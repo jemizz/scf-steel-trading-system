@@ -147,11 +147,38 @@
         </div>
 
         <footer class="table-footer">
-          <span id="tableSummary">Showing 0 transactions</span>
-          <span class="demo-note">
-            Sample transactions — connect your sales data source to use live records.
+
+          <span id="tableSummary">
+              Showing 0 transactions
           </span>
-        </footer>
+
+          <nav class="sales-pagination" aria-label="Sales pagination">
+
+              <button
+                  type="button"
+                  id="salesPreviousPage"
+                  aria-label="Previous page"
+                  disabled
+              >
+                  ‹
+              </button>
+
+              <span id="salesCurrentPage" aria-current="page">
+                  1
+              </span>
+
+              <button
+                  type="button"
+                  id="salesNextPage"
+                  aria-label="Next page"
+                  disabled
+              >
+                  ›
+              </button>
+
+          </nav>
+
+      </footer>
       </section>
     </main>
   </div>
@@ -165,6 +192,8 @@
       <button class="button button-secondary dialog-done">Done</button>
     </form>
   </dialog>
+
+    
 
   <script src="sidebar.js" defer></script>
   <script src="topbar.js" defer></script>

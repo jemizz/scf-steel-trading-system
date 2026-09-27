@@ -847,3 +847,115 @@ body {
         transform: none;
     }
 }
+
+/* =========================
+   TABLE FOOTER
+========================= */
+
+.sales-page .table-footer {
+    min-height: 66px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    padding: 16px 20px;
+
+    background-color: #ffffff;
+    border-top: 1px solid #e5e7e9;
+}
+
+.sales-page #tableSummary {
+    color: #61677a;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+/* =========================
+   PAGINATION
+========================= */
+
+.sales-page .sales-pagination {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.sales-page .sales-pagination button,
+.sales-page .sales-pagination span {
+    min-width: 32px;
+    height: 32px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 8px;
+    border-radius: 5px;
+
+    font-family: inherit;
+    font-size: 12px;
+}
+
+.sales-page .sales-pagination button {
+    background-color: #ffffff;
+    color: #61677a;
+
+    border: 1px solid #d8d9da;
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.sales-page .sales-pagination span {
+    background-color: #272829;
+    color: #ffffff;
+
+    border: 1px solid #272829;
+    font-weight: 500;
+}
+
+.sales-page .sales-pagination button:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.sales-page .sales-pagination button:focus-visible {
+    outline: 2px solid #61677a;
+    outline-offset: 2px;
+}
+
+/* =========================
+   HOVER
+========================= */
+
+@media (hover: hover) {
+    .sales-page .sales-pagination button:hover:not(:disabled) {
+        background-color: #eceef2;
+        border-color: #969ca8;
+        box-shadow: 0 2px 5px rgba(39, 40, 41, 0.06);
+    }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+    .sales-page .table-footer {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+        padding: 16px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sales-page .sales-pagination button {
+        transition: none;
+    }
+}
