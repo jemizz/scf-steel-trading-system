@@ -391,7 +391,7 @@ body {
   background-color: #272829;
 }
 
-/* ✅ Hover only when NOT disabled */
+/* Hover only when NOT disabled */
 .settings-content .save-settings-btn:not(:disabled):hover {
   background-color: #3b3d40;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
@@ -403,19 +403,20 @@ body {
   border-color: #d3d8df;
 }
 
-/* ✅ Hover only when NOT disabled */
+/* Hover only when NOT disabled */
 .settings-content .settings-secondary-btn:not(:disabled):hover {
   color: #272829;
   background-color: #f5f6f7;
   border-color: #a9afb6;
 }
 
-/* Keep active effect only when not disabled */
+/* Active only when NOT disabled */
 .settings-content .save-settings-btn:not(:disabled):active,
 .settings-content .settings-secondary-btn:not(:disabled):active {
   box-shadow: none;
 }
 
+/* Disabled styles (looks disabled + no red circle cursor) */
 .settings-content .save-settings-btn:disabled,
 .settings-content .settings-secondary-btn:disabled {
   opacity: 0.55;
@@ -566,7 +567,6 @@ body {
 ========================= */
 
 @media (max-width: 768px) {
-  /* Assumes the shared sidebar uses an overlay on mobile. */
   .settings-main {
     margin-left: 0;
   }

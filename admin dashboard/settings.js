@@ -14,6 +14,14 @@
 
     content.dataset.settingsInitialized = "true";
 
+    // Small helper for consistent disable/enable
+    const setDisabled = (btn, disabled) => {
+      if (!btn) return;
+      btn.disabled = disabled;
+      if (disabled) btn.setAttribute("disabled", "");
+      else btn.removeAttribute("disabled");
+    };
+
     // =========================
     // PASSWORD VISIBILITY
     // =========================
@@ -38,18 +46,13 @@
 
     function setPasswordVisibility(button, visible) {
       const input = document.getElementById(button.dataset.passwordTarget);
-
-      if (!input) {
-        return;
-      }
+      if (!input) return;
 
       const label = input.labels?.[0]?.textContent.trim() || "password";
 
       input.type = visible ? "text" : "password";
-
       button.innerHTML = visible ? eyeOffIcon : eyeIcon;
       button.setAttribute("aria-pressed", String(visible));
-
       button.setAttribute(
         "aria-label",
         `${visible ? "Hide" : "Show"} ${label.toLowerCase()}`
@@ -57,9 +60,7 @@
     }
 
     function hideAllPasswords() {
-      passwordButtons.forEach((button) => {
-        setPasswordVisibility(button, false);
-      });
+      passwordButtons.forEach((button) => setPasswordVisibility(button, false));
     }
 
     passwordButtons.forEach((button) => {
@@ -83,36 +84,28 @@
     };
 
     function showTab(tabName) {
-      if (!panels[tabName]) {
-        return;
-      }
+      if (!panels[tabName]) return;
 
       tabButtons.forEach((button) => {
         const isActive = button.dataset.settingsTab === tabName;
-
         button.classList.toggle("active", isActive);
         button.setAttribute("aria-pressed", String(isActive));
       });
 
       Object.entries(panels).forEach(([name, panel]) => {
-        if (panel) {
-          panel.hidden = name !== tabName;
-        }
+        if (panel) panel.hidden = name !== tabName;
       });
 
-      if (tabName !== "account") {
-        hideAllPasswords();
-      }
+      if (tabName !== "account") hideAllPasswords();
     }
 
     tabButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        showTab(button.dataset.settingsTab);
-      });
+      button.addEventListener("click", () => showTab(button.dataset.settingsTab));
     });
 
     // =========================
     // CHANGE PASSWORD
+    // Enable button ONLY when ALL 3 fields are filled
     // =========================
 
     const passwordForm = document.getElementById("changePasswordForm");
@@ -120,6 +113,7 @@
     const newPassword = document.getElementById("newPassword");
     const confirmPassword = document.getElementById("confirmPassword");
     const passwordMessage = document.getElementById("passwordMessage");
+    const changePasswordBtn = document.getElementById("changePasswordBtn");
 
     if (
       passwordForm &&
@@ -134,8 +128,24 @@
         passwordMessage.textContent = "";
       }
 
+      function updateChangePasswordBtnState() {
+        const allFilled =
+          currentPassword.value.trim() !== "" &&
+          newPassword.value.trim() !== "" &&
+          confirmPassword.value.trim() !== "";
+
+        // ✅ Enable only when ALL THREE are filled
+        setDisabled(changePasswordBtn, !allFilled);
+      }
+
+      // initial state (matches HTML disabled)
+      updateChangePasswordBtnState();
+
       [currentPassword, newPassword, confirmPassword].forEach((input) => {
-        input.addEventListener("input", clearPasswordFeedback);
+        input.addEventListener("input", () => {
+          clearPasswordFeedback();
+          updateChangePasswordBtnState();
+        });
       });
 
       passwordForm.addEventListener("submit", (event) => {
@@ -143,15 +153,15 @@
 
         clearPasswordFeedback();
 
-        if (!passwordForm.reportValidity()) {
-          return;
-        }
+        // If disabled, ignore submit (e.g., Enter key)
+        if (changePasswordBtn?.disabled) return;
+
+        if (!passwordForm.reportValidity()) return;
 
         if (newPassword.value === currentPassword.value) {
           newPassword.setCustomValidity(
             "Please choose a password different from your current password."
           );
-
           newPassword.reportValidity();
           return;
         }
@@ -160,7 +170,6 @@
           confirmPassword.setCustomValidity(
             "Your new password and confirmation do not match."
           );
-
           confirmPassword.reportValidity();
           return;
         }
@@ -176,6 +185,7 @@
       passwordForm.addEventListener("reset", () => {
         clearPasswordFeedback();
         hideAllPasswords();
+        updateChangePasswordBtnState(); // disables again
       });
     }
 
@@ -184,7 +194,6 @@
     // =========================
 
     const notificationPanel = panels.notification;
-
     const saveNotificationButton = document.getElementById("saveNotificationSettings");
     const notificationMessage = document.getElementById("notificationMessage");
 
@@ -208,8 +217,8 @@
 
     // =========================
     // ACCOUNT FORM
-    // Enable Confirm ONLY when user changes:
-    // contactNumber / emailAddress / facebookLink
+    // Confirm enables ONLY when user changes:
+    // contactNumber / facebookLink / emailAddress
     // =========================
 
     const accountForm = document.getElementById("accountForm");
@@ -230,91 +239,66 @@
         return el.value.trim();
       };
 
-      const setBtnDisabled = (disabled) => {
-        if (!confirmBtn) return;
-        confirmBtn.disabled = disabled;
-        if (disabled) confirmBtn.setAttribute("disabled", "");
-        else confirmBtn.removeAttribute("disabled");
-      };
-
       // Always start disabled
-      setBtnDisabled(true);
+      setDisabled(confirmBtn, true);
 
-      // Baseline (original values)
-      const initialValues = new Map();
-      const captureBaseline = () => {
-        initialValues.clear();
-        inputs.forEach((el) => initialValues.set(el.id, normalize(el)));
-        // keep disabled after baseline capture
-        setBtnDisabled(true);
-      };
+      // Baseline captured when user starts interacting (prevents autofill issues)
+      let baselineCaptured = false;
+      const baseline = new Map();
 
-      const hasChanges = () => {
-        return inputs.some((el) => normalize(el) !== initialValues.get(el.id));
-      };
+      function captureBaseline() {
+        baseline.clear();
+        inputs.forEach((el) => baseline.set(el.id, normalize(el)));
+        baselineCaptured = true;
+      }
 
-      // IMPORTANT:
-      // Only enable after REAL USER interaction
-      // (prevents autofill/timing from enabling the button)
-      let userArmed = false;
+      function hasChanges() {
+        if (!baselineCaptured) return false;
+        return inputs.some((el) => normalize(el) !== baseline.get(el.id));
+      }
 
-      const updateConfirmState = () => {
-        if (!userArmed) {
-          setBtnDisabled(true);
+      function updateConfirmState() {
+        if (!baselineCaptured) {
+          setDisabled(confirmBtn, true);
           return;
         }
-
-        setBtnDisabled(!hasChanges());
-
+        setDisabled(confirmBtn, !hasChanges());
         if (accountMessage) accountMessage.textContent = "";
-      };
+      }
 
-      const armUser = () => {
-        if (userArmed) return;
-        userArmed = true;
-        // baseline should reflect what user sees (including autofill)
+      function armBaselineIfNeeded() {
+        if (baselineCaptured) return;
         captureBaseline();
-        updateConfirmState();
-      };
+        updateConfirmState(); // stays disabled until user actually changes
+      }
 
-      // Capture baseline after page finishes loading (includes autofill)
-      // Do NOT enable button here.
-      const baselineAfterLoad = () => {
-        captureBaseline();
-        updateConfirmState(); // stays disabled because userArmed=false
-      };
+      accountForm.addEventListener("focusin", armBaselineIfNeeded);
+      accountForm.addEventListener("pointerdown", armBaselineIfNeeded, { passive: true });
+      accountForm.addEventListener("keydown", armBaselineIfNeeded);
+      accountForm.addEventListener("paste", armBaselineIfNeeded);
 
-      // multiple timings to catch autofill
-      baselineAfterLoad();
-      setTimeout(baselineAfterLoad, 0);
-      setTimeout(baselineAfterLoad, 300);
-      window.addEventListener("load", baselineAfterLoad);
-      window.addEventListener("pageshow", baselineAfterLoad);
-
-      // Arm on any user interaction inside account form
-      accountForm.addEventListener("pointerdown", armUser, { passive: true });
-      accountForm.addEventListener("keydown", armUser);
-      accountForm.addEventListener("paste", armUser);
-
-      // Contact number: digits only + max 11
       if (contactNumber) {
         contactNumber.addEventListener("input", () => {
-          // treat this as user change only after userArmed becomes true
+          armBaselineIfNeeded();
           contactNumber.value = contactNumber.value.replace(/\D/g, "").slice(0, 11);
           updateConfirmState();
         });
       }
 
-      // enable/disable confirm when user changes any of the 3 fields
       inputs.forEach((el) => {
-        el.addEventListener("input", updateConfirmState);
-        el.addEventListener("change", updateConfirmState);
+        el.addEventListener("input", () => {
+          armBaselineIfNeeded();
+          updateConfirmState();
+        });
+        el.addEventListener("change", () => {
+          armBaselineIfNeeded();
+          updateConfirmState();
+        });
       });
 
       accountForm.addEventListener("submit", (event) => {
         event.preventDefault();
 
-        // Never allow submit if button is disabled
         if (confirmBtn?.disabled) return;
 
         if (!accountForm.reportValidity()) return;
@@ -330,13 +314,20 @@
           contactNumber.setCustomValidity("");
         }
 
-        // Treat as "saved": set new baseline and disable button again
+        // "Saved": reset baseline
         captureBaseline();
-        userArmed = false; // require user to change again to enable
+        updateConfirmState(); // disables again
 
         if (accountMessage) {
           accountMessage.textContent = "Changes saved (frontend only).";
         }
+      });
+
+      window.addEventListener("pageshow", () => {
+        baselineCaptured = false;
+        baseline.clear();
+        setDisabled(confirmBtn, true);
+        if (accountMessage) accountMessage.textContent = "";
       });
     }
 
@@ -347,7 +338,6 @@
     showTab("account");
   }
 
-  // Works whether the script loads before or after DOMContentLoaded.
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initializeSettings, { once: true });
   } else {
