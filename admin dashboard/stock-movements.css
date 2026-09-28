@@ -1,0 +1,511 @@
+/* =========================
+   STOCK MODAL
+========================= */
+
+.stock-modal,
+.stock-modal * {
+    box-sizing: border-box;
+}
+
+.stock-modal {
+    width: min(650px, calc(100% - 32px));
+    max-height: 90vh;
+
+    margin: auto;
+    padding: 0;
+
+    overflow-y: auto;
+
+    background-color: #ffffff;
+    color: #272829;
+
+    border: 1px solid #d8d9da;
+    border-radius: 10px;
+
+    font-family: "Geologica", sans-serif;
+
+    box-shadow: 0 20px 65px rgba(0, 0, 0, 0.2);
+}
+
+.stock-modal::backdrop {
+    background-color: rgba(20, 23, 27, 0.6);
+}
+
+.stock-modal[open] {
+    animation: stockModalOpen 0.18s ease;
+}
+
+.stock-modal form {
+    margin: 0;
+}
+
+@keyframes stockModalOpen {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =========================
+   HEADER
+========================= */
+
+.stock-modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding: 23px 26px;
+
+    border-bottom: 1px solid #e6e7e9;
+}
+
+.stock-modal-header h2 {
+    margin: 0 0 6px;
+
+    font-size: 23px;
+    font-weight: 600;
+}
+
+.stock-modal-header p {
+    margin: 0;
+
+    color: #61677a;
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.stock-close-button {
+    width: 32px;
+    height: 32px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    background-color: transparent;
+    color: #61677a;
+
+    border: none;
+    border-radius: 5px;
+
+    font-size: 27px;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.stock-close-button:hover {
+    background-color: #f0f1f3;
+    color: #272829;
+}
+
+
+/* =========================
+   BODY
+========================= */
+
+.stock-modal-body {
+    padding: 23px 26px;
+}
+
+.stock-form-notice {
+    margin-bottom: 20px;
+    padding: 11px 13px;
+
+    background-color: #fff7e6;
+    color: #806222;
+
+    border: 1px solid #f0e1bd;
+    border-radius: 5px;
+
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.stock-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 18px;
+}
+
+.stock-field {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+.stock-field-full {
+    grid-column: 1 / -1;
+}
+
+.stock-field label {
+    color: #35383d;
+
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.stock-field label > span {
+    color: #c24b4b;
+}
+
+.stock-field label .stock-optional {
+    color: #858a94;
+    font-weight: 400;
+}
+
+.stock-field input,
+.stock-field select,
+.stock-field textarea {
+    width: 100%;
+    min-width: 0;
+
+    padding: 11px 12px;
+
+    background-color: #ffffff;
+    color: #272829;
+
+    border: 1px solid #d2d5db;
+    border-radius: 5px;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 12px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.stock-field input,
+.stock-field select {
+    min-height: 42px;
+}
+
+.stock-field textarea {
+    min-height: 85px;
+
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.stock-field input::placeholder,
+.stock-field textarea::placeholder {
+    color: #969ba5;
+}
+
+.stock-field input:focus,
+.stock-field select:focus,
+.stock-field textarea:focus {
+    outline: none;
+
+    border-color: #858c99;
+
+    box-shadow: 0 0 0 3px rgba(97, 103, 122, 0.1);
+}
+
+.stock-field input[readonly],
+.stock-field select:disabled {
+    background-color: #f5f6f7;
+    color: #717786;
+}
+
+.stock-field small {
+    color: #858a94;
+
+    font-size: 10px;
+    line-height: 1.5;
+}
+
+
+/* =========================
+   STOCK BALANCE PREVIEW
+========================= */
+
+.stock-balance-preview {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    margin-top: 23px;
+    padding: 18px;
+
+    background-color: #f3f4f6;
+
+    border: 1px solid #eceef1;
+    border-radius: 7px;
+}
+
+.stock-balance-item {
+    padding: 0 12px;
+}
+
+.stock-balance-item + .stock-balance-item {
+    border-left: 1px solid #d9dde3;
+}
+
+.stock-balance-item p {
+    margin: 0 0 8px;
+
+    color: #61677a;
+
+    font-size: 11px;
+}
+
+.stock-balance-item strong {
+    font-size: 24px;
+    font-weight: 600;
+
+    overflow-wrap: anywhere;
+}
+
+.stock-modal[data-type="IN"] #stockNewValue {
+    color: #25845e;
+}
+
+.stock-modal[data-type="OUT"] #stockNewValue {
+    color: #bb4848;
+}
+
+
+/* =========================
+   INFORMATION AND ERRORS
+========================= */
+
+.stock-information {
+    margin-top: 16px;
+    padding: 12px 14px;
+
+    background-color: #f0f5fb;
+    color: #51647c;
+
+    border-radius: 5px;
+
+    font-size: 11px;
+    line-height: 1.7;
+}
+
+.stock-information a {
+    color: #345d8e;
+
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.stock-error-message {
+    margin: 12px 0 0;
+
+    color: #b23939;
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.stock-error-message:empty {
+    display: none;
+}
+
+
+/* =========================
+   FOOTER AND BUTTONS
+========================= */
+
+.stock-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    gap: 10px;
+
+    padding: 18px 26px;
+
+    border-top: 1px solid #e6e7e9;
+}
+
+.stock-button {
+    min-height: 42px;
+
+    padding: 10px 18px;
+
+    border-radius: 5px;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 12px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.stock-button-secondary {
+    background-color: #ffffff;
+    color: #4d535e;
+
+    border: 1px solid #cfd3da;
+}
+
+.stock-button-secondary:hover {
+    background-color: #f4f5f7;
+}
+
+.stock-button-primary {
+    background-color: #272829;
+    color: #ffffff;
+
+    border: 1px solid #272829;
+}
+
+.stock-button-primary:hover:not(:disabled) {
+    background-color: #404247;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+.stock-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.stock-modal button:focus-visible {
+    outline: 3px solid #8d9db7;
+    outline-offset: 3px;
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+.stock-toast {
+    position: fixed;
+
+    right: 25px;
+    bottom: 25px;
+
+    z-index: 10000;
+
+    max-width: min(400px, calc(100% - 40px));
+
+    padding: 15px 18px;
+
+    background-color: #272829;
+    color: #ffffff;
+
+    border-radius: 7px;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 12px;
+    line-height: 1.6;
+
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.16);
+}
+
+.stock-toast[hidden] {
+    display: none;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+    .stock-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stock-modal-header,
+    .stock-modal-body,
+    .stock-modal-footer {
+        padding: 18px;
+    }
+
+    .stock-modal-footer {
+        flex-wrap: wrap;
+    }
+
+    .stock-button {
+        flex: 1;
+    }
+
+    .stock-balance-item {
+        padding: 0 8px;
+    }
+
+    .stock-balance-item strong {
+        font-size: 21px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .stock-modal[open] {
+        animation: none;
+    }
+
+    .stock-modal * {
+        transition: none !important;
+    }
+}
+
+/* =========================
+   FLOATING STOCK WINDOW
+========================= */
+
+dialog.stock-modal:not([open]) {
+    display: none !important;
+}
+
+dialog.stock-modal[open] {
+    position: fixed;
+
+    inset: 0;
+
+    display: block;
+
+    width: min(650px, calc(100vw - 32px));
+    height: fit-content;
+    max-height: calc(100dvh - 40px);
+
+    margin: auto;
+    padding: 0;
+
+    overflow-y: auto;
+
+    background-color: #ffffff;
+
+    border: 1px solid #d8d9da;
+    border-radius: 10px;
+
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
+}
+
+dialog.stock-modal::backdrop {
+    background-color: rgba(20, 23, 27, 0.6);
+}
+
+body:has(dialog.stock-modal[open]) {
+    overflow: hidden;
+}

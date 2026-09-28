@@ -374,3 +374,11 @@ statusFilter.addEventListener(
 // =========================
 
 displayInventory(inventory);
+
+// Give the stock forms access to the inventory array.
+StockMovements.setInventory(inventory);
+
+// Refresh the existing table and summary after an adjustment.
+document.addEventListener("stock:updated", function () {
+    filterInventory();
+});
