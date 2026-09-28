@@ -87,27 +87,31 @@
             </div>
           </div>
 
-          <form
-            class="settings-form"
-            id="accountForm"
-            method="post"
-          >
+          <form class="settings-form" id="accountForm" method="post">
             <div class="form-grid">
               <div class="field">
-                <label for="firstName">First Name</label>
+                <label for="contactNumber">Contact Number</label>
                 <input
-                  id="firstName"
-                  type="text"
-                  autocomplete="given-name"
+                  id="contactNumber"
+                  name="contactNumber"
+                  type="tel"
+                  inputmode="numeric"
+                  autocomplete="tel"
+                  maxlength="11"
+                  pattern="[0-9]{11}"
+                  title="Contact number must be exactly 11 digits"
+                  placeholder="09xxxxxxxxx"
                 >
               </div>
 
               <div class="field">
-                <label for="lastName">Last Name</label>
+                <label for="facebookLink">Facebook Link</label>
                 <input
-                  id="lastName"
-                  type="text"
-                  autocomplete="family-name"
+                  id="facebookLink"
+                  name="facebookLink"
+                  type="url"
+                  autocomplete="url"
+                  placeholder="https://facebook.com/yourprofile"
                 >
               </div>
             </div>
@@ -116,9 +120,31 @@
               <label for="emailAddress">Email Address</label>
               <input
                 id="emailAddress"
+                name="emailAddress"
                 type="email"
                 autocomplete="email"
+                placeholder="*********@gmail.com"
               >
+            </div>
+
+            <!-- Message + Confirm button -->
+            <p
+              class="settings-message"
+              id="accountMessage"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+            <div class="settings-form-actions">
+              <button
+                type="submit"
+                class="save-settings-btn"
+                id="accountConfirmBtn"
+                disabled
+                title="Edit Contact Number / Facebook Link / Email to enable"
+              >
+                Confirm
+              </button>
             </div>
           </form>
         </div>
@@ -218,10 +244,13 @@
                 Clear
               </button>
 
+              <!-- ✅ now starts DISABLED (JS will enable when user types, if you added that JS part) -->
               <button
                 type="submit"
                 class="save-settings-btn"
                 id="changePasswordBtn"
+                disabled
+                title="Type your passwords to enable"
               >
                 Change Password
               </button>
@@ -231,7 +260,7 @@
       </section>
       <!-- ACCOUNT PANEL ENDS HERE -->
 
-      <!-- NOTIFICATION PANEL: separate from Account -->
+      <!-- NOTIFICATION PANEL -->
       <section
         class="settings-panel"
         id="tab-notification"
