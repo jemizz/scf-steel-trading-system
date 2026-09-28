@@ -869,3 +869,18 @@ body {
     }
 
 }
+
+/* =========================
+   DYNAMIC CONTACT INFO
+========================= */
+
+    #contactPhone,
+    #contactEmail 
+{
+        overflow-wrap: anywhere;
+        word-break: break-word;
+}
+
+    #contactEmail {
+        font-size: 10.5px;
+}

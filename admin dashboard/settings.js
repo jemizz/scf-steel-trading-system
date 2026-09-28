@@ -189,9 +189,10 @@
       changePasswordBtn
     ) {
       function clearPasswordFeedback() {
-        newPassword.setCustomValidity("");
-        confirmPassword.setCustomValidity("");
-        passwordMessage.textContent = "";
+         newPassword.setCustomValidity("");
+         confirmPassword.setCustomValidity("");
+         passwordMessage.textContent = "";
+         passwordMessage.classList.remove("password-error");
       }
 
       function updateChangePasswordBtnState() {
@@ -210,12 +211,23 @@
 
       [
         currentPassword,
-        newPassword,
-        confirmPassword
-      ].forEach((input) => {
-        input.addEventListener("input", () => {
-          clearPasswordFeedback();
-          updateChangePasswordBtnState();
+  newPassword,
+  confirmPassword
+].forEach((input) => {
+  input.addEventListener("input", () => {
+    clearPasswordFeedback();
+    updateChangePasswordBtnState();
+
+    if (
+      newPassword.value !== "" &&
+      confirmPassword.value !== "" &&
+      newPassword.value !== confirmPassword.value
+    ) {
+      passwordMessage.textContent = "Password does not match.";
+      passwordMessage.classList.add("password-error");
+    } else {
+      passwordMessage.classList.remove("password-error");
+    }
         });
       });
 
@@ -306,18 +318,22 @@
 
             .then((data) => {
               passwordMessage.textContent =
-                data.message;
+              data.message || "Password changed successfully.";
+
+              passwordMessage.classList.remove("password-error");
 
               passwordForm.reset();
 
               hideAllPasswords();
 
               updateChangePasswordBtnState();
-            })
+          })
 
             .catch((error) => {
-              passwordMessage.textContent =
-                error.message;
+            passwordMessage.textContent =
+              error.message || "Unable to change password.";
+
+              passwordMessage.classList.add("password-error");
 
               updateChangePasswordBtnState();
             });
@@ -484,6 +500,10 @@
 
         if (accountMessage) {
           accountMessage.textContent = "";
+          accountMessage.classList.remove(
+            "success-message",
+            "error-message"
+          );
         }
       }
 
@@ -537,7 +557,7 @@
 
           if (facebookLink) {
             facebookLink.value =
-              account.facebook_link || "";
+            account.links || "";
           }
 
           if (emailAddress) {
@@ -728,15 +748,21 @@
 
               if (accountMessage) {
                 accountMessage.textContent =
-                  data.message ||
-                  "Account information updated successfully.";
+                data.message ||
+                "Changes saved successfully.";
+
+                accountMessage.classList.remove("error-message");
+                accountMessage.classList.add("success-message");
               }
             })
 
             .catch((error) => {
               if (accountMessage) {
                 accountMessage.textContent =
-                  error.message;
+              error.message || "Unable to save changes.";
+
+                accountMessage.classList.remove("success-message");
+                accountMessage.classList.add("error-message");
               }
 
               userArmed = true;

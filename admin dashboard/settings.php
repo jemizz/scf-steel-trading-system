@@ -172,4 +172,35 @@ if ($action === 'change_password') {
     respond(true, 'Password changed successfully.');
 }
 
+// =========================
+// PUBLIC CONTACT INFORMATION
+// =========================
+
+if ($action === 'get_public_contact') {
+
+    $stmt = $pdo->query(
+        'SELECT contact_no, email, links
+         FROM users
+         WHERE contact_no IS NOT NULL
+            OR email IS NOT NULL
+            OR links IS NOT NULL
+         ORDER BY id ASC
+         LIMIT 1'
+    );
+
+    $contact = $stmt->fetch();
+
+    if (!$contact) {
+        respond(false, 'Contact information not found.', [], 404);
+    }
+
+    respond(true, '', [
+        'contact' => [
+            'contact_no' => $contact['contact_no'] ?? '',
+            'email'      => $contact['email'] ?? '',
+            'links'      => $contact['links'] ?? ''
+        ]
+    ]);
+}
+
 respond(false, 'Unknown action.', [], 400);

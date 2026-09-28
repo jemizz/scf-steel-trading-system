@@ -551,9 +551,26 @@ body {
   font-size: 11px;
   line-height: 1.6;
 }
+/* SUCCESS MESSAGE */
+.settings-content .settings-message.success-message {
+  color: #2e7d32;
+  background-color: #e8f5e9;
+}
+
+/* ERROR MESSAGE */
+.settings-content .settings-message.error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+}
 
 .settings-content .settings-message:empty {
   display: none;
+}
+
+.settings-content .password-error {
+  color: #d32f2f;
+  background-color: #fff5f5;
+  border-color: #f0b8b8;
 }
 
 .settings-content button:focus-visible,

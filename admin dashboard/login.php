@@ -116,8 +116,6 @@ if ($attemptData && $attemptData["lockout_until"] !== null) {
 $stmt = $pdo->prepare("
     SELECT
         id,
-        first_name,
-        last_name,
         email,
         password,
         role
@@ -308,8 +306,6 @@ session_regenerate_id(true);
 // ==========================================
 
 $_SESSION["user_id"] = $user["id"];
-$_SESSION["first_name"] = $user["first_name"];
-$_SESSION["last_name"] = $user["last_name"];
 $_SESSION["email"] = $user["email"];
 $_SESSION["role"] = $user["role"];
 
