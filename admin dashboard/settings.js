@@ -1,4 +1,3 @@
-```javascript
 // =========================
 // SETTINGS — FRONTEND ONLY
 // =========================
@@ -15,16 +14,19 @@
 
     content.dataset.settingsInitialized = "true";
 
-    // Small helper for consistent disable/enable
-    const setDisabled = (btn, disabled) => {
-      if (!btn) return;
+    // =========================
+    // HELPER
+    // =========================
 
-      btn.disabled = disabled;
+    const setDisabled = (button, disabled) => {
+      if (!button) return;
+
+      button.disabled = disabled;
 
       if (disabled) {
-        btn.setAttribute("disabled", "");
+        button.setAttribute("disabled", "");
       } else {
-        btn.removeAttribute("disabled");
+        button.removeAttribute("disabled");
       }
     };
 
@@ -48,10 +50,13 @@
       </svg>
     `;
 
-    const passwordButtons = content.querySelectorAll(".password-toggle");
+    const passwordButtons =
+      content.querySelectorAll(".password-toggle");
 
     function setPasswordVisibility(button, visible) {
-      const input = document.getElementById(button.dataset.passwordTarget);
+      const input = document.getElementById(
+        button.dataset.passwordTarget
+      );
 
       if (!input) return;
 
@@ -60,7 +65,9 @@
 
       input.type = visible ? "text" : "password";
 
-      button.innerHTML = visible ? eyeOffIcon : eyeIcon;
+      button.innerHTML = visible
+        ? eyeOffIcon
+        : eyeIcon;
 
       button.setAttribute(
         "aria-pressed",
@@ -109,7 +116,10 @@
         const isActive =
           button.dataset.settingsTab === tabName;
 
-        button.classList.toggle("active", isActive);
+        button.classList.toggle(
+          "active",
+          isActive
+        );
 
         button.setAttribute(
           "aria-pressed",
@@ -117,11 +127,13 @@
         );
       });
 
-      Object.entries(panels).forEach(([name, panel]) => {
-        if (panel) {
-          panel.hidden = name !== tabName;
+      Object.entries(panels).forEach(
+        ([name, panel]) => {
+          if (panel) {
+            panel.hidden = name !== tabName;
+          }
         }
-      });
+      );
 
       if (tabName !== "account") {
         hideAllPasswords();
@@ -136,27 +148,37 @@
 
     // =========================
     // CHANGE PASSWORD
-    // Enable button ONLY when
-    // ALL 3 fields are filled
     // =========================
 
     const passwordForm =
-      document.getElementById("changePasswordForm");
+      document.getElementById(
+        "changePasswordForm"
+      );
 
     const currentPassword =
-      document.getElementById("currentPassword");
+      document.getElementById(
+        "currentPassword"
+      );
 
     const newPassword =
-      document.getElementById("newPassword");
+      document.getElementById(
+        "newPassword"
+      );
 
     const confirmPassword =
-      document.getElementById("confirmPassword");
+      document.getElementById(
+        "confirmPassword"
+      );
 
     const passwordMessage =
-      document.getElementById("passwordMessage");
+      document.getElementById(
+        "passwordMessage"
+      );
 
     const changePasswordBtn =
-      document.getElementById("changePasswordBtn");
+      document.getElementById(
+        "changePasswordBtn"
+      );
 
     if (
       passwordForm &&
@@ -184,7 +206,6 @@
         );
       }
 
-      // Initial state
       updateChangePasswordBtnState();
 
       [
@@ -198,113 +219,115 @@
         });
       });
 
-      passwordForm.addEventListener("submit", (event) => {
-        event.preventDefault();
+      passwordForm.addEventListener(
+        "submit",
+        (event) => {
+          event.preventDefault();
 
-        clearPasswordFeedback();
+          clearPasswordFeedback();
 
-        // Ignore submit while disabled
-        if (changePasswordBtn.disabled) {
-          return;
-        }
-
-        if (!passwordForm.reportValidity()) {
-          return;
-        }
-
-        if (
-          newPassword.value ===
-          currentPassword.value
-        ) {
-          newPassword.setCustomValidity(
-            "Please choose a password different from your current password."
-          );
-
-          newPassword.reportValidity();
-
-          return;
-        }
-
-        if (
-          newPassword.value !==
-          confirmPassword.value
-        ) {
-          confirmPassword.setCustomValidity(
-            "Your new password and confirmation do not match."
-          );
-
-          confirmPassword.reportValidity();
-
-          return;
-        }
-
-        hideAllPasswords();
-
-        // =========================
-        // SAVE NEW PASSWORD
-        // =========================
-
-        fetch(
-          "settings.php?action=change_password",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              currentPassword:
-                currentPassword.value,
-
-              newPassword:
-                newPassword.value,
-
-              confirmPassword:
-                confirmPassword.value
-            })
+          if (changePasswordBtn.disabled) {
+            return;
           }
-        )
-          .then(async (response) => {
-            const data =
-              await response.json()
-                .catch(() => ({}));
 
-            if (
-              !response.ok ||
-              !data.success
-            ) {
-              throw new Error(
-                data.message ||
-                "Unable to change password."
-              );
+          if (!passwordForm.reportValidity()) {
+            return;
+          }
+
+          if (
+            newPassword.value ===
+            currentPassword.value
+          ) {
+            newPassword.setCustomValidity(
+              "Please choose a password different from your current password."
+            );
+
+            newPassword.reportValidity();
+            return;
+          }
+
+          if (
+            newPassword.value !==
+            confirmPassword.value
+          ) {
+            confirmPassword.setCustomValidity(
+              "Your new password and confirmation do not match."
+            );
+
+            confirmPassword.reportValidity();
+            return;
+          }
+
+          hideAllPasswords();
+
+          // =========================
+          // SAVE NEW PASSWORD
+          // =========================
+
+          fetch(
+            "settings.php?action=change_password",
+            {
+              method: "POST",
+
+              headers: {
+                "Content-Type":
+                  "application/json"
+              },
+
+              body: JSON.stringify({
+                currentPassword:
+                  currentPassword.value,
+
+                newPassword:
+                  newPassword.value,
+
+                confirmPassword:
+                  confirmPassword.value
+              })
             }
+          )
+            .then(async (response) => {
+              const data =
+                await response.json()
+                  .catch(() => ({}));
 
-            return data;
-          })
+              if (
+                !response.ok ||
+                !data.success
+              ) {
+                throw new Error(
+                  data.message ||
+                  "Unable to change password."
+                );
+              }
 
-          .then((data) => {
-            passwordMessage.textContent =
-              data.message;
+              return data;
+            })
 
-            passwordForm.reset();
+            .then((data) => {
+              passwordMessage.textContent =
+                data.message;
 
-            hideAllPasswords();
+              passwordForm.reset();
 
-            updateChangePasswordBtnState();
-          })
+              hideAllPasswords();
 
-          .catch((error) => {
-            passwordMessage.textContent =
-              error.message;
+              updateChangePasswordBtnState();
+            })
 
-            updateChangePasswordBtnState();
-          });
-      });
+            .catch((error) => {
+              passwordMessage.textContent =
+                error.message;
+
+              updateChangePasswordBtnState();
+            });
+        }
+      );
 
       passwordForm.addEventListener(
         "reset",
         () => {
           clearPasswordFeedback();
-
           hideAllPasswords();
 
           setTimeout(() => {
@@ -342,9 +365,12 @@
         );
 
       notificationInputs.forEach((input) => {
-        input.addEventListener("change", () => {
-          notificationMessage.textContent = "";
-        });
+        input.addEventListener(
+          "change",
+          () => {
+            notificationMessage.textContent = "";
+          }
+        );
       });
 
       saveNotificationButton.addEventListener(
@@ -359,28 +385,38 @@
 
     // =========================
     // ACCOUNT FORM
-    // Confirm enables ONLY when user changes:
-    // contactNumber / facebookLink / emailAddress
     // =========================
 
     const accountForm =
-      document.getElementById("accountForm");
+      document.getElementById(
+        "accountForm"
+      );
 
     if (accountForm) {
       const contactNumber =
-        document.getElementById("contactNumber");
+        document.getElementById(
+          "contactNumber"
+        );
 
       const facebookLink =
-        document.getElementById("facebookLink");
+        document.getElementById(
+          "facebookLink"
+        );
 
       const emailAddress =
-        document.getElementById("emailAddress");
+        document.getElementById(
+          "emailAddress"
+        );
 
       const confirmBtn =
-        document.getElementById("accountConfirmBtn");
+        document.getElementById(
+          "accountConfirmBtn"
+        );
 
       const accountMessage =
-        document.getElementById("accountMessage");
+        document.getElementById(
+          "accountMessage"
+        );
 
       const inputs = [
         contactNumber,
@@ -388,50 +424,56 @@
         emailAddress
       ].filter(Boolean);
 
-      const normalize = (el) => {
-        if (!el) return "";
-
-        if (el.id === "contactNumber") {
-          return el.value
-            .replace(/\D/g, "");
-        }
-
-        return el.value.trim();
-      };
-
-      // Always start disabled
-      setDisabled(confirmBtn, true);
-
-      // Original values
       const initialValues = new Map();
 
       let userArmed = false;
 
-      const captureBaseline = () => {
+      function normalize(input) {
+        if (!input) return "";
+
+        if (
+          input.id === "contactNumber"
+        ) {
+          return input.value.replace(
+            /\D/g,
+            ""
+          );
+        }
+
+        return input.value.trim();
+      }
+
+      function captureBaseline() {
         initialValues.clear();
 
-        inputs.forEach((el) => {
+        inputs.forEach((input) => {
           initialValues.set(
-            el.id,
-            normalize(el)
+            input.id,
+            normalize(input)
           );
         });
 
-        setDisabled(confirmBtn, true);
-      };
+        setDisabled(
+          confirmBtn,
+          true
+        );
+      }
 
-      const hasChanges = () => {
-        return inputs.some((el) => {
+      function hasChanges() {
+        return inputs.some((input) => {
           return (
-            normalize(el) !==
-            initialValues.get(el.id)
+            normalize(input) !==
+            initialValues.get(input.id)
           );
         });
-      };
+      }
 
-      const updateConfirmState = () => {
+      function updateConfirmState() {
         if (!userArmed) {
-          setDisabled(confirmBtn, true);
+          setDisabled(
+            confirmBtn,
+            true
+          );
           return;
         }
 
@@ -443,51 +485,78 @@
         if (accountMessage) {
           accountMessage.textContent = "";
         }
-      };
+      }
 
-      const armUser = () => {
-        if (userArmed) return;
-
+      function armUser() {
         userArmed = true;
-
-        /*
-         * Do NOT recapture the baseline here.
-         * The baseline should remain the values
-         * loaded from the database.
-         */
         updateConfirmState();
-      };
+      }
+
+      // Start disabled
+      setDisabled(
+        confirmBtn,
+        true
+      );
+
+      // Capture current values as baseline
+      captureBaseline();
 
       // =========================
-      // INITIAL BASELINE
+      // LOAD ACCOUNT DATA
       // =========================
 
-      const baselineAfterLoad = () => {
-        captureBaseline();
-        userArmed = false;
-      };
+      fetch(
+        "settings.php?action=get_account"
+      )
+        .then(async (response) => {
+          const data =
+            await response.json()
+              .catch(() => ({}));
 
-      baselineAfterLoad();
+          if (
+            !response.ok ||
+            !data.success
+          ) {
+            throw new Error(
+              data.message ||
+              "Unable to load account information."
+            );
+          }
 
-      setTimeout(
-        baselineAfterLoad,
-        0
-      );
+          return data;
+        })
 
-      setTimeout(
-        baselineAfterLoad,
-        300
-      );
+        .then((data) => {
+          const account =
+            data.account || {};
 
-      window.addEventListener(
-        "load",
-        baselineAfterLoad
-      );
+          if (contactNumber) {
+            contactNumber.value =
+              account.contact_no || "";
+          }
 
-      window.addEventListener(
-        "pageshow",
-        baselineAfterLoad
-      );
+          if (facebookLink) {
+            facebookLink.value =
+              account.facebook_link || "";
+          }
+
+          if (emailAddress) {
+            emailAddress.value =
+              account.email || "";
+          }
+
+          // Database values are now the baseline
+          captureBaseline();
+
+          userArmed = false;
+        })
+
+        .catch((error) => {
+          if (accountMessage) {
+            accountMessage.textContent =
+              error.message;
+          }
+        });
 
       // =========================
       // USER INTERACTION
@@ -511,7 +580,6 @@
 
       // =========================
       // CONTACT NUMBER
-      // Digits only + max 11
       // =========================
 
       if (contactNumber) {
@@ -531,10 +599,13 @@
       }
 
       // =========================
-      // OTHER ACCOUNT INPUTS
+      // FACEBOOK + EMAIL
       // =========================
 
-      [facebookLink, emailAddress]
+      [
+        facebookLink,
+        emailAddress
+      ]
         .filter(Boolean)
         .forEach((input) => {
           input.addEventListener(
@@ -555,7 +626,7 @@
         });
 
       // =========================
-      // SUBMIT ACCOUNT CHANGES
+      // SAVE ACCOUNT CHANGES
       // =========================
 
       accountForm.addEventListener(
@@ -563,7 +634,10 @@
         (event) => {
           event.preventDefault();
 
-          if (confirmBtn?.disabled) {
+          if (
+            !confirmBtn ||
+            confirmBtn.disabled
+          ) {
             return;
           }
 
@@ -571,7 +645,7 @@
             return;
           }
 
-          // Contact number validation
+          // Validate contact number
           if (contactNumber) {
             const digits =
               normalize(contactNumber);
@@ -585,15 +659,25 @@
               );
 
               contactNumber.reportValidity();
-
               return;
             }
 
             contactNumber.setCustomValidity("");
           }
 
+          // Disable while saving
+          setDisabled(
+            confirmBtn,
+            true
+          );
+
+          if (accountMessage) {
+            accountMessage.textContent =
+              "Saving...";
+          }
+
           // =========================
-          // SAVE ACCOUNT TO DATABASE
+          // SAVE TO DATABASE
           // =========================
 
           fetch(
@@ -637,14 +721,15 @@
             })
 
             .then((data) => {
-              // Save the new values as baseline
+              // New values become the new baseline
               captureBaseline();
 
               userArmed = false;
 
               if (accountMessage) {
                 accountMessage.textContent =
-                  data.message;
+                  data.message ||
+                  "Account information updated successfully.";
               }
             })
 
@@ -661,95 +746,6 @@
         }
       );
     }
-
-    // =========================
-    // LOAD ACCOUNT DATA
-    // FROM DATABASE
-    // =========================
-
-    fetch(
-      "settings.php?action=get_account"
-    )
-      .then(async (response) => {
-        const data =
-          await response.json()
-            .catch(() => ({}));
-
-        if (
-          !response.ok ||
-          !data.success
-        ) {
-          throw new Error(
-            data.message ||
-            "Unable to load account information."
-          );
-        }
-
-        return data;
-      })
-
-      .then((data) => {
-        const account =
-          data.account || {};
-
-        const contactNumber =
-          document.getElementById(
-            "contactNumber"
-          );
-
-        const facebookLink =
-          document.getElementById(
-            "facebookLink"
-          );
-
-        const emailAddress =
-          document.getElementById(
-            "emailAddress"
-          );
-
-        if (contactNumber) {
-          contactNumber.value =
-            account.contact_no || "";
-        }
-
-        if (facebookLink) {
-          facebookLink.value =
-            account.facebook_link || "";
-        }
-
-        if (emailAddress) {
-          emailAddress.value =
-            account.email || "";
-        }
-
-        /*
-         * Re-capture baseline after the
-         * database values have loaded.
-         */
-        if (accountForm) {
-          const fields = [
-            contactNumber,
-            facebookLink,
-            emailAddress
-          ].filter(Boolean);
-
-          fields.forEach((el) => {
-            // no-op; values are already populated
-          });
-        }
-      })
-
-      .catch((error) => {
-        const accountMessage =
-          document.getElementById(
-            "accountMessage"
-          );
-
-        if (accountMessage) {
-          accountMessage.textContent =
-            error.message;
-        }
-      });
 
     // =========================
     // INITIAL PANEL
@@ -774,4 +770,3 @@
     initializeSettings();
   }
 })();
-```
