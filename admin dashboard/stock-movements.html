@@ -1,0 +1,216 @@
+<!-- STOCK IN / STOCK OUT MODAL -->
+<dialog
+    class="stock-modal"
+    id="stockMovementModal"
+    aria-labelledby="stockModalTitle"
+>
+    <form id="stockMovementForm">
+
+        <!-- HEADER -->
+        <header class="stock-modal-header">
+            <div>
+                <h2 id="stockModalTitle">Stock In</h2>
+
+                <p id="stockModalDescription">
+                    Record an increase in inventory.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="stock-close-button"
+                id="closeStockModal"
+                aria-label="Close stock form"
+            >
+                &times;
+            </button>
+        </header>
+
+        <!-- BODY -->
+        <div class="stock-modal-body">
+
+            <div class="stock-form-notice">
+                Front-end preview: changes are not saved to a database yet.
+            </div>
+
+            <div class="stock-form-grid">
+
+                <!-- PRODUCT -->
+                <div class="stock-field">
+                    <label for="stockProduct">
+                        Product <span>*</span>
+                    </label>
+
+                    <select id="stockProduct" required>
+                        <option value="">Select product</option>
+                    </select>
+                </div>
+
+                <!-- DIMENSIONS -->
+                <div class="stock-field">
+                    <label for="stockDimension">
+                        Dimensions / Size <span>*</span>
+                    </label>
+
+                    <select
+                        id="stockDimension"
+                        required
+                        disabled
+                    >
+                        <option value="">Select dimensions</option>
+                    </select>
+                </div>
+
+                <!-- CATEGORY -->
+                <div class="stock-field">
+                    <label for="stockCategory">Category</label>
+
+                    <input
+                        type="text"
+                        id="stockCategory"
+                        placeholder="Automatically displayed"
+                        readonly
+                    >
+                </div>
+
+                <!-- UNIT -->
+                <div class="stock-field">
+                    <label for="stockUnit">Unit</label>
+
+                    <input
+                        type="text"
+                        id="stockUnit"
+                        placeholder="Automatically displayed"
+                        readonly
+                    >
+                </div>
+
+                <!-- QUANTITY -->
+                <div class="stock-field">
+                    <label for="stockQuantity">
+                        Quantity <span>*</span>
+                    </label>
+
+                    <input
+                        type="number"
+                        id="stockQuantity"
+                        min="1"
+                        step="1"
+                        placeholder="Enter quantity"
+                        inputmode="decimal"
+                        required
+                    >
+
+                    <small id="stockQuantityHelp">
+                        Enter the quantity to add.
+                    </small>
+                </div>
+
+                <!-- REASON -->
+                <div class="stock-field">
+                    <label for="stockReason">
+                        Reason <span>*</span>
+                    </label>
+
+                    <select id="stockReason" required>
+                        <option value="">Select reason</option>
+                    </select>
+                </div>
+
+                <!-- REFERENCE -->
+                <div class="stock-field stock-field-full">
+                    <label for="stockReference">
+                        Reference
+                        <span class="stock-optional" id="stockReferenceLabel">
+                            (optional)
+                        </span>
+                    </label>
+
+                    <input
+                        type="text"
+                        id="stockReference"
+                        maxlength="100"
+                        placeholder="Sale, purchase order, or record number"
+                    >
+                </div>
+
+                <!-- NOTES -->
+                <div class="stock-field stock-field-full">
+                    <label for="stockNotes">
+                        Notes
+                        <span class="stock-optional" id="stockNotesLabel">
+                            (optional)
+                        </span>
+                    </label>
+
+                    <textarea
+                        id="stockNotes"
+                        rows="3"
+                        maxlength="500"
+                        placeholder="Enter additional details"
+                    ></textarea>
+                </div>
+
+            </div>
+
+            <!-- STOCK PREVIEW -->
+            <div class="stock-balance-preview" aria-live="polite">
+
+                <div class="stock-balance-item">
+                    <p>Current Stock</p>
+
+                    <strong id="stockCurrentValue">—</strong>
+                </div>
+
+                <div class="stock-balance-item">
+                    <p id="stockNewValueLabel">After Stock In</p>
+
+                    <strong id="stockNewValue">—</strong>
+                </div>
+
+            </div>
+
+            <!-- HELPER MESSAGE -->
+            <div class="stock-information" id="stockInformation"></div>
+
+            <!-- VALIDATION MESSAGE -->
+            <p
+                class="stock-error-message"
+                id="stockErrorMessage"
+                role="alert"
+            ></p>
+
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="stock-modal-footer">
+
+            <button
+                type="button"
+                class="stock-button stock-button-secondary"
+                id="cancelStockModal"
+            >
+                Cancel
+            </button>
+
+            <button
+                type="submit"
+                class="stock-button stock-button-primary"
+                id="confirmStockMovement"
+            >
+                Confirm Stock In
+            </button>
+
+        </footer>
+
+    </form>
+</dialog>
+
+<!-- SUCCESS / ERROR NOTIFICATION -->
+<div
+    class="stock-toast"
+    id="stockToast"
+    role="status"
+    aria-live="polite"
+    hidden
+></div>
