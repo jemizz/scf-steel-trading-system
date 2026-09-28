@@ -167,10 +167,40 @@
 
         hideAllPasswords();
 
-        passwordMessage.textContent =
-          "The new password and confirmation match. " +
-          "Your password has not been changed because " +
-          "saving is not connected yet.";
+        // =========================
+        // SAVE NEW PASSWORD TO DATABASE
+        // =========================
+
+        fetch("settings.php?action=change_password", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            currentPassword: currentPassword.value,
+            newPassword: newPassword.value,
+            confirmPassword: confirmPassword.value
+          })
+        })
+          .then(async (response) => {
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok || !data.success) {
+              throw new Error(data.message || "Unable to change password.");
+            }
+
+            return data;
+          })
+          .then((data) => {
+            passwordMessage.textContent = data.message;
+
+            passwordForm.reset();
+
+            hideAllPasswords();
+          })
+          .catch((error) => {
+            passwordMessage.textContent = error.message;
+          });
       });
 
       passwordForm.addEventListener("reset", () => {
@@ -185,10 +215,19 @@
 
     const notificationPanel = panels.notification;
 
-    const saveNotificationButton = document.getElementById("saveNotificationSettings");
-    const notificationMessage = document.getElementById("notificationMessage");
+    const saveNotificationButton = document.getElementById(
+      "saveNotificationSettings"
+    );
 
-    if (notificationPanel && saveNotificationButton && notificationMessage) {
+    const notificationMessage = document.getElementById(
+      "notificationMessage"
+    );
+
+    if (
+      notificationPanel &&
+      saveNotificationButton &&
+      notificationMessage
+    ) {
       const notificationInputs = notificationPanel.querySelectorAll(
         'input[type="checkbox"]'
       );
@@ -222,19 +261,32 @@
       const confirmBtn = document.getElementById("accountConfirmBtn");
       const accountMessage = document.getElementById("accountMessage");
 
-      const inputs = [contactNumber, facebookLink, emailAddress].filter(Boolean);
+      const inputs = [
+        contactNumber,
+        facebookLink,
+        emailAddress
+      ].filter(Boolean);
 
       const normalize = (el) => {
         if (!el) return "";
-        if (el.id === "contactNumber") return el.value.replace(/\D/g, "");
+
+        if (el.id === "contactNumber") {
+          return el.value.replace(/\D/g, "");
+        }
+
         return el.value.trim();
       };
 
       const setBtnDisabled = (disabled) => {
         if (!confirmBtn) return;
+
         confirmBtn.disabled = disabled;
-        if (disabled) confirmBtn.setAttribute("disabled", "");
-        else confirmBtn.removeAttribute("disabled");
+
+        if (disabled) {
+          confirmBtn.setAttribute("disabled", "");
+        } else {
+          confirmBtn.removeAttribute("disabled");
+        }
       };
 
       // Always start disabled
@@ -242,15 +294,22 @@
 
       // Baseline (original values)
       const initialValues = new Map();
+
       const captureBaseline = () => {
         initialValues.clear();
-        inputs.forEach((el) => initialValues.set(el.id, normalize(el)));
+
+        inputs.forEach((el) => {
+          initialValues.set(el.id, normalize(el));
+        });
+
         // keep disabled after baseline capture
         setBtnDisabled(true);
       };
 
       const hasChanges = () => {
-        return inputs.some((el) => normalize(el) !== initialValues.get(el.id));
+        return inputs.some(
+          (el) => normalize(el) !== initialValues.get(el.id)
+        );
       };
 
       // IMPORTANT:
@@ -266,41 +325,56 @@
 
         setBtnDisabled(!hasChanges());
 
-        if (accountMessage) accountMessage.textContent = "";
+        if (accountMessage) {
+          accountMessage.textContent = "";
+        }
       };
 
       const armUser = () => {
         if (userArmed) return;
+
         userArmed = true;
+
         // baseline should reflect what user sees (including autofill)
         captureBaseline();
+
         updateConfirmState();
       };
 
-      // Capture baseline after page finishes loading (includes autofill)
+      // Capture baseline after page finishes loading
       // Do NOT enable button here.
       const baselineAfterLoad = () => {
         captureBaseline();
-        updateConfirmState(); // stays disabled because userArmed=false
+
+        updateConfirmState();
       };
 
       // multiple timings to catch autofill
       baselineAfterLoad();
+
       setTimeout(baselineAfterLoad, 0);
       setTimeout(baselineAfterLoad, 300);
+
       window.addEventListener("load", baselineAfterLoad);
       window.addEventListener("pageshow", baselineAfterLoad);
 
       // Arm on any user interaction inside account form
-      accountForm.addEventListener("pointerdown", armUser, { passive: true });
+      accountForm.addEventListener(
+        "pointerdown",
+        armUser,
+        { passive: true }
+      );
+
       accountForm.addEventListener("keydown", armUser);
       accountForm.addEventListener("paste", armUser);
 
       // Contact number: digits only + max 11
       if (contactNumber) {
         contactNumber.addEventListener("input", () => {
-          // treat this as user change only after userArmed becomes true
-          contactNumber.value = contactNumber.value.replace(/\D/g, "").slice(0, 11);
+          contactNumber.value = contactNumber.value
+            .replace(/\D/g, "")
+            .slice(0, 11);
+
           updateConfirmState();
         });
       }
@@ -322,23 +396,109 @@
         // If contact has value, require exactly 11 digits
         if (contactNumber) {
           const digits = normalize(contactNumber);
+
           if (digits.length > 0 && digits.length !== 11) {
-            contactNumber.setCustomValidity("Contact number must be exactly 11 digits.");
+            contactNumber.setCustomValidity(
+              "Contact number must be exactly 11 digits."
+            );
+
             contactNumber.reportValidity();
+
             return;
           }
+
           contactNumber.setCustomValidity("");
         }
 
-        // Treat as "saved": set new baseline and disable button again
-        captureBaseline();
-        userArmed = false; // require user to change again to enable
+        // =========================
+        // SAVE ACCOUNT TO DATABASE
+        // =========================
 
-        if (accountMessage) {
-          accountMessage.textContent = "Changes saved (frontend only).";
-        }
+        fetch("settings.php?action=update_account", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            contactNumber: contactNumber?.value || "",
+            facebookLink: facebookLink?.value || "",
+            emailAddress: emailAddress?.value || ""
+          })
+        })
+          .then(async (response) => {
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok || !data.success) {
+              throw new Error(
+                data.message ||
+                "Unable to save account information."
+              );
+            }
+
+            return data;
+          })
+          .then((data) => {
+            captureBaseline();
+
+            userArmed = false;
+
+            if (accountMessage) {
+              accountMessage.textContent = data.message;
+            }
+          })
+          .catch((error) => {
+            if (accountMessage) {
+              accountMessage.textContent = error.message;
+            }
+          });
       });
     }
+
+    // =========================
+    // LOAD ACCOUNT DATA FROM DATABASE
+    // =========================
+
+    fetch("settings.php?action=get_account")
+      .then(async (response) => {
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok || !data.success) {
+          throw new Error(
+            data.message ||
+            "Unable to load account information."
+          );
+        }
+
+        return data;
+      })
+      .then((data) => {
+        const account = data.account || {};
+
+        const contactNumber =
+          document.getElementById("contactNumber");
+
+        const facebookLink =
+          document.getElementById("facebookLink");
+
+        const emailAddress =
+          document.getElementById("emailAddress");
+
+        if (contactNumber) {
+          contactNumber.value = account.contact_no || "";
+        }
+
+        if (facebookLink) {
+          facebookLink.value = account.links || "";
+        }
+
+        if (emailAddress) {
+          emailAddress.value = account.email || "";
+        }
+      })
+      .catch(() => {
+        // Keep the original page usable even if
+        // the database is unavailable.
+      });
 
     // =========================
     // INITIAL PANEL
@@ -349,7 +509,11 @@
 
   // Works whether the script loads before or after DOMContentLoaded.
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", initializeSettings, { once: true });
+    document.addEventListener(
+      "DOMContentLoaded",
+      initializeSettings,
+      { once: true }
+    );
   } else {
     initializeSettings();
   }
