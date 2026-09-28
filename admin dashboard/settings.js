@@ -34,21 +34,16 @@
       </svg>
     `;
 
-    const passwordButtons = content.querySelectorAll(
-      ".password-toggle"
-    );
+    const passwordButtons = content.querySelectorAll(".password-toggle");
 
     function setPasswordVisibility(button, visible) {
-      const input = document.getElementById(
-        button.dataset.passwordTarget
-      );
+      const input = document.getElementById(button.dataset.passwordTarget);
 
       if (!input) {
         return;
       }
 
-      const label = input.labels?.[0]?.textContent.trim()
-        || "password";
+      const label = input.labels?.[0]?.textContent.trim() || "password";
 
       input.type = visible ? "text" : "password";
 
@@ -71,9 +66,7 @@
       setPasswordVisibility(button, false);
 
       button.addEventListener("click", () => {
-        const isVisible =
-          button.getAttribute("aria-pressed") === "true";
-
+        const isVisible = button.getAttribute("aria-pressed") === "true";
         setPasswordVisibility(button, !isVisible);
       });
     });
@@ -82,9 +75,7 @@
     // SETTINGS NAVIGATION
     // =========================
 
-    const tabButtons = content.querySelectorAll(
-      ".settings-tab-btn"
-    );
+    const tabButtons = content.querySelectorAll(".settings-tab-btn");
 
     const panels = {
       account: document.getElementById("tab-account"),
@@ -97,8 +88,7 @@
       }
 
       tabButtons.forEach((button) => {
-        const isActive =
-          button.dataset.settingsTab === tabName;
+        const isActive = button.dataset.settingsTab === tabName;
 
         button.classList.toggle("active", isActive);
         button.setAttribute("aria-pressed", String(isActive));
@@ -125,25 +115,11 @@
     // CHANGE PASSWORD
     // =========================
 
-    const passwordForm = document.getElementById(
-      "changePasswordForm"
-    );
-
-    const currentPassword = document.getElementById(
-      "currentPassword"
-    );
-
-    const newPassword = document.getElementById(
-      "newPassword"
-    );
-
-    const confirmPassword = document.getElementById(
-      "confirmPassword"
-    );
-
-    const passwordMessage = document.getElementById(
-      "passwordMessage"
-    );
+    const passwordForm = document.getElementById("changePasswordForm");
+    const currentPassword = document.getElementById("currentPassword");
+    const newPassword = document.getElementById("newPassword");
+    const confirmPassword = document.getElementById("confirmPassword");
+    const passwordMessage = document.getElementById("passwordMessage");
 
     if (
       passwordForm &&
@@ -158,11 +134,7 @@
         passwordMessage.textContent = "";
       }
 
-      [
-        currentPassword,
-        newPassword,
-        confirmPassword
-      ].forEach((input) => {
+      [currentPassword, newPassword, confirmPassword].forEach((input) => {
         input.addEventListener("input", clearPasswordFeedback);
       });
 
@@ -195,15 +167,6 @@
 
         hideAllPasswords();
 
-        /*
-         * Future backend connection:
-         * Submit the current and new passwords to your server.
-         * The server must verify the current password and
-         * enforce the password policy.
-         *
-         * Never log passwords or save them in localStorage.
-         */
-
         passwordMessage.textContent =
           "The new password and confirmation match. " +
           "Your password has not been changed because " +
@@ -222,19 +185,10 @@
 
     const notificationPanel = panels.notification;
 
-    const saveNotificationButton = document.getElementById(
-      "saveNotificationSettings"
-    );
+    const saveNotificationButton = document.getElementById("saveNotificationSettings");
+    const notificationMessage = document.getElementById("notificationMessage");
 
-    const notificationMessage = document.getElementById(
-      "notificationMessage"
-    );
-
-    if (
-      notificationPanel &&
-      saveNotificationButton &&
-      notificationMessage
-    ) {
+    if (notificationPanel && saveNotificationButton && notificationMessage) {
       const notificationInputs = notificationPanel.querySelectorAll(
         'input[type="checkbox"]'
       );
@@ -246,12 +200,6 @@
       });
 
       saveNotificationButton.addEventListener("click", () => {
-        /*
-         * Future backend connection:
-         * Read the notification checkboxes and submit their
-         * checked values to your settings endpoint.
-         */
-
         notificationMessage.textContent =
           "Your selections have not been saved because " +
           "saving is not connected yet.";
@@ -260,14 +208,135 @@
 
     // =========================
     // ACCOUNT FORM
+    // Enable Confirm ONLY when user changes:
+    // contactNumber / emailAddress / facebookLink
     // =========================
 
     const accountForm = document.getElementById("accountForm");
 
     if (accountForm) {
+      const contactNumber = document.getElementById("contactNumber");
+      const facebookLink = document.getElementById("facebookLink");
+      const emailAddress = document.getElementById("emailAddress");
+
+      const confirmBtn = document.getElementById("accountConfirmBtn");
+      const accountMessage = document.getElementById("accountMessage");
+
+      const inputs = [contactNumber, facebookLink, emailAddress].filter(Boolean);
+
+      const normalize = (el) => {
+        if (!el) return "";
+        if (el.id === "contactNumber") return el.value.replace(/\D/g, "");
+        return el.value.trim();
+      };
+
+      const setBtnDisabled = (disabled) => {
+        if (!confirmBtn) return;
+        confirmBtn.disabled = disabled;
+        if (disabled) confirmBtn.setAttribute("disabled", "");
+        else confirmBtn.removeAttribute("disabled");
+      };
+
+      // Always start disabled
+      setBtnDisabled(true);
+
+      // Baseline (original values)
+      const initialValues = new Map();
+      const captureBaseline = () => {
+        initialValues.clear();
+        inputs.forEach((el) => initialValues.set(el.id, normalize(el)));
+        // keep disabled after baseline capture
+        setBtnDisabled(true);
+      };
+
+      const hasChanges = () => {
+        return inputs.some((el) => normalize(el) !== initialValues.get(el.id));
+      };
+
+      // IMPORTANT:
+      // Only enable after REAL USER interaction
+      // (prevents autofill/timing from enabling the button)
+      let userArmed = false;
+
+      const updateConfirmState = () => {
+        if (!userArmed) {
+          setBtnDisabled(true);
+          return;
+        }
+
+        setBtnDisabled(!hasChanges());
+
+        if (accountMessage) accountMessage.textContent = "";
+      };
+
+      const armUser = () => {
+        if (userArmed) return;
+        userArmed = true;
+        // baseline should reflect what user sees (including autofill)
+        captureBaseline();
+        updateConfirmState();
+      };
+
+      // Capture baseline after page finishes loading (includes autofill)
+      // Do NOT enable button here.
+      const baselineAfterLoad = () => {
+        captureBaseline();
+        updateConfirmState(); // stays disabled because userArmed=false
+      };
+
+      // multiple timings to catch autofill
+      baselineAfterLoad();
+      setTimeout(baselineAfterLoad, 0);
+      setTimeout(baselineAfterLoad, 300);
+      window.addEventListener("load", baselineAfterLoad);
+      window.addEventListener("pageshow", baselineAfterLoad);
+
+      // Arm on any user interaction inside account form
+      accountForm.addEventListener("pointerdown", armUser, { passive: true });
+      accountForm.addEventListener("keydown", armUser);
+      accountForm.addEventListener("paste", armUser);
+
+      // Contact number: digits only + max 11
+      if (contactNumber) {
+        contactNumber.addEventListener("input", () => {
+          // treat this as user change only after userArmed becomes true
+          contactNumber.value = contactNumber.value.replace(/\D/g, "").slice(0, 11);
+          updateConfirmState();
+        });
+      }
+
+      // enable/disable confirm when user changes any of the 3 fields
+      inputs.forEach((el) => {
+        el.addEventListener("input", updateConfirmState);
+        el.addEventListener("change", updateConfirmState);
+      });
+
       accountForm.addEventListener("submit", (event) => {
-        // Prevent a page reload while this form is frontend-only.
         event.preventDefault();
+
+        // Never allow submit if button is disabled
+        if (confirmBtn?.disabled) return;
+
+        if (!accountForm.reportValidity()) return;
+
+        // If contact has value, require exactly 11 digits
+        if (contactNumber) {
+          const digits = normalize(contactNumber);
+          if (digits.length > 0 && digits.length !== 11) {
+            contactNumber.setCustomValidity("Contact number must be exactly 11 digits.");
+            contactNumber.reportValidity();
+            return;
+          }
+          contactNumber.setCustomValidity("");
+        }
+
+        // Treat as "saved": set new baseline and disable button again
+        captureBaseline();
+        userArmed = false; // require user to change again to enable
+
+        if (accountMessage) {
+          accountMessage.textContent = "Changes saved (frontend only).";
+        }
       });
     }
 
@@ -280,11 +349,7 @@
 
   // Works whether the script loads before or after DOMContentLoaded.
   if (document.readyState === "loading") {
-    document.addEventListener(
-      "DOMContentLoaded",
-      initializeSettings,
-      { once: true }
-    );
+    document.addEventListener("DOMContentLoaded", initializeSettings, { once: true });
   } else {
     initializeSettings();
   }

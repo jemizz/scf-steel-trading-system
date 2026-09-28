@@ -3,17 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Settings - SCF Steel Trading</title>
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap"
-    rel="stylesheet"
-  >
-  <link
-    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
-    rel="stylesheet"
-  >
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="sidebar.css">
   <link rel="stylesheet" href="topbar.css">
@@ -87,27 +80,33 @@
             </div>
           </div>
 
-          <form
-            class="settings-form"
-            id="accountForm"
-            method="post"
-          >
+          <form class="settings-form" id="accountForm" method="post">
             <div class="form-grid">
               <div class="field">
-                <label for="firstName">First Name</label>
+                <label for="contactNumber">Contact Number</label>
                 <input
-                  id="firstName"
-                  type="text"
-                  autocomplete="given-name"
+                  id="contactNumber"
+                  name="contactNumber"
+                  type="tel"
+                  inputmode="numeric"
+                  autocomplete="tel"
+                  maxlength="11"
+                  pattern="[0-9]{11}"
+                  title="Contact number must be exactly 11 digits"
+                  placeholder="09xxxxxxxxx"
+                  value=""
                 >
               </div>
 
               <div class="field">
-                <label for="lastName">Last Name</label>
+                <label for="facebookLink">Facebook Link</label>
                 <input
-                  id="lastName"
-                  type="text"
-                  autocomplete="family-name"
+                  id="facebookLink"
+                  name="facebookLink"
+                  type="url"
+                  autocomplete="url"
+                  placeholder="https://facebook.com/yourprofile"
+                  value=""
                 >
               </div>
             </div>
@@ -116,9 +115,33 @@
               <label for="emailAddress">Email Address</label>
               <input
                 id="emailAddress"
+                name="emailAddress"
                 type="email"
                 autocomplete="email"
+                placeholder="*********@gmail.com"
+                value=""
               >
+            </div>
+
+            <!-- Message -->
+            <p
+              class="settings-message"
+              id="accountMessage"
+              role="status"
+              aria-live="polite"
+            ></p>
+
+            <!-- Confirm button: DISABLED by default -->
+            <div class="settings-form-actions">
+              <button
+                type="submit"
+                class="save-settings-btn"
+                id="accountConfirmBtn"
+                disabled="disabled"
+                aria-disabled="true"
+              >
+                Confirm
+              </button>
             </div>
           </form>
         </div>
@@ -129,11 +152,7 @@
             <h2>Change Password</h2>
           </div>
 
-          <form
-            class="settings-form"
-            id="changePasswordForm"
-            method="post"
-          >
+          <form class="settings-form" id="changePasswordForm" method="post">
             <div class="field">
               <label for="currentPassword">Current Password</label>
 
@@ -211,18 +230,11 @@
             ></p>
 
             <div class="settings-form-actions">
-              <button
-                type="reset"
-                class="settings-secondary-btn"
-              >
+              <button type="reset" class="settings-secondary-btn">
                 Clear
               </button>
 
-              <button
-                type="submit"
-                class="save-settings-btn"
-                id="changePasswordBtn"
-              >
+              <button type="submit" class="save-settings-btn" id="changePasswordBtn">
                 Change Password
               </button>
             </div>
@@ -231,7 +243,7 @@
       </section>
       <!-- ACCOUNT PANEL ENDS HERE -->
 
-      <!-- NOTIFICATION PANEL: separate from Account -->
+      <!-- NOTIFICATION PANEL -->
       <section
         class="settings-panel"
         id="tab-notification"
@@ -247,9 +259,7 @@
             <div class="notif-item">
               <div class="notif-text">
                 <strong id="lowStockLabel">Low Stock Alerts</strong>
-                <p id="lowStockDescription">
-                  When product stock falls below reorder level
-                </p>
+                <p id="lowStockDescription">When product stock falls below reorder level</p>
               </div>
 
               <label class="switch">
@@ -265,12 +275,8 @@
 
             <div class="notif-item">
               <div class="notif-text">
-                <strong id="fabricationLabel">
-                  New Fabrication Requests
-                </strong>
-                <p id="fabricationDescription">
-                  When a new job request is submitted
-                </p>
+                <strong id="fabricationLabel">New Fabrication Requests</strong>
+                <p id="fabricationDescription">When a new job request is submitted</p>
               </div>
 
               <label class="switch">
@@ -286,12 +292,8 @@
 
             <div class="notif-item">
               <div class="notif-text">
-                <strong id="poDeliveryLabel">
-                  Purchase Order Delivery
-                </strong>
-                <p id="poDeliveryDescription">
-                  When expected PO delivery date arrives
-                </p>
+                <strong id="poDeliveryLabel">Purchase Order Delivery</strong>
+                <p id="poDeliveryDescription">When expected PO delivery date arrives</p>
               </div>
 
               <label class="switch">
@@ -308,9 +310,7 @@
             <div class="notif-item">
               <div class="notif-text">
                 <strong id="dailySalesLabel">Daily Sales Summary</strong>
-                <p id="dailySalesDescription">
-                  End-of-day sales report notification
-                </p>
+                <p id="dailySalesDescription">End-of-day sales report notification</p>
               </div>
 
               <label class="switch">
@@ -326,12 +326,8 @@
 
             <div class="notif-item">
               <div class="notif-text">
-                <strong id="paymentDueLabel">
-                  Payment Due Reminders
-                </strong>
-                <p id="paymentDueDescription">
-                  For outstanding wholesale credit payments
-                </p>
+                <strong id="paymentDueLabel">Payment Due Reminders</strong>
+                <p id="paymentDueDescription">For outstanding wholesale credit payments</p>
               </div>
 
               <label class="switch">
@@ -354,11 +350,7 @@
           ></p>
 
           <div class="settings-form-actions">
-            <button
-              type="button"
-              class="save-settings-btn"
-              id="saveNotificationSettings"
-            >
+            <button type="button" class="save-settings-btn" id="saveNotificationSettings">
               Save Notification Settings
             </button>
           </div>
