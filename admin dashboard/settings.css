@@ -382,7 +382,8 @@ body {
   transition:
     background-color 0.15s ease,
     border-color 0.15s ease,
-    box-shadow 0.15s ease;
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
 }
 
 .settings-content .save-settings-btn {
@@ -390,7 +391,8 @@ body {
   background-color: #272829;
 }
 
-.settings-content .save-settings-btn:hover {
+/* ✅ Hover only when NOT disabled */
+.settings-content .save-settings-btn:not(:disabled):hover {
   background-color: #3b3d40;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
@@ -401,14 +403,28 @@ body {
   border-color: #d3d8df;
 }
 
-.settings-content .settings-secondary-btn:hover {
+/* ✅ Hover only when NOT disabled */
+.settings-content .settings-secondary-btn:not(:disabled):hover {
   color: #272829;
   background-color: #f5f6f7;
   border-color: #a9afb6;
 }
 
-.settings-content .save-settings-btn:active,
-.settings-content .settings-secondary-btn:active {
+/* Keep active effect only when not disabled */
+.settings-content .save-settings-btn:not(:disabled):active,
+.settings-content .settings-secondary-btn:not(:disabled):active {
+  box-shadow: none;
+}
+
+.settings-content .save-settings-btn:disabled,
+.settings-content .settings-secondary-btn:disabled {
+  opacity: 0.55;
+  cursor: default;
+  box-shadow: none;
+}
+
+.settings-content .save-settings-btn:disabled:hover,
+.settings-content .settings-secondary-btn:disabled:hover {
   box-shadow: none;
 }
 
