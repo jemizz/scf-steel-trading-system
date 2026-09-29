@@ -189,10 +189,12 @@
 
       passwordButtons.forEach(
         (button) => {
+
           setPasswordVisibility(
             button,
             false
           );
+
         }
       );
     }
@@ -219,6 +221,7 @@
               button,
               !visible
             );
+
           }
         );
 
@@ -463,6 +466,10 @@
       }
 
 
+      // =========================
+      // CONFIRM BUTTON
+      // =========================
+
       function updateConfirmState() {
 
         if (!userArmed) {
@@ -477,8 +484,23 @@
         }
 
 
+        // Check if ANY field is blank
+
+        const hasBlankField =
+          inputs.some(
+            (input) => {
+              return normalize(input) === "";
+            }
+          );
+
+
+        // Disable if:
+        // 1. Any field is blank
+        // 2. Nothing was changed
+
         setDisabled(
           confirmBtn,
+          hasBlankField ||
           !hasChanges()
         );
 
@@ -643,6 +665,7 @@
                 .replace(/\D/g, "")
                 .slice(0, 11);
 
+
             userArmed = true;
 
             updateConfirmState();
@@ -654,7 +677,7 @@
 
 
       // =========================
-      // FACEBOOK + CONTACT EMAIL
+      // FACEBOOK + EMAIL
       // =========================
 
       [
@@ -720,6 +743,8 @@
           );
 
 
+          // Browser validation
+
           if (
             !accountForm.reportValidity()
           ) {
@@ -729,7 +754,36 @@
           }
 
 
-          // Contact number validation
+          // =========================
+          // REQUIRED FIELDS
+          // =========================
+
+          const hasBlankField =
+            inputs.some(
+              (input) => {
+                return normalize(input) === "";
+              }
+            );
+
+
+          if (hasBlankField) {
+
+            showMessage(
+              accountMessage,
+              "Please complete all account information fields.",
+              "error-message"
+            );
+
+            updateConfirmState();
+
+            return;
+
+          }
+
+
+          // =========================
+          // CONTACT NUMBER
+          // =========================
 
           if (contactNumber) {
 
@@ -740,7 +794,6 @@
 
 
             if (
-              digits.length > 0 &&
               digits.length !== 11
             ) {
 
@@ -759,6 +812,10 @@
 
           }
 
+
+          // =========================
+          // DISABLE WHILE SAVING
+          // =========================
 
           setDisabled(
             confirmBtn,
@@ -809,7 +866,9 @@
               );
 
 
-            // Update account display
+            // =========================
+            // UPDATE DISPLAY
+            // =========================
 
             if (accountAdminUsername) {
 
@@ -818,6 +877,8 @@
 
             }
 
+
+            // Save new baseline
 
             captureBaseline();
 
