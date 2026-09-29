@@ -71,6 +71,10 @@ body {
     font-size: 10px;
 }
 
+.hidden-count{
+    display:none;
+}
+
 
 /* =========================
    BUTTONS
@@ -155,7 +159,7 @@ body {
 
     gap: 16px;
 
-    margin-bottom: 28px;
+    margin-bottom: 18px;
 }
 
 .summary-card {
@@ -244,17 +248,6 @@ body {
 }
 
 
-/* TOTAL */
-
-.total-icon {
-    background-color: #edf2f5;
-}
-
-.total-icon svg {
-    stroke: #647783;
-}
-
-
 /* AVAILABLE */
 
 .available-icon {
@@ -263,6 +256,17 @@ body {
 
 .available-icon svg {
     stroke: #3a927a;
+}
+
+
+/* UNDER MONITOR */
+
+.monitor-icon{
+    background-color: #eaf1ff;
+}
+
+.monitor-icon svg{
+    stroke: #3b73d1;
 }
 
 
@@ -285,6 +289,98 @@ body {
 
 .danger-icon svg {
     stroke: #c34d4d;
+}
+
+
+/* =========================
+   REPLENISHMENT PANEL (UI ONLY)
+========================= */
+
+.replenishment-panel{
+    overflow: hidden;
+
+    margin-bottom: 22px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #d8dadd;
+    border-radius: 7px;
+
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.025);
+}
+
+.replenishment-panel-header{
+    padding: 16px 18px;
+
+    border-bottom: 1px solid #e8e9ea;
+}
+
+.replenishment-panel-header h3{
+    font-size: 14px;
+    font-weight: 600;
+    color:#272829;
+    margin-bottom: 3px;
+}
+
+.replenishment-panel-header p{
+    font-size: 10px;
+    color:#7b7f83;
+}
+
+.replenishment-empty{
+    min-height: 220px;
+
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content:center;
+
+    padding: 18px;
+
+    color: #8c9094;
+
+    text-align:center;
+}
+
+.empty-icon {
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 14px;
+
+    background-color: #f0f1f2;
+
+    border-radius: 50%;
+}
+
+.empty-icon svg {
+    width: 21px;
+    height: 21px;
+
+    fill: none;
+    stroke: #73777a;
+
+    stroke-width: 1.5;
+}
+
+.replenishment-empty h3{
+    margin-bottom: 6px;
+
+    color: #4c5053;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.replenishment-empty p{
+    max-width: 320px;
+
+    font-size: 10px;
+    line-height: 1.5;
 }
 
 
@@ -566,6 +662,11 @@ body {
     color: #25845e;
 }
 
+.status-under-monitor{
+    background-color: #eaf1ff;
+    color: #2f62b5;
+}
+
 .status-low-stock {
     background-color: #fff3d9;
     color: #ad7911;
@@ -634,7 +735,7 @@ body {
 
 
 /* =========================
-   EMPTY STATE
+   EMPTY STATE (TABLE)
 ========================= */
 
 .inventory-empty {
@@ -648,31 +749,6 @@ body {
     color: #8c9094;
 
     text-align: center;
-}
-
-.empty-icon {
-    width: 48px;
-    height: 48px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-bottom: 14px;
-
-    background-color: #f0f1f2;
-
-    border-radius: 50%;
-}
-
-.empty-icon svg {
-    width: 21px;
-    height: 21px;
-
-    fill: none;
-    stroke: #73777a;
-
-    stroke-width: 1.5;
 }
 
 .inventory-empty h3 {

@@ -53,6 +53,9 @@
                     <p>
                         Monitor stock levels and manage inventory movements.
                     </p>
+
+                    <!-- Hidden: keeps old JS safe if it updates totalItems -->
+                    <span id="totalItems" class="hidden-count">0</span>
                 </div>
 
 
@@ -83,57 +86,45 @@
 
             <!-- =========================
                  INVENTORY SUMMARY
+                 (4 small containers)
             ========================== -->
 
             <section class="inventory-summary">
-
-                <!-- TOTAL -->
-                <div class="summary-card">
-
-                    <div class="summary-card-content">
-
-                        <p>TOTAL ITEMS</p>
-
-                        <h3 id="totalItems">0</h3>
-
-                        <span>Active Products</span>
-
-                    </div>
-
-                    <div class="summary-icon total-icon">
-
-                        <svg viewBox="0 0 24 24">
-                            <path d="M4 7l8-4 8 4-8 4-8-4"></path>
-                            <path d="M4 7v10l8 4 8-4V7"></path>
-                            <path d="M12 11v10"></path>
-                        </svg>
-
-                    </div>
-
-                </div>
-
 
                 <!-- IN STOCK -->
                 <div class="summary-card">
 
                     <div class="summary-card-content">
-
                         <p>IN STOCK</p>
-
                         <h3 id="inStockItems">0</h3>
-
                         <span>Products Available</span>
-
                     </div>
 
                     <div class="summary-icon available-icon">
-
                         <svg viewBox="0 0 24 24">
                             <path d="M4 7l8-4 8 4-8 4-8-4"></path>
                             <path d="M4 7v10l8 4 8-4V7"></path>
                             <path d="M8 13l3 3 5-6"></path>
                         </svg>
+                    </div>
 
+                </div>
+
+
+                <!-- UNDER MONITOR -->
+                <div class="summary-card">
+
+                    <div class="summary-card-content">
+                        <p>UNDER MONITOR</p>
+                        <h3 id="underMonitorItems">0</h3>
+                        <span>Watch stock movement</span>
+                    </div>
+
+                    <div class="summary-icon monitor-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
                     </div>
 
                 </div>
@@ -143,23 +134,17 @@
                 <div class="summary-card">
 
                     <div class="summary-card-content">
-
                         <p>LOW STOCK</p>
-
                         <h3 id="lowStockItems">0</h3>
-
                         <span>Below Stock Level</span>
-
                     </div>
 
                     <div class="summary-icon warning-icon">
-
                         <svg viewBox="0 0 24 24">
                             <path d="M12 3L2 21h20L12 3z"></path>
                             <path d="M12 9v5"></path>
                             <path d="M12 17h.01"></path>
                         </svg>
-
                     </div>
 
                 </div>
@@ -169,24 +154,54 @@
                 <div class="summary-card">
 
                     <div class="summary-card-content">
-
                         <p>OUT OF STOCK</p>
-
                         <h3 id="outOfStockItems">0</h3>
-
                         <span>Needs Restocking</span>
-
                     </div>
 
                     <div class="summary-icon danger-icon">
-
                         <svg viewBox="0 0 24 24">
                             <path d="M12 3L2 21h20L12 3z"></path>
                             <path d="M12 9v5"></path>
                             <path d="M12 17h.01"></path>
                         </svg>
-
                     </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =========================
+                 REPLENISHMENT RECOMMENDATIONS (UI ONLY)
+            ========================== -->
+
+            <section class="replenishment-panel">
+
+                <div class="replenishment-panel-header">
+                    <div>
+                        <h3>Replenishment Recommendations</h3>
+                        <p>Algorithm-based restocking recommendations</p>
+                    </div>
+                </div>
+
+                <div class="replenishment-empty">
+
+                    <div class="empty-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M6 2h9l3 3v17H6z"></path>
+                            <path d="M15 2v4h4"></path>
+                            <path d="M8 10h8"></path>
+                            <path d="M8 14h8"></path>
+                            <path d="M8 18h6"></path>
+                        </svg>
+                    </div>
+
+                    <h3>No recommendations yet</h3>
+
+                    <p>
+                        Recommendations will appear here once generated.
+                    </p>
 
                 </div>
 
@@ -223,11 +238,16 @@
 
                         <select id="categoryFilter">
                             <option value="">All Categories</option>
+                            <option value="steel-products">Steel Products</option>
+                            <option value="roofing-materials">Roofing Materials</option>
+                            <option value="stainless-materials">Stainless Materials</option>
+                            <option value="hardware-items">Hardware Items</option>
                         </select>
 
                         <select id="statusFilter">
                             <option value="">All Status</option>
                             <option value="in-stock">In Stock</option>
+                            <option value="under-monitor">Under Monitor</option>
                             <option value="low-stock">Low Stock</option>
                             <option value="out-of-stock">Out of Stock</option>
                         </select>
@@ -243,7 +263,6 @@
                     <table class="inventory-table">
 
                         <thead>
-
                             <tr>
                                 <th>PRODUCT ID</th>
                                 <th>PRODUCT NAME</th>
@@ -254,9 +273,7 @@
                                 <th>STOCK STATUS</th>
                                 <th class="actions-heading">ACTIONS</th>
                             </tr>
-
                         </thead>
-
 
                         <!-- DATABASE ROWS LATER -->
                         <tbody id="inventoryTableBody"></tbody>
@@ -271,13 +288,11 @@
                     >
 
                         <div class="empty-icon">
-
                             <svg viewBox="0 0 24 24">
                                 <rect x="4" y="7" width="16" height="13"></rect>
                                 <path d="M3 4h18v3H3"></path>
                                 <path d="M9 11h6"></path>
                             </svg>
-
                         </div>
 
                         <h3>No inventory records yet</h3>
