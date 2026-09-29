@@ -116,11 +116,12 @@ if ($attemptData && $attemptData["lockout_until"] !== null) {
 $stmt = $pdo->prepare("
     SELECT
         id,
+        username,
         email,
         password,
         role
     FROM users
-    WHERE email = ?
+    WHERE username = ?
     LIMIT 1
 ");
 
@@ -306,7 +307,8 @@ session_regenerate_id(true);
 // ==========================================
 
 $_SESSION["user_id"] = $user["id"];
-$_SESSION["email"] = $user["email"];
+$_SESSION["username"] = $user["username"];
+$_SESSION["email"] = $user["email"]; // contact email only (optional)
 $_SESSION["role"] = $user["role"];
 
 

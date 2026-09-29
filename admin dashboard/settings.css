@@ -10,8 +10,10 @@ body {
 
 body {
   min-height: 100vh;
+
   background-color: #f3f4f5;
   color: #272829;
+
   font-family: "Geologica", sans-serif;
 }
 
@@ -25,7 +27,9 @@ body {
 
 .settings-main {
   min-height: 100vh;
+
   margin-left: 230px;
+
   background-color: #f3f4f5;
 }
 
@@ -35,8 +39,15 @@ body {
 
 .settings-content {
   width: 100%;
+
   margin: 0;
-  padding: 35px 29px 32px 32px;
+
+  padding:
+    35px
+    29px
+    32px
+    32px;
+
   font-size: 12px;
 }
 
@@ -44,6 +55,7 @@ body {
 .settings-content input {
   font-family: inherit;
 }
+
 
 /* =========================
    HEADER
@@ -55,19 +67,25 @@ body {
 
 .settings-header h1 {
   margin: 0 0 4px;
+
   color: #272829;
+
   font-size: 28px;
   font-weight: 600;
+
   line-height: 1.25;
   letter-spacing: -0.5px;
 }
 
 .settings-header p {
   margin: 0;
+
   color: #7b7f83;
+
   font-size: 12px;
   line-height: 1.5;
 }
+
 
 /* =========================
    SETTINGS NAVIGATION
@@ -75,12 +93,15 @@ body {
 
 .settings-content .settings-tabs {
   display: flex;
+
   gap: 10px;
+
   margin-bottom: 18px;
 }
 
 .settings-content .settings-tab-btn {
   min-height: 36px;
+
   padding: 0 16px;
 
   color: #4c5053;
@@ -91,6 +112,7 @@ body {
 
   font-size: 11px;
   font-weight: 500;
+
   cursor: pointer;
 
   transition:
@@ -107,10 +129,15 @@ body {
 .settings-content .settings-tab-btn.active {
   color: #ffffff;
   background-color: #272829;
+
   border-color: #272829;
 }
 
-/* The hidden attribute controls panel visibility. */
+
+/* =========================
+   PANELS
+========================= */
+
 .settings-content > .settings-panel {
   display: block;
 }
@@ -119,19 +146,23 @@ body {
   display: none;
 }
 
+
 /* =========================
    CARDS
 ========================= */
 
 .settings-content .settings-card {
   margin-bottom: 18px;
+
   padding: 20px;
 
   background-color: #ffffff;
+
   border: 1px solid #d7dbe0;
   border-radius: 7px;
 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.025);
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.025);
 
   transition:
     border-color 0.2s ease,
@@ -140,15 +171,20 @@ body {
 
 .settings-content .settings-card:hover {
   border-color: #c8cdd3;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
 .settings-content .settings-card-header h2 {
   margin: 0 0 16px;
+
   color: #343638;
+
   font-size: 14px;
   font-weight: 600;
 }
+
 
 /* =========================
    ACCOUNT SUMMARY
@@ -156,15 +192,20 @@ body {
 
 .settings-content .account-summary {
   display: flex;
+
   align-items: center;
+
   gap: 14px;
+
   margin-bottom: 18px;
 }
 
 .settings-content .avatar {
   display: flex;
+
   align-items: center;
   justify-content: center;
+
   flex-shrink: 0;
 
   width: 50px;
@@ -172,6 +213,7 @@ body {
 
   color: #ffffff;
   background-color: #272829;
+
   border-radius: 50%;
 }
 
@@ -180,46 +222,62 @@ body {
   height: 26px;
 
   fill: none;
+
   stroke: currentColor;
+
   stroke-width: 1.5;
+
   stroke-linecap: round;
 }
 
 .settings-content .account-meta {
   display: flex;
+
   flex-direction: column;
+
   gap: 3px;
+
   min-width: 0;
 }
 
 .settings-content .account-meta strong {
   color: #272829;
+
   font-size: 13px;
   font-weight: 600;
 }
 
 .settings-content .account-meta span {
   color: #7b7f83;
+
   font-size: 10px;
+
   overflow-wrap: anywhere;
 }
 
 .settings-content .account-meta .role-badge {
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
 
   width: fit-content;
+
   margin-top: 5px;
-  padding: 5px 9px;
+
+  padding:
+    5px
+    9px;
 
   color: #ffffff;
   background-color: #272829;
+
   border-radius: 20px;
 
   font-size: 9px;
   font-weight: 600;
 }
+
 
 /* =========================
    FORMS
@@ -235,9 +293,11 @@ body {
 
 .settings-content .settings-form label {
   display: block;
+
   margin-bottom: 7px;
 
   color: #6b6f73;
+
   font-size: 11px;
   font-weight: 600;
 }
@@ -245,7 +305,10 @@ body {
 .settings-content .settings-form input {
   width: 100%;
   height: 40px;
-  padding: 0 12px;
+
+  padding:
+    0
+    12px;
 
   color: #272829;
   background-color: #ffffff;
@@ -254,6 +317,7 @@ body {
   border-radius: 5px;
 
   font-size: 12px;
+
   outline: none;
 
   transition:
@@ -271,14 +335,27 @@ body {
 
 .settings-content .settings-form input:focus {
   border-color: #747d88;
-  box-shadow: 0 0 0 3px rgba(39, 40, 41, 0.07);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(39, 40, 41, 0.07);
 }
+
+
+/* TWO-COLUMN FIELDS */
 
 .settings-content .form-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(0, 1fr)
+    );
+
   gap: 14px;
 }
+
 
 /* =========================
    PASSWORD FIELDS
@@ -298,15 +375,18 @@ body {
 
 .settings-content .password-toggle {
   position: absolute;
+
   top: 50%;
   right: 5px;
 
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
 
   width: 32px;
   height: 32px;
+
   padding: 0;
 
   color: #858c95;
@@ -316,6 +396,7 @@ body {
   border-radius: 5px;
 
   transform: translateY(-50%);
+
   cursor: pointer;
 
   transition:
@@ -325,11 +406,14 @@ body {
 
 .settings-content .password-toggle:hover {
   color: #272829;
+
   background-color: #f0f2f4;
 }
 
-.settings-content .password-toggle[aria-pressed="true"] {
+.settings-content
+.password-toggle[aria-pressed="true"] {
   color: #272829;
+
   background-color: #eceff2;
 }
 
@@ -338,13 +422,17 @@ body {
   height: 18px;
 
   fill: none;
+
   stroke: currentColor;
+
   stroke-width: 1.7;
+
   stroke-linecap: round;
   stroke-linejoin: round;
 
   pointer-events: none;
 }
+
 
 /* =========================
    BUTTONS
@@ -352,31 +440,44 @@ body {
 
 .settings-content .settings-form-actions {
   display: flex;
+
   align-items: center;
+
   justify-content: flex-end;
+
   flex-wrap: wrap;
 
   gap: 10px;
+
   margin-top: 18px;
+
   padding-top: 18px;
 
-  border-top: 1px solid #eceef0;
+  border-top:
+    1px solid #eceef0;
 }
 
 .settings-content .save-settings-btn,
 .settings-content .settings-secondary-btn {
   display: inline-flex;
+
   align-items: center;
   justify-content: center;
 
   min-height: 40px;
-  padding: 0 18px;
 
-  border: 1px solid transparent;
+  padding:
+    0
+    18px;
+
+  border:
+    1px solid transparent;
+
   border-radius: 5px;
 
   font-size: 11px;
   font-weight: 500;
+
   cursor: pointer;
 
   transition:
@@ -388,65 +489,81 @@ body {
 
 .settings-content .save-settings-btn {
   color: #ffffff;
+
   background-color: #272829;
 }
 
-/* Hover only when NOT disabled */
-.settings-content .save-settings-btn:not(:disabled):hover {
+.settings-content
+.save-settings-btn:not(:disabled):hover {
   background-color: #3b3d40;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+
+  box-shadow:
+    0 3px 8px
+    rgba(0, 0, 0, 0.1);
 }
 
 .settings-content .settings-secondary-btn {
   color: #555e69;
+
   background-color: #ffffff;
+
   border-color: #d3d8df;
 }
 
-/* Hover only when NOT disabled */
-.settings-content .settings-secondary-btn:not(:disabled):hover {
+.settings-content
+.settings-secondary-btn:not(:disabled):hover {
   color: #272829;
+
   background-color: #f5f6f7;
+
   border-color: #a9afb6;
 }
 
-/* Active only when NOT disabled */
-.settings-content .save-settings-btn:not(:disabled):active,
-.settings-content .settings-secondary-btn:not(:disabled):active {
+.settings-content
+.save-settings-btn:not(:disabled):active,
+.settings-content
+.settings-secondary-btn:not(:disabled):active {
   box-shadow: none;
 }
 
-/* Disabled styles (looks disabled + no red circle cursor) */
-.settings-content .save-settings-btn:disabled,
-.settings-content .settings-secondary-btn:disabled {
+.settings-content
+.save-settings-btn:disabled,
+.settings-content
+.settings-secondary-btn:disabled {
   opacity: 0.55;
+
   cursor: default;
+
   box-shadow: none;
 }
 
-.settings-content .save-settings-btn:disabled:hover,
-.settings-content .settings-secondary-btn:disabled:hover {
-  box-shadow: none;
-}
 
 /* =========================
    NOTIFICATIONS
 ========================= */
 
 .settings-content .notif-list {
-  border-top: 1px solid #eeeeee;
+  border-top:
+    1px solid #eeeeee;
 }
 
 .settings-content .notif-item {
   display: flex;
+
   align-items: center;
   justify-content: space-between;
+
   gap: 16px;
 
-  padding: 16px 0;
-  border-bottom: 1px solid #eeeeee;
+  padding:
+    16px
+    0;
 
-  transition: background-color 0.15s ease;
+  border-bottom:
+    1px solid #eeeeee;
+
+  transition:
+    background-color 0.15s ease;
 }
 
 .settings-content .notif-item:hover {
@@ -459,19 +576,25 @@ body {
 
 .settings-content .notif-text strong {
   display: block;
+
   margin-bottom: 5px;
 
   color: #343638;
+
   font-size: 12px;
   font-weight: 600;
 }
 
 .settings-content .notif-text p {
   margin: 0;
+
   color: #8b8f92;
+
   font-size: 10px;
+
   line-height: 1.5;
 }
+
 
 /* =========================
    NOTIFICATION SWITCHES
@@ -479,7 +602,9 @@ body {
 
 .settings-content .switch {
   position: relative;
+
   display: inline-block;
+
   flex-shrink: 0;
 
   width: 40px;
@@ -488,31 +613,39 @@ body {
 
 .settings-content .switch input {
   position: absolute;
+
   inset: 0;
 
   width: 100%;
   height: 100%;
+
   margin: 0;
 
   opacity: 0;
+
   cursor: pointer;
 }
 
 .settings-content .slider {
   position: absolute;
+
   inset: 0;
 
   background-color: #d7dadc;
+
   border-radius: 999px;
 
   pointer-events: none;
-  transition: background-color 0.2s ease;
+
+  transition:
+    background-color 0.2s ease;
 }
 
 .settings-content .slider::before {
   content: "";
 
   position: absolute;
+
   top: 3px;
   left: 3px;
 
@@ -520,117 +653,169 @@ body {
   height: 16px;
 
   background-color: #ffffff;
+
   border-radius: 50%;
 
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  transition: transform 0.2s ease;
+  box-shadow:
+    0 2px 6px
+    rgba(0, 0, 0, 0.15);
+
+  transition:
+    transform 0.2s ease;
 }
 
-.settings-content .switch input:checked + .slider {
+.settings-content
+.switch input:checked + .slider {
   background-color: #272829;
 }
 
-.settings-content .switch input:checked + .slider::before {
-  transform: translateX(18px);
+.settings-content
+.switch input:checked + .slider::before {
+  transform:
+    translateX(18px);
 }
 
+
 /* =========================
-   MESSAGES AND FOCUS
+   MESSAGES
 ========================= */
 
 .settings-content .settings-message {
-  margin: 12px 0 0;
-  padding: 10px 12px;
+  margin:
+    12px
+    0
+    0;
+
+  padding:
+    10px
+    12px;
 
   color: #526477;
+
   background-color: #f0f4f8;
 
-  border: 1px solid #dce4ec;
+  border:
+    1px solid #dce4ec;
+
   border-radius: 5px;
 
   font-size: 11px;
+
   line-height: 1.6;
 }
-/* SUCCESS MESSAGE */
-.settings-content .settings-message.success-message {
+
+.settings-content
+.settings-message.success-message {
   color: #2e7d32;
+
   background-color: #e8f5e9;
 }
 
-/* ERROR MESSAGE */
-.settings-content .settings-message.error-message {
+.settings-content
+.settings-message.error-message {
   color: #d32f2f;
+
   background-color: #ffebee;
 }
 
-.settings-content .settings-message:empty {
+.settings-content
+.settings-message:empty {
   display: none;
 }
 
 .settings-content .password-error {
   color: #d32f2f;
+
   background-color: #fff5f5;
+
   border-color: #f0b8b8;
 }
 
+
+/* =========================
+   FOCUS
+========================= */
+
 .settings-content button:focus-visible,
-.settings-content .switch input:focus-visible + .slider {
-  outline: 2px solid #8a9fb8;
+.settings-content
+.switch input:focus-visible + .slider {
+  outline:
+    2px solid #8a9fb8;
+
   outline-offset: 3px;
 }
+
 
 /* =========================
    RESPONSIVE
 ========================= */
 
 @media (max-width: 768px) {
+
   .settings-main {
     margin-left: 0;
   }
 
   .settings-content {
-    padding: 24px 18px;
+    padding:
+      24px
+      18px;
   }
 
   .settings-header h1 {
     font-size: 24px;
   }
+
 }
 
+
 @media (max-width: 600px) {
+
   .settings-content .settings-tabs {
     flex-wrap: wrap;
   }
 
   .settings-content .settings-tab-btn {
     flex: 1;
+
     min-width: 120px;
   }
 
   .settings-content .form-grid {
     grid-template-columns: 1fr;
+
     gap: 0;
   }
 
   .settings-content .settings-card {
     padding: 18px;
   }
+
 }
 
+
 @media (max-width: 480px) {
+
   .settings-header h1 {
     font-size: 21px;
   }
 
-  .settings-content .settings-form-actions > button {
+  .settings-content
+  .settings-form-actions > button {
     flex: 1;
   }
+
 }
 
+
 @media (prefers-reduced-motion: reduce) {
+
   .settings-content *,
   .settings-content *::before,
   .settings-content *::after {
+
     transition: none !important;
+
   }
+
 }
