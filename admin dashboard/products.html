@@ -36,6 +36,7 @@
     <main class="products-main">
 
         <!-- TOP BAR -->
+        
         <div
             id="topbar"
             data-page-title="Products"
@@ -44,6 +45,7 @@
 
         <!-- CONTENT -->
         <div class="products-content">
+
 
             <!-- PAGE HEADER -->
             <section class="products-header">
@@ -69,124 +71,13 @@
             </section>
 
 
-            <!-- =========================
-                 PRODUCT ANALYTICS (MERGED INSIDE PRODUCTS)
-                 Table only: Rank, Product, Views, Search Frequency
-                 NOTE: UI ready for pagination (show max 5 rows per page via JS later)
-            ========================== -->
-            <section class="products-analytics-panel" id="productAnalytics">
-
-                <div class="products-analytics-header">
-
-                    <div>
-                        <h2>All Product Analytics</h2>
-                        <p>Product views and search frequency</p>
-                    </div>
-
-                    <div class="analytics-search">
-
-                        <svg viewBox="0 0 24 24">
-                            <circle cx="11" cy="11" r="7"></circle>
-                            <path d="M20 20l-4-4"></path>
-                        </svg>
-
-                        <input
-                            type="search"
-                            id="analyticsSearch"
-                            placeholder="Search product..."
-                            autocomplete="off"
-                        >
-
-                    </div>
-
-                </div>
-
-
-                <div class="analytics-table-wrapper">
-
-                    <table class="analytics-table">
-
-                        <thead>
-                            <tr>
-                                <th>RANK</th>
-                                <th>PRODUCT</th>
-                                <th>VIEWS</th>
-                                <th>SEARCH FREQUENCY</th>
-                            </tr>
-                        </thead>
-
-                        <!-- UI ONLY: rows later (render max 5 rows per page) -->
-                        <tbody id="analyticsTableBody"></tbody>
-
-                    </table>
-
-
-                    <!-- EMPTY STATE -->
-                    <div
-                        class="analytics-empty"
-                        id="analyticsEmptyState"
-                    >
-
-                        <div class="empty-icon">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M6 2h9l3 3v17H6z"></path>
-                                <path d="M15 2v4h4"></path>
-                                <path d="M8 12h8"></path>
-                                <path d="M8 16h6"></path>
-                            </svg>
-                        </div>
-
-                        <h3>No analytics data yet</h3>
-                        <p>Analytics will appear here once tracking is enabled.</p>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Footer w/ pagination (UI only) -->
-                <div class="analytics-footer">
-
-                    <p>
-                        Showing
-                        <strong id="visibleAnalyticsCount">0</strong>
-                        of
-                        <strong id="totalAnalyticsCount">0</strong>
-                        products
-                    </p>
-
-                    <div class="pagination">
-
-                        <button
-                            type="button"
-                            id="analyticsPreviousPage"
-                            disabled
-                        >
-                            ‹
-                        </button>
-
-                        <span id="analyticsCurrentPage">1</span>
-
-                        <button
-                            type="button"
-                            id="analyticsNextPage"
-                            disabled
-                        >
-                            ›
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
             <!-- PRODUCT PANEL -->
             <section class="products-panel">
 
+
                 <!-- TOOLBAR -->
                 <div class="products-toolbar">
+
 
                     <!-- SEARCH -->
                     <div class="search-box">
@@ -211,10 +102,6 @@
 
                         <select id="categoryFilter">
                             <option value="">All Categories</option>
-                            <option value="steel-products">Steel Products</option>
-                            <option value="roofing-materials">Roofing Materials</option>
-                            <option value="stainless-materials">Stainless Materials</option>
-                            <option value="hardware-items">Hardware Items</option>
                         </select>
 
 
@@ -248,7 +135,10 @@
                         </thead>
 
 
-                        <!-- Products from the database will eventually be inserted here. -->
+                        <!--
+                            Products from the database will
+                            eventually be inserted here.
+                        -->
                         <tbody id="productsTableBody"></tbody>
 
                     </table>
