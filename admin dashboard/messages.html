@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Messages - SCF Steel Trading</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="sidebar.css" />
+  <link rel="stylesheet" href="topbar.css" />
+  <link rel="stylesheet" href="messages.css" />
+</head>
+
+<body>
+
+  <!-- SIDEBAR (loaded via sidebar.js) -->
+  <div id="sidebar"></div>
+
+  <!-- MAIN -->
+  <main class="dashboard-main">
+
+    <!-- TOPBAR (loaded via topbar.js) -->
+    <div id="topbar" data-page-title="Messages"></div>
+
+    <!-- PAGE CONTENT -->
+    <div class="dashboard-content">
+
+      <section class="dashboard-card messages-card">
+
+        <!-- HEADER -->
+        <div class="card-header messages-header">
+          <div>
+            <h3>Customer Messages</h3>
+            <p>Customer inquiries from Product Catalog</p>
+          </div>
+
+          <div class="messages-actions">
+            <button class="m-btn" id="refreshBtn" type="button">Refresh</button>
+            <button class="m-btn" id="exportBtn" type="button">Export JSON</button>
+            <button class="m-btn m-btn-danger" id="clearAllBtn" type="button">Clear All</button>
+          </div>
+        </div>
+
+        <!-- TOOLBAR (Search + All Status like screenshot) -->
+        <div class="messages-toolbar">
+          <div class="messages-filter-row">
+
+            <!-- SEARCH with icon -->
+            <div class="search-field">
+              <span class="search-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M10.5 18.5a8 8 0 1 1 0-16 8 8 0 0 1 0 16Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M16.5 16.5 21 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </span>
+
+              <input
+                id="searchInput"
+                class="messages-search"
+                type="search"
+                placeholder="Search name, email, contact number..."
+              />
+            </div>
+
+            <!-- STATUS -->
+            <select id="statusFilter" class="messages-select">
+              <option value="all">All Status</option>
+              <option value="unread">Unread</option>
+              <option value="read">Read</option>
+            </select>
+
+          </div>
+
+          <div class="messages-count" id="countHint">0 messages</div>
+        </div>
+
+        <!-- BODY -->
+        <div class="messages-body" id="messagesBody">
+
+          <!-- EMPTY STATE -->
+          <div class="messages-empty" id="emptyState">
+            <div class="empty-title">No messages yet</div>
+            <div class="empty-subtitle">
+              When customers submit inquiry from Product Catalog, it will appear here.
+            </div>
+          </div>
+
+          <!-- TABLE -->
+          <div class="messages-table-wrap">
+            <table class="messages-table">
+              <thead>
+                <tr>
+                  <th style="width:160px;">Date</th>
+                  <th style="width:200px;">Name</th>
+                  <th style="width:260px;">Email</th>
+                  <th style="width:190px;">Contact Number</th>
+                  <th style="width:120px;">Status</th>
+                  <th style="width:230px;">Actions</th>
+                </tr>
+              </thead>
+
+              <tbody id="messagesTbody">
+                <!-- Rendered by messages.js -->
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- VIEW MODAL (optional UI for viewing message details) -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalTitle">Message Details</h3>
+          <p id="modalMeta">—</p>
+        </div>
+
+        <button class="m-btn" id="closeModalBtn" type="button">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="kv"><span class="k">From</span><span class="v" id="modalFrom">—</span></div>
+        <div class="kv"><span class="k">Email</span><span class="v" id="modalEmail">—</span></div>
+        <div class="kv"><span class="k">Contact Number</span><span class="v" id="modalPhone">—</span></div>
+        <div class="kv"><span class="k">Status</span><span class="v" id="modalStatus">—</span></div>
+
+        <div class="message-box">
+          <div class="message-box-label">Message</div>
+          <div class="message-box-text" id="modalMessage">—</div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="m-btn" id="toggleReadBtn" type="button">Mark as Read</button>
+        <button class="m-btn m-btn-danger" id="deleteBtn" type="button">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="sidebar.js"></script>
+  <script src="topbar.js"></script>
+  <script src="messages.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,504 @@
+/* =========================
+   PAGE SETTINGS (like sales.css)
+========================= */
+
+:root {
+  --msg-sidebar-width: 230px;
+  --msg-topbar-height: 58px;
+
+  --msg-background: #f3f4f5;
+  --msg-white: #ffffff;
+  --msg-text: #272829;
+  --msg-muted: #818894;
+  --msg-border: #d7dbe0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--msg-background);
+
+  color: var(--msg-text);
+  font-family: "Geologica", "Segoe UI", Arial, sans-serif;
+  font-size: 12px;
+}
+
+/* Let form controls inherit font like sales.css */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+}
+
+/* =========================
+   MAIN LAYOUT (same idea as dashboard)
+========================= */
+
+.dashboard-main {
+  min-height: 100vh;
+  margin-left: var(--msg-sidebar-width);
+}
+
+/* Reserve space for injected topbar */
+.dashboard-main > #topbar {
+  min-height: var(--msg-topbar-height);
+}
+
+.dashboard-content {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 35px 29px 32px 32px;
+}
+
+/* =========================
+   CARD (match sales card)
+========================= */
+
+.dashboard-card {
+  background: var(--msg-white);
+  border: 1px solid var(--msg-border);
+  border-radius: 7px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.025);
+}
+
+.messages-card {
+  overflow: hidden;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.card-header {
+  min-height: 60px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 16px 18px 11px;
+}
+
+.card-header h3 {
+  margin: 0 0 4px;
+  color: #343638;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.card-header p {
+  margin: 0;
+  color: #737b86;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+/* Header actions */
+.messages-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Buttons (similar sizing to sales controls) */
+.m-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 39px;
+  min-height: 39px;
+  padding: 0 14px;
+
+  border: 1px solid #d3d8df;
+  border-radius: 5px;
+
+  background: #ffffff;
+  color: #3c4653;
+
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.m-btn:hover {
+  background: #fafbfc;
+}
+
+.m-btn:active {
+  transform: scale(0.99);
+}
+
+.m-btn-danger {
+  border-color: #f2b7bf;
+  background: #fdecee;
+  color: #9f1c2e;
+}
+
+.m-btn-danger:hover {
+  background: #fbd9dd;
+}
+
+/* =========================
+   TOOLBAR (search + All Status like sales.css look)
+========================= */
+
+.messages-toolbar {
+  padding: 18px;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.messages-filter-row {
+  display: grid;
+  grid-template-columns: 1fr 240px; /* search + status */
+  gap: 14px;
+  align-items: center;
+}
+
+/* Search field */
+.search-field {
+  position: relative;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  left: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #87909b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.messages-search {
+  width: 100%;
+  height: 39px;
+  padding: 0 13px 0 40px;
+
+  color: #333a44;
+  background: #ffffff;
+
+  border: 1px solid #d3d8df;
+  border-radius: 5px;
+
+  outline: none;
+
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.messages-search::placeholder {
+  color: #929aa6;
+  opacity: 1;
+}
+
+.search-field:focus-within .messages-search {
+  border-color: #8794a3;
+}
+
+/* Status select */
+.messages-select {
+  width: 100%;
+  height: 39px;
+  padding: 0 12px;
+
+  color: #3c4653;
+  background: #ffffff;
+
+  border: 1px solid #d3d8df;
+  border-radius: 5px;
+
+  font-size: 10px;
+  font-weight: 400;
+
+  cursor: pointer;
+  outline: none;
+}
+
+.messages-count {
+  margin-top: 10px;
+  color: #87919e;
+  font-size: 10px;
+}
+
+/* =========================
+   BODY (empty/table switching)
+========================= */
+
+.messages-body {
+  min-height: 290px;
+  position: relative;
+}
+
+.messages-empty {
+  display: none;
+  min-height: 290px;
+  padding: 60px 20px 45px;
+
+  color: #87919e;
+  text-align: center;
+
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.messages-empty .empty-title {
+  display: block;
+  color: #46546a;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.messages-empty .empty-subtitle {
+  max-width: 360px;
+  margin: 0;
+  color: #87919e;
+  font-size: 10px;
+  line-height: 1.6;
+}
+
+.messages-body.is-empty .messages-table-wrap {
+  display: none;
+}
+
+.messages-body.is-empty .messages-empty {
+  display: flex;
+}
+
+/* =========================
+   TABLE (typography copied from sales table)
+========================= */
+
+.messages-table {
+  width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.messages-table thead {
+  background: #f9f9fa;
+}
+
+.messages-table th {
+  height: 48px;
+  padding: 0 14px;
+
+  color: #455469;
+
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #dfe3e8;
+
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.35px;
+  text-transform: uppercase;
+}
+
+.messages-table td {
+  height: 49px;
+  padding: 0 14px;
+
+  color: #3d4652;
+  background: transparent;
+
+  border-bottom: 1px solid #edf0f2;
+
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.messages-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.messages-table tbody tr:hover {
+  background: #fafbfc;
+}
+
+/* Row actions */
+.row-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* Status badges (still yours, but font adjusted) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 22px;
+  padding: 3px 8px;
+
+  border-radius: 4px;
+
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.badge-unread {
+  color: #3730a3;
+  background: #eef2ff;
+}
+
+.badge-read {
+  color: #505458;
+  background: #f1f2f3;
+}
+
+/* =========================
+   MODAL (kept simple + same font rules)
+========================= */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 5000;
+}
+
+.modal-backdrop.show {
+  display: flex;
+}
+
+.modal {
+  width: min(760px, 100%);
+  background: #ffffff;
+  border: 1px solid var(--msg-border);
+  border-radius: 8px;
+  box-shadow: 0 18px 60px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+
+  padding: 16px 18px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.modal-header p {
+  margin: 6px 0 0;
+  color: var(--msg-muted);
+  font-size: 10px;
+}
+
+.modal-body {
+  padding: 16px 18px;
+  display: grid;
+  gap: 10px;
+}
+
+.kv {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
+
+  padding: 12px;
+  border: 1px solid #edf0f2;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+.k {
+  color: var(--msg-muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.v {
+  color: #303844;
+  font-size: 12px;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+.message-box {
+  border: 1px solid #edf0f2;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.message-box-label {
+  color: var(--msg-muted);
+  font-size: 11px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.message-box-text {
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-size: 12px;
+  color: #303844;
+}
+
+.modal-footer {
+  padding: 14px 18px;
+  border-top: 1px solid #e5e7eb;
+
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* =========================
+   RESPONSIVE (like sales.css)
+========================= */
+
+@media (max-width: 1100px) {
+  .dashboard-content {
+    padding-right: 24px;
+    padding-left: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  /* assumes sidebar becomes overlay/hidden on mobile */
+  .dashboard-main {
+    margin-left: 0;
+  }
+
+  .dashboard-content {
+    padding: 24px 18px;
+  }
+
+  .messages-filter-row {
+    grid-template-columns: 1fr;
+  }
+}
