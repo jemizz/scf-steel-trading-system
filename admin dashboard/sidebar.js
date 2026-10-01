@@ -48,6 +48,27 @@ fetch("sidebar.html?v=2")
 
 
         // =========================
+        // PREVENT PAGE SCROLL WHILE HOVERING SIDEBAR
+        // =========================
+
+        const sidebar = sidebarContainer.querySelector(".sidebar");
+        const nav = sidebarContainer.querySelector(".sidebar-nav");
+
+        if (sidebar && nav) {
+
+            sidebar.addEventListener("wheel", function (event) {
+
+                // Kung hindi scrollable ang nav, harangin ang scroll
+                if (nav.scrollHeight <= nav.clientHeight) {
+                    event.preventDefault();
+                }
+
+            }, { passive: false });
+
+        }
+
+
+        // =========================
         // LOG OUT
         // =========================
 

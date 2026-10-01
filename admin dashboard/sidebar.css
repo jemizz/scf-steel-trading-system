@@ -25,9 +25,13 @@ body {
 
     width: 230px;
     height: 100vh;
+    height: 100dvh;                 /* tama ang taas sa mobile browsers */
 
     display: flex;
     flex-direction: column;
+
+    overflow: hidden;               /* FIX: walang scroll sa mismong sidebar */
+    overscroll-behavior: contain;   /* FIX: hindi ipinapasa ang scroll sa page */
 
     background-color: #272829;
     color: #ffffff;
@@ -44,6 +48,7 @@ body {
 
 .sidebar-header {
     height: 80px;
+    flex-shrink: 0;
 
     display: flex;
     align-items: center;
@@ -87,10 +92,12 @@ body {
 
 .sidebar-nav {
     flex: 1;
+    min-height: 0;                  /* FIX: kailangan para gumana ang overflow sa flex child */
 
     padding: 12px 9px;
 
     overflow-y: auto;
+    overscroll-behavior: contain;   /* FIX */
 }
 
 .sidebar-link {
@@ -162,6 +169,8 @@ body {
 ========================= */
 
 .sidebar-bottom {
+    flex-shrink: 0;
+
     padding: 12px 9px 14px;
 
     border-top: 1px solid rgba(255, 255, 255, 0.08);
