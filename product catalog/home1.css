@@ -265,8 +265,21 @@ body {
 
 .product-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+
+    /* FIX: 4 cards in one row (desktop) */
+    grid-template-columns: repeat(4, 1fr);
+
     gap: 25px;
+
+    /* FIX: make all cards stretch to the same height so buttons can align */
+    align-items: stretch;
+}
+
+/* FIX: 2 columns on medium screens (so it doesn't get too tight) */
+@media (max-width: 1200px) {
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 
@@ -275,7 +288,10 @@ body {
 ========================= */
 
 .product-card {
-    display: block;
+    /* FIX: make card a flex column so we can push the button to the bottom */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 
     overflow: hidden;
 
@@ -312,6 +328,9 @@ body {
     overflow: hidden;
 
     background-color: #eeeeee;
+
+    /* FIX: keep image section from stretching */
+    flex: 0 0 auto;
 }
 
 .product-image::after {
@@ -375,6 +394,11 @@ body {
 
 .product-info {
     padding: 23px 22px 24px;
+
+    /* FIX: make content a column and fill remaining space */
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -434,6 +458,12 @@ body {
     text-align: center;
 
     transition: 0.25s ease;
+
+    /* FIX: push the button to the bottom so all buttons line up */
+    margin-top: auto;
+
+    /* Keeps the button aligned left like your design */
+    align-self: flex-start;
 }
 
 .product-card:hover .product-link {
@@ -539,8 +569,6 @@ body {
     transform: scale(1.03);
 }
 
-
-/* Small Label Over Image */
 
 /* Logo on About Image */
 
