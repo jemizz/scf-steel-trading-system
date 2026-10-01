@@ -35,7 +35,7 @@
             <h1>Our Products</h1>
 
             <p>
-                Browse our available steel, roofing, hardware,
+                Browse our available steel, roofing, hardware items,
                 and construction materials.
             </p>
 
@@ -50,22 +50,27 @@
         <div class="container filters-inner">
 
             <!-- Category Buttons -->
-            <div class="pill-group">
+            <div class="pill-group" aria-label="Product Categories">
 
-                <button class="pill active" type="button">
+                <button class="pill active" type="button" data-filter="all">
                     All
                 </button>
 
-                <button class="pill" type="button">
+                <button class="pill" type="button" data-filter="steel">
                     Steel Products
                 </button>
 
-                <button class="pill" type="button">
+                <button class="pill" type="button" data-filter="roofing">
                     Roofing Materials
                 </button>
 
-                <button class="pill" type="button">
-                    Hardware Materials
+                <button class="pill" type="button" data-filter="hardware">
+                    Hardware Items
+                </button>
+
+                <!-- NEW: Stainless Products -->
+                <button class="pill" type="button" data-filter="stainless">
+                    Stainless Products
                 </button>
 
             </div>
@@ -75,12 +80,13 @@
             <div class="search">
 
                 <input
+                    id="productSearch"
                     type="search"
                     placeholder="Search Products"
                     aria-label="Search products"
                 >
 
-                <button type="button" aria-label="Search">
+                <button type="button" aria-label="Search" id="searchBtn">
                     🔍
                 </button>
 
@@ -99,7 +105,7 @@
             <div class="grid">
 
                 <!-- Product 1 -->
-                <article class="card">
+                <article class="card" data-category="steel">
 
                     <img
                         src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
@@ -128,7 +134,7 @@
 
 
                 <!-- Product 2 -->
-                <article class="card">
+                <article class="card" data-category="steel">
 
                     <img
                         src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
@@ -157,7 +163,7 @@
 
 
                 <!-- Product 3 -->
-                <article class="card">
+                <article class="card" data-category="steel">
 
                     <img
                         src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
@@ -186,7 +192,7 @@
 
 
                 <!-- Product 4 -->
-                <article class="card">
+                <article class="card" data-category="steel">
 
                     <img
                         src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
@@ -215,7 +221,7 @@
 
 
                 <!-- Product 5 -->
-                <article class="card">
+                <article class="card" data-category="steel">
 
                     <img
                         src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
@@ -244,7 +250,7 @@
 
 
                 <!-- Product 6 -->
-                <article class="card">
+                <article class="card" data-category="steel">
 
                     <img
                         src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
@@ -273,7 +279,7 @@
 
 
                 <!-- Product 7 -->
-                <article class="card">
+                <article class="card" data-category="steel">
 
                     <img
                         src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
@@ -302,7 +308,7 @@
 
 
                 <!-- Product 8 -->
-                <article class="card">
+                <article class="card" data-category="steel">
 
                     <img
                         src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
@@ -331,7 +337,7 @@
 
 
                 <!-- Product 9 -->
-                <article class="card">
+                <article class="card" data-category="steel">
 
                     <img
                         src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
@@ -398,6 +404,80 @@
     <!-- Shared JavaScript -->
     <script src="navbar.js"></script>
     <script src="footer.js"></script>
+
+    <!-- Filters/Search (so footer links like products.html?category=stainless will work) -->
+    <script>
+        (() => {
+            "use strict";
+
+            const pills = Array.from(document.querySelectorAll(".pill-group .pill"));
+            const cards = Array.from(document.querySelectorAll(".products .grid .card"));
+            const searchInput = document.getElementById("productSearch");
+            const searchBtn = document.getElementById("searchBtn");
+
+            let activeFilter = "all";
+
+            function setActivePill(filter) {
+                pills.forEach(p => p.classList.remove("active"));
+                const btn = pills.find(p => (p.dataset.filter || "all") === filter);
+                if (btn) btn.classList.add("active");
+            }
+
+            function applyFilters() {
+                const q = (searchInput?.value || "").trim().toLowerCase();
+
+                cards.forEach(card => {
+                    const cat = (card.dataset.category || "").toLowerCase();
+                    const text = card.textContent.toLowerCase();
+
+                    const matchCategory = (activeFilter === "all") || (cat === activeFilter);
+                    const matchSearch = !q || text.includes(q);
+
+                    card.style.display = (matchCategory && matchSearch) ? "" : "none";
+                });
+            }
+
+            // Pill click
+            pills.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    activeFilter = btn.dataset.filter || "all";
+                    setActivePill(activeFilter);
+                    applyFilters();
+                });
+            });
+
+            // Search typing
+            if (searchInput) {
+                searchInput.addEventListener("input", applyFilters);
+            }
+
+            // Search button
+            if (searchBtn) {
+                searchBtn.addEventListener("click", applyFilters);
+            }
+
+            // Read URL params: ?category=steel|roofing|hardware|stainless and ?q=...
+            const params = new URLSearchParams(window.location.search);
+            const urlCategory = (params.get("category") || "").toLowerCase();
+            const urlQ = params.get("q") || "";
+
+            const validCategories = new Set(["all", "steel", "roofing", "hardware", "stainless"]);
+
+            if (searchInput && urlQ) searchInput.value = urlQ;
+
+            if (validCategories.has(urlCategory) && urlCategory) {
+                activeFilter = urlCategory;
+            } else {
+                activeFilter = "all";
+            }
+
+            setActivePill(activeFilter);
+            applyFilters();
+        })();
+
+    </script>
+
+<script src="products.js"></script>
 
 </body>
 
