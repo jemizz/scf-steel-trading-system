@@ -160,11 +160,26 @@ function render() {
   }).join("");
 }
 
-function openModal(id) {
+async function markAsRead(id) {
+  const item = messages.find((x) => String(x.id) === String(id));
+  if (!item || normalizeStatus(item.status) === "read") return;
+
+  await apiRequest("set_status", {
+    id,
+    status: "read"
+  });
+
+  item.status = "read";
+  render();
+
+  if (currentId === String(id)) {
+    fillModal(id);
+  }
+}
+
+function fillModal(id) {
   const m = messages.find((x) => String(x.id) === String(id));
   if (!m) return;
-
-  currentId = String(id);
 
   const status = normalizeStatus(m.status);
 
@@ -174,11 +189,24 @@ function openModal(id) {
   modalPhone.textContent = m.phone || "—";
   modalStatus.textContent = status === "unread" ? "Unread" : "Read";
   modalMessage.textContent = m.message || "—";
-
   toggleReadBtn.textContent = status === "unread" ? "Mark as Read" : "Mark as Unread";
+}
+
+function openModal(id) {
+  const m = messages.find((x) => String(x.id) === String(id));
+  if (!m) return;
+
+  currentId = String(id);
+  fillModal(id);
 
   modalBackdrop.classList.add("show");
   modalBackdrop.setAttribute("aria-hidden", "false");
+
+  if (normalizeStatus(m.status) === "unread") {
+    markAsRead(id).catch((error) => {
+      alert(error.message || "Unable to mark as read.");
+    });
+  }
 }
 
 function closeModal() {
@@ -200,7 +228,7 @@ async function toggleRead(id) {
     });
     item.status = nextStatus;
     render();
-    if (currentId === String(id)) openModal(id);
+    if (currentId === String(id)) fillModal(id);
   } catch (error) {
     alert(error.message || "Unable to update status.");
   }
