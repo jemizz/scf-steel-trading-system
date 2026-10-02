@@ -5,8 +5,7 @@
     // SETTINGS
     // =========================
 
-    const tableBody =
-        document.getElementById("productsTableBody");
+    const tableBody = document.getElementById("productsTableBody");
 
     if (!tableBody) return;
 
@@ -90,8 +89,6 @@
             : "images/" + path;
     }
 
-    // One row per category: every product name under the same
-    // category (e.g. Paints & Chemicals) is grouped together.
     function groupKey(product) {
         return String(Number(product.category_id));
     }
@@ -126,8 +123,7 @@
     };
 
     function actionButton(action, id, label) {
-        const deleteClass =
-            action === "delete" ? "delete" : "";
+        const deleteClass = action === "delete" ? "delete" : "";
 
         return `
             <button
@@ -138,10 +134,7 @@
                 title="${escape(label)}"
                 aria-label="${escape(label)}"
             >
-                <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
                     ${icons[action]}
                 </svg>
             </button>
@@ -177,14 +170,10 @@
 
                 <div class="scf-dialog-body">
                     <div class="scf-product-summary">
-                        <img
-                            id="detailImage"
-                            alt=""
-                        >
+                        <img id="detailImage" alt="">
 
                         <div>
                             <h3 id="detailName"></h3>
-
                             <p id="detailCategory"></p>
 
                             <span
@@ -215,9 +204,7 @@
                             id="variantColor"
                             aria-label="Filter by color"
                         >
-                            <option value="">
-                                All Colors
-                            </option>
+                            <option value="">All Colors</option>
                         </select>
                     </div>
 
@@ -249,9 +236,7 @@
                                 ‹
                             </button>
 
-                            <span id="variantPage">
-                                1
-                            </span>
+                            <span id="variantPage">1</span>
 
                             <button
                                 type="button"
@@ -421,16 +406,13 @@
                         data = await readResponse(response);
 
                         if (!Array.isArray(data.products)) {
-                            throw new Error(
-                                "Missing products list."
-                            );
+                            throw new Error("Missing products list.");
                         }
 
                         apiUrl = path;
                         break;
                     } catch (error) {
-                        const lastPath =
-                            API_PATHS[API_PATHS.length - 1];
+                        const lastPath = API_PATHS[API_PATHS.length - 1];
 
                         if (path === lastPath) {
                             throw error;
@@ -451,17 +433,14 @@
             }
 
             products = data.products;
-
             filterProducts(false);
 
             return true;
         } catch (error) {
             products = [];
-
             filterProducts(false);
 
-            const empty =
-                byId("productsEmptyState");
+            const empty = byId("productsEmptyState");
 
             empty.querySelector("h3").textContent =
                 "Could not load products";
@@ -488,10 +467,7 @@
                 variant.id,
                 variant.name,
                 variant.spec,
-
-                ...fields.map(
-                    ([key]) => variant[key]
-                )
+                ...fields.map(([key]) => variant[key])
             ])
         ]
             .join(" ")
@@ -504,17 +480,14 @@
             .trim()
             .toLowerCase();
 
-        const category =
-            byId("categoryFilter").value;
+        const category = byId("categoryFilter").value;
 
         filteredProducts = products.filter(product => {
             const matchesSearch =
-                !query ||
-                searchable(product).includes(query);
+                !query || searchable(product).includes(query);
 
             const matchesCategory =
-                !category ||
-                slug(product.catalog) === category;
+                !category || slug(product.catalog) === category;
 
             return matchesSearch && matchesCategory;
         });
@@ -533,9 +506,7 @@
     function renderProducts() {
         const totalPages = Math.max(
             1,
-            Math.ceil(
-                filteredProducts.length / PAGE_SIZE
-            )
+            Math.ceil(filteredProducts.length / PAGE_SIZE)
         );
 
         page = Math.min(page, totalPages);
@@ -546,15 +517,6 @@
         );
 
         tableBody.innerHTML = visible.map(product => {
-            const image = product.image
-                ? `
-                    <img
-                        src="${escape(imagePath(product.image))}"
-                        alt=""
-                    >
-                `
-                : "";
-
             return `
                 <tr>
                     <td>
@@ -563,20 +525,21 @@
 
                     <td>
                         <div class="product-info">
-                            <div class="product-image">
-                                ${image}
-                            </div>
+    <div class="product-image">
+        ${
+            product.image
+                ? `<img
+                    src="${escape(imagePath(product.image))}"
+                    alt=""
+                >`
+                : ""
+        }
+    </div>
 
-                            <div class="product-details">
-                                <strong>
-                                    ${escape(product.name)}
-                                </strong>
-
-                                <span>
-                                    ${escape(product.category)}
-                                </span>
-                            </div>
-                        </div>
+    <div class="product-details">
+        <strong>${escape(product.name)}</strong>
+    </div>
+</div>
                     </td>
 
                     <td>
@@ -612,25 +575,16 @@
             `;
         }).join("");
 
-        byId("visibleProductCount").textContent =
-            visible.length;
-
-        byId("totalProductCount").textContent =
-            filteredProducts.length;
-
+        byId("visibleProductCount").textContent = visible.length;
+        byId("totalProductCount").textContent = filteredProducts.length;
         byId("currentPage").textContent = page;
 
-        byId("previousPage").disabled =
-            page <= 1;
+        byId("previousPage").disabled = page <= 1;
+        byId("nextPage").disabled = page >= totalPages;
 
-        byId("nextPage").disabled =
-            page >= totalPages;
+        const empty = byId("productsEmptyState");
 
-        const empty =
-            byId("productsEmptyState");
-
-        empty.style.display =
-            visible.length ? "none" : "flex";
+        empty.style.display = visible.length ? "none" : "flex";
 
         empty.querySelector("h3").textContent =
             products.length
@@ -653,11 +607,8 @@
                 ? "Manage Specifications"
                 : "Product Details";
 
-        byId("detailName").textContent =
-            selected.name;
-
-        byId("detailCategory").textContent =
-            selected.catalog;
+        byId("detailName").textContent = selected.name;
+        byId("detailCategory").textContent = selected.catalog;
 
         byId("detailCount").textContent =
             selected.variants.length + " variants";
@@ -674,8 +625,7 @@
             image.src = imagePath(selected.image);
         }
 
-        const currentColor =
-            byId("variantColor").value;
+        const currentColor = byId("variantColor").value;
 
         const colors = [
             ...new Set(
@@ -698,8 +648,7 @@
                 ? currentColor
                 : "";
 
-        byId("variantColor").hidden =
-            !colors.length;
+        byId("variantColor").hidden = !colors.length;
 
         renderVariants();
     }
@@ -714,7 +663,6 @@
         byId("detailError").textContent = "";
 
         populateDetails();
-
         details.showModal();
     }
 
@@ -728,46 +676,34 @@
             .toLowerCase()
             .trim();
 
-        const color =
-            byId("variantColor").value;
+        const color = byId("variantColor").value;
 
         const variants = selected.variants.filter(variant => {
             const matchesColor =
-                !color ||
-                variant.color === color;
+                !color || variant.color === color;
 
             const searchText = [
                 variant.id,
                 variant.name,
                 variant.spec,
-
-                ...fields.map(
-                    ([key]) => variant[key]
-                ),
-
+                ...fields.map(([key]) => variant[key]),
                 variant.notes
             ]
                 .join(" ")
                 .toLowerCase();
 
             const matchesSearch =
-                !query ||
-                searchText.includes(query);
+                !query || searchText.includes(query);
 
             return matchesColor && matchesSearch;
         });
 
         const pageCount = Math.max(
             1,
-            Math.ceil(
-                variants.length / VARIANT_PAGE_SIZE
-            )
+            Math.ceil(variants.length / VARIANT_PAGE_SIZE)
         );
 
-        variantPage = Math.min(
-            variantPage,
-            pageCount
-        );
+        variantPage = Math.min(variantPage, pageCount);
 
         const visible = variants.slice(
             (variantPage - 1) * VARIANT_PAGE_SIZE,
@@ -775,7 +711,7 @@
         );
 
         // Show fields used by this product.
-        // Keep the columns stable while searching.
+        // Keep columns stable while searching.
         const columns = fields.filter(([key]) => {
             return (
                 key === "price" ||
@@ -786,8 +722,6 @@
             );
         });
 
-        // Show which product each record belongs to when a
-        // category holds several product names.
         const productNames = new Set(
             selected.variants.map(variant => variant.name)
         );
@@ -828,9 +762,7 @@
                         : "Not set";
                 }
 
-                return `
-                    <td>${escape(value)}</td>
-                `;
+                return `<td>${escape(value)}</td>`;
             }).join("");
 
             const actions = manage
@@ -862,8 +794,7 @@
             `;
         }).join("");
 
-        const columnCount =
-            columns.length + (manage ? 2 : 1);
+        const columnCount = columns.length + (manage ? 2 : 1);
 
         byId("variantBody").innerHTML =
             rows ||
@@ -881,11 +812,8 @@
         byId("variantPage").textContent =
             `${variantPage} / ${pageCount}`;
 
-        byId("variantPrevious").disabled =
-            variantPage <= 1;
-
-        byId("variantNext").disabled =
-            variantPage >= pageCount;
+        byId("variantPrevious").disabled = variantPage <= 1;
+        byId("variantNext").disabled = variantPage >= pageCount;
     }
 
     // =========================
@@ -894,7 +822,6 @@
 
     async function refreshSelected() {
         const key = groupKey(selected);
-
         const loaded = await loadProducts();
 
         if (!loaded) {
@@ -985,171 +912,145 @@
     // MAIN TABLE ACTIONS
     // =========================
 
-    tableBody.addEventListener(
-        "click",
-        async event => {
-            const button =
-                event.target.closest("[data-action]");
+    tableBody.addEventListener("click", async event => {
+        const button = event.target.closest("[data-action]");
 
-            if (!button || busy) return;
+        if (!button || busy) return;
 
-            const product = products.find(
-                item =>
-                    Number(item.id) ===
-                    Number(button.dataset.id)
-            );
+        const product = products.find(
+            item => Number(item.id) === Number(button.dataset.id)
+        );
 
-            if (!product) return;
+        if (!product) return;
 
-            const action = button.dataset.action;
+        const action = button.dataset.action;
 
-            if (action === "view") {
-                openDetails(product, false);
-                return;
-            }
-
-            if (action === "edit") {
-                openDetails(product, true);
-                return;
-            }
-
-            if (action !== "delete") return;
-
-            const confirmed = confirm(
-                `Deactivate "${product.name}" and ALL ${product.variants.length} specifications?\n\n` +
-                "They will be hidden from active lists. Existing records will be retained."
-            );
-
-            if (!confirmed) return;
-
-            busy = true;
-            button.disabled = true;
-
-            try {
-                await postAction(
-                    "deactivate-group",
-                    {
-                        id: product.id,
-                        name: product.name,
-                        category_id: product.category_id
-                    }
-                );
-
-                await loadProducts();
-            } catch (error) {
-                alert(error.message);
-            } finally {
-                busy = false;
-                button.disabled = false;
-            }
+        if (action === "view") {
+            openDetails(product, false);
+            return;
         }
-    );
+
+        if (action === "edit") {
+            openDetails(product, true);
+            return;
+        }
+
+        if (action !== "delete") return;
+
+        const confirmed = confirm(
+            `Deactivate "${product.name}" and ALL ${product.variants.length} specifications?\n\n` +
+            "They will be hidden from active lists. Existing records will be retained."
+        );
+
+        if (!confirmed) return;
+
+        busy = true;
+        button.disabled = true;
+
+        try {
+            await postAction("deactivate-group", {
+                id: product.id,
+                name: product.name,
+                category_id: product.category_id
+            });
+
+            await loadProducts();
+        } catch (error) {
+            alert(error.message);
+        } finally {
+            busy = false;
+            button.disabled = false;
+        }
+    });
 
     // =========================
     // VARIANT TABLE ACTIONS
     // =========================
 
-    byId("variantBody").addEventListener(
-        "click",
-        async event => {
-            const button =
-                event.target.closest("[data-action]");
+    byId("variantBody").addEventListener("click", async event => {
+        const button = event.target.closest("[data-action]");
 
-            if (!button || busy || !manage) return;
+        if (!button || busy || !manage) return;
 
-            const variant = selected.variants.find(
-                item =>
-                    Number(item.id) ===
-                    Number(button.dataset.id)
-            );
+        const variant = selected.variants.find(
+            item => Number(item.id) === Number(button.dataset.id)
+        );
 
-            if (!variant) return;
+        if (!variant) return;
 
-            const action = button.dataset.action;
+        const action = button.dataset.action;
 
-            if (action === "edit") {
-                openEditor(variant);
-                return;
-            }
-
-            if (action !== "delete") return;
-
-            const confirmed = confirm(
-                `Deactivate ONLY record ${variant.id} of ${selected.name}?\n` +
-                `${variant.spec || ""}\n\n` +
-                "Other specifications will remain active."
-            );
-
-            if (!confirmed) return;
-
-            busy = true;
-            button.disabled = true;
-
-            byId("detailError").textContent = "";
-
-            try {
-                const response = await fetch(
-                    apiUrl +
-                    "?id=" +
-                    encodeURIComponent(variant.id),
-                    {
-                        method: "DELETE"
-                    }
-                );
-
-                await readResponse(response);
-                await refreshSelected();
-            } catch (error) {
-                byId("detailError").textContent =
-                    error.message;
-            } finally {
-                busy = false;
-                button.disabled = false;
-            }
+        if (action === "edit") {
+            openEditor(variant);
+            return;
         }
-    );
+
+        if (action !== "delete") return;
+
+        const confirmed = confirm(
+            `Deactivate ONLY record ${variant.id} of ${selected.name}?\n` +
+            `${variant.spec || ""}\n\n` +
+            "Other specifications will remain active."
+        );
+
+        if (!confirmed) return;
+
+        busy = true;
+        button.disabled = true;
+
+        byId("detailError").textContent = "";
+
+        try {
+            const response = await fetch(
+                apiUrl + "?id=" + encodeURIComponent(variant.id),
+                {
+                    method: "DELETE"
+                }
+            );
+
+            await readResponse(response);
+            await refreshSelected();
+        } catch (error) {
+            byId("detailError").textContent = error.message;
+        } finally {
+            busy = false;
+            button.disabled = false;
+        }
+    });
 
     // =========================
     // SAVE VARIANT CHANGES
     // =========================
 
-    byId("variantEditForm").addEventListener(
-        "submit",
-        async event => {
-            event.preventDefault();
+    byId("variantEditForm").addEventListener("submit", async event => {
+        event.preventDefault();
 
-            if (busy) return;
+        if (busy) return;
 
-            busy = true;
+        busy = true;
 
-            byId("saveVariant").disabled = true;
-            byId("editError").textContent = "";
+        byId("saveVariant").disabled = true;
+        byId("editError").textContent = "";
 
-            try {
-                const values = Object.fromEntries(
-                    new FormData(event.currentTarget)
-                );
+        try {
+            const values = Object.fromEntries(
+                new FormData(event.currentTarget)
+            );
 
-                await postAction(
-                    "update-variant",
-                    {
-                        ...values,
-                        id: editingId
-                    }
-                );
+            await postAction("update-variant", {
+                ...values,
+                id: editingId
+            });
 
-                editor.close();
-
-                await refreshSelected();
-            } catch (error) {
-                byId("editError").textContent =
-                    error.message;
-            } finally {
-                busy = false;
-                byId("saveVariant").disabled = false;
-            }
+            editor.close();
+            await refreshSelected();
+        } catch (error) {
+            byId("editError").textContent = error.message;
+        } finally {
+            busy = false;
+            byId("saveVariant").disabled = false;
         }
-    );
+    });
 
     // =========================
     // MODAL CLOSE BUTTONS
@@ -1235,65 +1136,47 @@
         () => filterProducts()
     );
 
-    byId("variantSearch").addEventListener(
-        "input",
-        () => {
-            variantPage = 1;
-            renderVariants();
-        }
-    );
+    byId("variantSearch").addEventListener("input", () => {
+        variantPage = 1;
+        renderVariants();
+    });
 
-    byId("variantColor").addEventListener(
-        "change",
-        () => {
-            variantPage = 1;
-            renderVariants();
-        }
-    );
+    byId("variantColor").addEventListener("change", () => {
+        variantPage = 1;
+        renderVariants();
+    });
 
     // =========================
     // MAIN TABLE PAGINATION
     // =========================
 
-    byId("previousPage").addEventListener(
-        "click",
-        () => {
-            if (page > 1) {
-                page--;
-                renderProducts();
-            }
-        }
-    );
-
-    byId("nextPage").addEventListener(
-        "click",
-        () => {
-            page++;
+    byId("previousPage").addEventListener("click", () => {
+        if (page > 1) {
+            page--;
             renderProducts();
         }
-    );
+    });
+
+    byId("nextPage").addEventListener("click", () => {
+        page++;
+        renderProducts();
+    });
 
     // =========================
     // VARIANT PAGINATION
     // =========================
 
-    byId("variantPrevious").addEventListener(
-        "click",
-        () => {
-            if (variantPage > 1) {
-                variantPage--;
-                renderVariants();
-            }
-        }
-    );
-
-    byId("variantNext").addEventListener(
-        "click",
-        () => {
-            variantPage++;
+    byId("variantPrevious").addEventListener("click", () => {
+        if (variantPage > 1) {
+            variantPage--;
             renderVariants();
         }
-    );
+    });
+
+    byId("variantNext").addEventListener("click", () => {
+        variantPage++;
+        renderVariants();
+    });
 
     // =========================
     // DATE AND TIME
@@ -1302,35 +1185,29 @@
     function updateDateTime() {
         const now = new Date();
 
-        const dateElement =
-            byId("currentDate");
-
-        const timeElement =
-            byId("currentTime");
+        const dateElement = byId("currentDate");
+        const timeElement = byId("currentTime");
 
         if (dateElement) {
-            dateElement.textContent =
-                now.toLocaleDateString("en-US", {
-                    weekday: "short",
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric"
-                });
+            dateElement.textContent = now.toLocaleDateString("en-US", {
+                weekday: "short",
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            });
         }
 
         if (timeElement) {
-            timeElement.textContent =
-                now.toLocaleTimeString("en-US", {
-                    hour: "numeric",
-                    minute: "2-digit",
-                    second: "2-digit",
-                    hour12: true
-                });
+            timeElement.textContent = now.toLocaleTimeString("en-US", {
+                hour: "numeric",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: true
+            });
         }
     }
 
     updateDateTime();
-
     setInterval(updateDateTime, 1000);
 
     // =========================

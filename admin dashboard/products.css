@@ -740,3 +740,7 @@ body {
 .products-table th:nth-child(5) {
     width: 15%;
 }
+
+.products-panel + .products-analytics-panel {
+    margin-top: 24px;
+}

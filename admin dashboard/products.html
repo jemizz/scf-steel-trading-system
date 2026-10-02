@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Products - SCF Steel Trading</title>
+
     <link
         href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap"
         rel="stylesheet"
@@ -12,6 +14,7 @@
         href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
         rel="stylesheet"
     >
+
     <link rel="stylesheet" href="sidebar.css">
     <link rel="stylesheet" href="topbar.css">
     <link rel="stylesheet" href="new-transaction.css">
@@ -20,16 +23,16 @@
     <link rel="stylesheet" href="stock-movements.css">
     <link rel="stylesheet" href="products.css">
 </head>
+
 <body>
     <!-- SIDEBAR -->
     <div id="sidebar"></div>
+
     <!-- MAIN -->
     <main class="products-main">
         <!-- TOP BAR -->
-        <div
-            id="topbar"
-            data-page-title="Products"
-        ></div>
+        <div id="topbar" data-page-title="Products"></div>
+
         <!-- CONTENT -->
         <div class="products-content">
             <!-- PAGE HEADER -->
@@ -40,6 +43,7 @@
                         Manage products and their specifications, sizes and prices.
                     </p>
                 </div>
+
                 <button
                     type="button"
                     class="add-product-btn"
@@ -49,22 +53,123 @@
                     Add Product
                 </button>
             </section>
-            <!-- =========================
-                 PRODUCT ANALYTICS (MERGED INSIDE PRODUCTS)
-                 Table only: Rank, Product, Views, Search Frequency
-                 NOTE: UI ready for pagination (show max 5 rows per page via JS later)
-            ========================== -->
-            <section class="products-analytics-panel" id="productAnalytics">
+
+            <!-- PRODUCT LIST -->
+            <section class="products-panel">
+                <!-- TOOLBAR -->
+                <div class="products-toolbar">
+                    <!-- SEARCH -->
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <path d="M20 20l-4-4"></path>
+                        </svg>
+
+                        <input
+                            type="search"
+                            id="productSearch"
+                            placeholder="Search products or specifications..."
+                            autocomplete="off"
+                        >
+                    </div>
+
+                    <!-- FILTERS -->
+                    <div class="product-filters">
+                        <select id="categoryFilter">
+                            <option value="">All Categories</option>
+                            <option value="steel-products">Steel Products</option>
+                            <option value="roofing-materials">Roofing Materials</option>
+                            <option value="stainless-products">Stainless Products</option>
+                            <option value="hardware-items">Hardware Items</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- PRODUCT TABLE -->
+                <div class="table-wrapper">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>PRODUCT ID</th>
+                                <th>PRODUCT</th>
+                                <th>CATEGORY</th>
+                                <th>TOTAL VARIANTS</th>
+                                <th class="actions-heading">ACTIONS</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="productsTableBody"></tbody>
+                    </table>
+
+                    <!-- EMPTY STATE -->
+                    <div
+                        class="products-empty"
+                        id="productsEmptyState"
+                    >
+                        <div class="empty-icon">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M4 7l8-4 8 4-8 4-8-4"></path>
+                                <path d="M4 7v10l8 4 8-4V7"></path>
+                                <path d="M12 11v10"></path>
+                            </svg>
+                        </div>
+
+                        <h3>No products yet</h3>
+                        <p>
+                            Products added to the system will appear here.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- PRODUCT TABLE FOOTER -->
+                <div class="products-table-footer">
+                    <p>
+                        Showing
+                        <strong id="visibleProductCount">0</strong>
+                        of
+                        <strong id="totalProductCount">0</strong>
+                        products
+                    </p>
+
+                    <div class="pagination">
+                        <button
+                            type="button"
+                            id="previousPage"
+                            disabled
+                        >
+                            ‹
+                        </button>
+
+                        <span id="currentPage">1</span>
+
+                        <button
+                            type="button"
+                            id="nextPage"
+                            disabled
+                        >
+                            ›
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PRODUCT ANALYTICS -->
+            <section
+                class="products-analytics-panel"
+                id="productAnalytics"
+            >
                 <div class="products-analytics-header">
                     <div>
                         <h2>Product Analytics</h2>
                         <p>Product views and search frequency</p>
                     </div>
+
                     <div class="analytics-search">
                         <svg viewBox="0 0 24 24">
                             <circle cx="11" cy="11" r="7"></circle>
                             <path d="M20 20l-4-4"></path>
                         </svg>
+
                         <input
                             type="search"
                             id="analyticsSearch"
@@ -73,6 +178,8 @@
                         >
                     </div>
                 </div>
+
+                <!-- ANALYTICS TABLE -->
                 <div class="analytics-table-wrapper">
                     <table class="analytics-table">
                         <thead>
@@ -83,9 +190,10 @@
                                 <th>SEARCH FREQUENCY</th>
                             </tr>
                         </thead>
-                        <!-- UI ONLY: rows later (render max 5 rows per page) -->
+
                         <tbody id="analyticsTableBody"></tbody>
                     </table>
+
                     <!-- EMPTY STATE -->
                     <div
                         class="analytics-empty"
@@ -99,11 +207,13 @@
                                 <path d="M8 16h6"></path>
                             </svg>
                         </div>
+
                         <h3>No analytics data yet</h3>
                         <p>Analytics will appear here once tracking is enabled.</p>
                     </div>
                 </div>
-                <!-- Footer w/ pagination (UI only) -->
+
+                <!-- ANALYTICS FOOTER -->
                 <div class="analytics-footer">
                     <p>
                         Showing
@@ -112,6 +222,7 @@
                         <strong id="totalAnalyticsCount">0</strong>
                         products
                     </p>
+
                     <div class="pagination">
                         <button
                             type="button"
@@ -120,7 +231,9 @@
                         >
                             ‹
                         </button>
+
                         <span id="analyticsCurrentPage">1</span>
+
                         <button
                             type="button"
                             id="analyticsNextPage"
@@ -131,105 +244,14 @@
                     </div>
                 </div>
             </section>
-            <!-- PRODUCT PANEL -->
-            <section class="products-panel">
-                <!-- TOOLBAR -->
-                <div class="products-toolbar">
-                    <!-- SEARCH -->
-                    <div class="search-box">
-                        <svg viewBox="0 0 24 24">
-                            <circle cx="11" cy="11" r="7"></circle>
-                            <path d="M20 20l-4-4"></path>
-                        </svg>
-                        <input
-                            type="search"
-                            id="productSearch"
-                            placeholder="Search products or specifications..."
-                            autocomplete="off"
-                        >
-                    </div>
-                    <!-- FILTERS -->
-                    <div class="product-filters">
-                        <select id="categoryFilter">
-                            <option value="">All Categories</option>
-                            <option value="steel-products">Steel Products</option>
-                            <option value="roofing-materials">Roofing Materials</option>
-                            <option value="stainless-products">Stainless Products</option>
-                            <option value="hardware-items">Hardware Items</option>
-                        </select>
-                        
-                    </div>
-                </div>
-                <!-- TABLE -->
-                <div class="table-wrapper">
-                    <table class="products-table">
-                        <thead>
-                            <tr>
-                                <th>PRODUCT ID</th>
-                                <th>PRODUCT</th>
-                                <th>CATEGORY</th>
-                                <th>TOTAL VARIANTS</th>
-                                <th class="actions-heading">ACTIONS</th>
-                            </tr>
-                        </thead>
-                        <!-- Products from the database will eventually be inserted here. -->
-                        <tbody id="productsTableBody"></tbody>
-                    </table>
-                    <!-- EMPTY STATE -->
-                    <div
-                        class="products-empty"
-                        id="productsEmptyState"
-                    >
-                        <div class="empty-icon">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M4 7l8-4 8 4-8 4-8-4"></path>
-                                <path d="M4 7v10l8 4 8-4V7"></path>
-                                <path d="M12 11v10"></path>
-                            </svg>
-                        </div>
-                        <h3>No products yet</h3>
-                        <p>
-                            Products added to the system will appear here.
-                        </p>
-                    </div>
-                </div>
-                <!-- TABLE FOOTER -->
-                <div class="products-table-footer">
-                    <p>
-                        Showing
-                        <strong id="visibleProductCount">0</strong>
-                        of
-                        <strong id="totalProductCount">0</strong>
-                        products
-                    </p>
-                    <div class="pagination">
-                        <button
-                            type="button"
-                            id="previousPage"
-                            disabled
-                        >
-                            ‹
-                        </button>
-                        <span id="currentPage">1</span>
-                        <button
-                            type="button"
-                            id="nextPage"
-                            disabled
-                        >
-                            ›
-                        </button>
-                    </div>
-                </div>
-            </section>
         </div>
     </main>
-     <!-- =========================
-         MODALS
-    ========================== -->
-    <!-- NEW TRANSACTION MODAL -->
+
+    <!-- MODALS -->
     <div id="newTransactionModal"></div>
-    <!-- NEW PURCHASE ORDER MODAL -->
     <div id="newPurchaseOrderModal"></div>
+
+    <!-- SCRIPTS -->
     <script src="sidebar.js"></script>
     <script src="topbar.js"></script>
     <script src="new-transaction.js"></script>

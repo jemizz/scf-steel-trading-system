@@ -1,481 +1,1047 @@
 (() => {
-    const basePath = new URL(".", document.currentScript.src);
 
-    let modal;
-    let loading;
-    let imageURL;
+    const basePath =
+        new URL(".", document.currentScript.src);
+
+
+    let modal = null;
+
+    let loading = null;
+
+    let imageURL = null;
+
     let previousOverflow = "";
-    let previousButton;
+
+    let previousButton = null;
+
     let saving = false;
 
-    const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // tugma sa products.php (2 MB)
+    let resolvedApi = null;
 
-    // Hinahanap ang tamang products.php (kapareho ng products.js),
-    // para hindi HTML 404 page ang matanggap kapag iba ang folder.
-    let resolvedApi;
+
+    const MAX_IMAGE_SIZE =
+        2 * 1024 * 1024;
+
+
+    // =========================
+    // FIND PRODUCTS API
+    // =========================
 
     async function apiUrl() {
-        if (resolvedApi) return resolvedApi;
 
-        const candidates = [
-            window.PRODUCTS_API_URL,
-            new URL("api/products.php", basePath).href,
-            new URL("products.php", basePath).href,
-            new URL("../api/products.php", basePath).href,
-            new URL("api/products.php", document.baseURI).href,
-            new URL("products.php", document.baseURI).href,
-            new URL("../api/products.php", document.baseURI).href,
-            new URL("/api/products.php", document.baseURI).href
-        ].filter(Boolean);
-
-        for (const url of new Set(candidates)) {
-            try {
-                const response = await fetch(url, { cache: "no-store" });
-                const data = JSON.parse(await response.text());
-
-                if (data && data.ok && Array.isArray(data.categories)) {
-                    resolvedApi = url;
-                    return url;
-                }
-            } catch (error) {
-                // subukan ang susunod na path
-            }
+        if (resolvedApi) {
+            return resolvedApi;
         }
 
+
+        const candidates = [
+
+            window.PRODUCTS_API_URL,
+
+            new URL(
+                "api/products.php",
+                basePath
+            ).href,
+
+            new URL(
+                "products.php",
+                basePath
+            ).href,
+
+            new URL(
+                "../api/products.php",
+                basePath
+            ).href,
+
+            new URL(
+                "api/products.php",
+                document.baseURI
+            ).href,
+
+            new URL(
+                "products.php",
+                document.baseURI
+            ).href,
+
+            new URL(
+                "../api/products.php",
+                document.baseURI
+            ).href,
+
+            new URL(
+                "/api/products.php",
+                document.baseURI
+            ).href
+
+        ].filter(Boolean);
+
+
+        for (
+            const url of new Set(candidates)
+        ) {
+
+            try {
+
+                const response =
+                    await fetch(
+                        url,
+                        {
+                            cache: "no-store"
+                        }
+                    );
+
+
+                if (!response.ok) {
+                    continue;
+                }
+
+
+                const text =
+                    await response.text();
+
+
+                const data =
+                    JSON.parse(text);
+
+
+                if (
+                    data &&
+                    data.ok &&
+                    Array.isArray(data.categories)
+                ) {
+
+                    resolvedApi = url;
+
+                    return url;
+                }
+
+
+            } catch (error) {
+
+                // Try next path.
+
+            }
+
+        }
+
+
         throw new Error(
-            "Could not find products.php. Set window.PRODUCTS_API_URL or check the API folder."
+            "Could not find products.php."
         );
     }
 
+
     // =========================
-    // CONNECT EXISTING BUTTONS
+    // OPEN BUTTONS
     // =========================
 
-    document.addEventListener("click", function (event) {
-        const button = event.target.closest(
-            "#quickAddProduct, #addProductBtn"
-        );
+    document.addEventListener(
+        "click",
+        function (event) {
 
-        if (!button) return;
+            const button =
+                event.target.closest(
+                    "#quickAddProduct, #addProductBtn"
+                );
 
-        event.preventDefault();
 
-        if (typeof closeTopbarMenus === "function") {
-            closeTopbarMenus();
+            if (!button) {
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            if (
+                typeof closeTopbarMenus ===
+                "function"
+            ) {
+
+                closeTopbarMenus();
+            }
+
+
+            openModal(button);
+
         }
+    );
 
-        openModal(button);
-    });
 
     // =========================
     // LOAD MODAL
     // =========================
 
     async function loadModal() {
-        const stylesheet = document.createElement("link");
 
-        stylesheet.rel = "stylesheet";
-        stylesheet.href = new URL("add-product.css", basePath);
+        if (
+            !document.querySelector(
+                'link[data-add-product-style]'
+            )
+        ) {
 
-        document.head.appendChild(stylesheet);
+            const stylesheet =
+                document.createElement("link");
 
-        const response = await fetch(
-            new URL("add-product.html", basePath),
-            { cache: "no-store" }
-        );
 
-        if (!response.ok) {
-            throw new Error("Could not load add-product.html.");
+            stylesheet.rel =
+                "stylesheet";
+
+
+            stylesheet.href =
+                new URL(
+                    "add-product.css",
+                    basePath
+                ).href;
+
+
+            stylesheet.dataset
+                .addProductStyle = "true";
+
+
+            document.head.appendChild(
+                stylesheet
+            );
         }
 
-        const html = await response.text();
 
-        document.body.insertAdjacentHTML("beforeend", html);
+        const response =
+            await fetch(
+                new URL(
+                    "add-product.html",
+                    basePath
+                ),
+                {
+                    cache: "no-store"
+                }
+            );
 
-        modal = document.getElementById("addProductModal");
 
-        // Remove the old browser-storage notice.
-        modal.querySelector(".ap-notice")?.remove();
+        if (!response.ok) {
 
-        modal.querySelectorAll("[data-ap-close]").forEach(button => {
-            button.addEventListener("click", closeModal);
-        });
+            throw new Error(
+                "Could not load add-product.html."
+            );
+        }
 
-        modal.addEventListener("cancel", function (event) {
-            event.preventDefault();
-            closeModal();
-        });
 
-        modal.addEventListener("close", function () {
-            document.body.style.overflow = previousOverflow;
-            previousButton?.focus();
-        });
+        const html =
+            await response.text();
 
-        modal.querySelector("#apAddVariant").addEventListener(
-            "click",
-            function () {
-                addVariant();
+
+        document.body.insertAdjacentHTML(
+            "beforeend",
+            html
+        );
+
+
+        modal =
+            document.getElementById(
+                "addProductModal"
+            );
+
+
+        if (!modal) {
+
+            throw new Error(
+                "Add Product modal not found."
+            );
+        }
+
+
+        modal
+            .querySelectorAll(
+                "[data-ap-close]"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    closeModal
+                );
+
+            });
+
+
+        modal.addEventListener(
+            "cancel",
+            function (event) {
+
+                event.preventDefault();
+
+                closeModal();
+
             }
         );
 
-        modal.querySelector("#apImage").addEventListener(
-            "change",
-            previewImage
+
+        modal.addEventListener(
+            "close",
+            function () {
+
+                document.body.style.overflow =
+                    previousOverflow;
+
+
+                previousButton?.focus();
+
+            }
         );
 
-        modal.querySelector("#apRemoveImage").addEventListener(
-            "click",
-            clearImage
-        );
 
-        modal.querySelector("#apForm").addEventListener(
-            "submit",
-            saveProduct
-        );
+        modal
+            .querySelector("#apImage")
+            .addEventListener(
+                "change",
+                previewImage
+            );
+
+
+        modal
+            .querySelector("#apRemoveImage")
+            .addEventListener(
+                "click",
+                clearImage
+            );
+
+
+        modal
+            .querySelector("#apForm")
+            .addEventListener(
+                "submit",
+                saveProduct
+            );
+
     }
 
+
     // =========================
-    // CATEGORIES (from database)
+    // CATEGORIES
     // =========================
 
     async function loadCategories() {
-        // Gumagana kahit luma pa ang add-product.html (name="category")
-        const select =
-            modal.querySelector("#apCategory") ||
-            modal.querySelector('select[name="category_id"], select[name="category"]');
 
-        if (!select) {
-            throw new Error("Category dropdown not found in add-product.html.");
+        const select =
+            modal.querySelector(
+                "#apCategory"
+            );
+
+
+        const response =
+            await fetch(
+                await apiUrl(),
+                {
+                    cache: "no-store"
+                }
+            );
+
+
+        const text =
+            await response.text();
+
+
+        let data;
+
+
+        try {
+
+            data =
+                JSON.parse(text);
+
+        } catch (error) {
+
+            throw new Error(
+                "Invalid response from products.php."
+            );
+
         }
 
-        select.id = "apCategory";
-        select.name = "category_id";
-
-        const response = await fetch(await apiUrl(), { cache: "no-store" });
-        const data = await response.json();
 
         if (!data.ok) {
-            throw new Error(data.error || "Could not load categories.");
+
+            throw new Error(
+                data.error ||
+                "Could not load categories."
+            );
+
         }
 
-        // Main categories lang (walang subcategory)
-        const parents = (data.categories || []).filter(c => !c.parent_id);
 
-        select.replaceChildren(new Option("Select a category", ""));
-
-        parents.forEach(parent => {
-            select.appendChild(new Option(parent.name, parent.id));
-        });
-    }
-
-    // =========================
-    // SAVE TO DATABASE
-    // =========================
-
-    async function saveProduct(event) {
-        event.preventDefault();
-
-        if (saving) return;
-
-        const form = modal.querySelector("#apForm");
-        const saveButton = modal.querySelector("#apSave");
-
-        const name = form.elements["name"].value.trim();
-        const categoryId = form.elements["category_id"].value;
-        const description = form.elements["description"].value.trim();
-        const showInCatalog = form.elements["showInCatalog"].checked;
-        const imageFile = modal.querySelector("#apImage").files[0];
-
-        const variants = [...modal.querySelectorAll("#apVariants tr")].map(row => ({
-            sku: row.children[0].querySelector("input").value.trim(),
-            spec: row.children[1].querySelector("input").value.trim(),
-            unit: row.children[2].querySelector("select").value,
-            price: row.children[3].querySelector("input").value,
-            min_stock: row.children[4].querySelector("input").value
-        }));
-
-        if (!name || !categoryId) {
-            showError("Product name and category are required.");
-            return;
-        }
-
-        if (variants.length === 0 ||
-            variants.some(v => !v.spec || v.price === "")) {
-            showError("Each variant needs a specification and a price.");
-            return;
-        }
-
-        const formData = new FormData();
-
-        formData.append("name", name);
-        formData.append("category_id", categoryId);
-        formData.append("description", description);
-        formData.append("variants", JSON.stringify(variants));
-
-        if (showInCatalog) formData.append("showInCatalog", "1");
-        if (imageFile) formData.append("image", imageFile);
-
-        saving = true;
-        saveButton.disabled = true;
-        saveButton.textContent = "Saving...";
-        showError("");
-
-        try {
-            const response = await fetch(await apiUrl(), {
-                method: "POST",
-                body: formData
-            });
-
-            const text = await response.text();
-            let data;
-
-            try {
-                data = JSON.parse(text);
-            } catch (e) {
-                throw new Error(
-                    "Server error: " + text.slice(0, 150).replace(/\s+/g, " ")
+        /*
+         * Main categories only:
+         * Steel Products
+         * Roofing Materials
+         * Hardware Materials
+         */
+        const categories =
+            (data.categories || [])
+                .filter(
+                    category =>
+                        !category.parent_id
                 );
-            }
 
-            if (!data.ok) {
-                throw new Error(data.error || "Could not save the product.");
-            }
 
-            closeModal();
-            showToast(data.message || "Product saved.");
+        select.replaceChildren(
+            new Option(
+                "Select a category",
+                ""
+            )
+        );
 
-            if (typeof window.reloadProducts === "function") {
-                window.reloadProducts(true);
-            }
 
-        } catch (error) {
-            showError(error.message);
-        } finally {
-            saving = false;
-            saveButton.disabled = false;
-            saveButton.textContent = "Save Product";
-        }
-    }
+        categories.forEach(
+            category => {
 
-    function showToast(message) {
-        const toast = document.createElement("div");
+                select.appendChild(
+                    new Option(
+                        category.name,
+                        category.id
+                    )
+                );
 
-        toast.className = "ap-toast";
-        toast.textContent = message;
-
-        document.body.appendChild(toast);
-
-        setTimeout(() => toast.remove(), 3500);
-    }
-
-    // =========================
-    // OPEN AND CLOSE
-    // =========================
-
-    async function openModal(button) {
-        try {
-            if (!modal) {
-                if (!loading) {
-                    loading = loadModal().catch(error => {
-                        loading = null;
-                        throw error;
-                    });
-                }
-
-                await loading;
-            }
-
-            if (modal.open) return;
-
-            await loadCategories();
-
-            modal.querySelector("#apForm").reset();
-            modal.querySelector("#apVariants").replaceChildren();
-
-            clearImage();
-            showError("");
-            addVariant();
-
-            previousButton = button;
-            previousOverflow = document.body.style.overflow;
-
-            document.body.style.overflow = "hidden";
-
-            modal.showModal();
-
-            modal.querySelector('[name="name"]').focus();
-
-        } catch (error) {
-            alert(error.message);
-        }
-    }
-
-    function closeModal() {
-        modal.close();
-    }
-
-    // =========================
-    // VARIANT ROWS
-    // =========================
-
-    function addVariant() {
-        const row = document.createElement("tr");
-
-        row.innerHTML = `
-            <td>
-                <input
-                    type="text"
-                    aria-label="SKU"
-                    placeholder="Optional"
-                >
-            </td>
-
-            <td>
-                <input
-                    type="text"
-                    aria-label="Specifications"
-                    placeholder="Size, thickness, length..."
-                    required
-                >
-            </td>
-
-            <td>
-                <select aria-label="Unit">
-                    <option>pc</option>
-                    <option>sheet</option>
-                    <option>meter</option>
-                    <option>kg</option>
-                    <option>box</option>
-                    <option>set</option>
-                    <option>roll</option>
-                </select>
-            </td>
-
-            <td>
-                <input
-                    type="number"
-                    aria-label="Price"
-                    min="0"
-                    step="0.01"
-                    placeholder="0.00"
-                    required
-                >
-            </td>
-
-            <td>
-                <input
-                    type="number"
-                    aria-label="Minimum stock"
-                    min="0"
-                    step="1"
-                    value="0"
-                    required
-                >
-            </td>
-
-            <td>
-                <button
-                    type="button"
-                    class="ap-remove"
-                    aria-label="Remove variant"
-                >
-                    ×
-                </button>
-            </td>
-        `;
-
-        row.querySelector(".ap-remove").addEventListener(
-            "click",
-            function () {
-                row.remove();
-                updateVariantCount();
             }
         );
 
-        modal.querySelector("#apVariants").appendChild(row);
+    }
 
-        updateVariantCount();
 
-        if (modal.open) {
-            row.querySelector("input").focus();
+    // =========================
+    // OPEN MODAL
+    // =========================
+
+    async function openModal(button) {
+
+        try {
+
+            if (!modal) {
+
+                if (!loading) {
+
+                    loading =
+                        loadModal()
+                            .catch(error => {
+
+                                loading = null;
+
+                                throw error;
+
+                            });
+
+                }
+
+
+                await loading;
+
+            }
+
+
+            if (modal.open) {
+                return;
+            }
+
+
+            await loadCategories();
+
+
+            const form =
+                modal.querySelector(
+                    "#apForm"
+                );
+
+
+            form.reset();
+
+
+            modal.querySelector(
+                "#apProductId"
+            ).value =
+                "Auto-generated";
+
+
+            form.elements[
+                "showInCatalog"
+            ].checked =
+                true;
+
+
+            clearImage();
+
+            showError("");
+
+
+            previousButton =
+                button;
+
+
+            previousOverflow =
+                document.body.style
+                    .overflow;
+
+
+            document.body.style
+                .overflow =
+                "hidden";
+
+
+            modal.showModal();
+
+
+            modal
+                .querySelector(
+                    '[name="name"]'
+                )
+                .focus();
+
+
+        } catch (error) {
+
+            alert(
+                error.message
+            );
+
         }
+
     }
 
-    function updateVariantCount() {
-        const rows = modal.querySelectorAll("#apVariants tr");
 
-        modal.querySelector("#apVariantCount").textContent =
-            rows.length + (rows.length === 1 ? " variant" : " variants");
+    // =========================
+    // CLOSE MODAL
+    // =========================
 
-        rows.forEach(row => {
-            row.querySelector(".ap-remove").disabled =
-                rows.length === 1;
-        });
+    function closeModal() {
+
+        if (
+            modal &&
+            modal.open
+        ) {
+
+            modal.close();
+
+        }
+
     }
+
+
+    // =========================
+    // SAVE PRODUCT
+    // =========================
+
+    async function saveProduct(event) {
+
+        event.preventDefault();
+
+
+        if (saving) {
+            return;
+        }
+
+
+        const form =
+            modal.querySelector(
+                "#apForm"
+            );
+
+
+        const saveButton =
+            modal.querySelector(
+                "#apSave"
+            );
+
+
+        const name =
+            form.elements["name"]
+                .value
+                .trim();
+
+
+        const categoryId =
+            form.elements[
+                "category_id"
+            ].value;
+
+
+        const description =
+            form.elements[
+                "description"
+            ].value
+                .trim();
+
+
+        const showInCatalog =
+            form.elements[
+                "showInCatalog"
+            ].checked;
+
+
+        const imageFile =
+            modal.querySelector(
+                "#apImage"
+            ).files[0];
+
+
+        // =========================
+        // VALIDATION
+        // =========================
+
+        if (!name) {
+
+            showError(
+                "Product name is required."
+            );
+
+            return;
+        }
+
+
+        if (!categoryId) {
+
+            showError(
+                "Please select a category."
+            );
+
+            return;
+        }
+
+
+        // =========================
+        // FORM DATA
+        // =========================
+
+        const formData =
+            new FormData();
+
+
+        formData.append(
+            "name",
+            name
+        );
+
+
+        formData.append(
+            "category_id",
+            categoryId
+        );
+
+
+        formData.append(
+            "description",
+            description
+        );
+
+
+        formData.append(
+            "showInCatalog",
+            showInCatalog
+                ? "1"
+                : "0"
+        );
+
+
+        /*
+         * IMPORTANT:
+         *
+         * We DO NOT send variants here.
+         *
+         * A product can now be created
+         * first. Existing variants are
+         * still supported by products.php.
+         */
+
+
+        if (imageFile) {
+
+            formData.append(
+                "image",
+                imageFile
+            );
+
+        }
+
+
+        saving = true;
+
+
+        saveButton.disabled =
+            true;
+
+
+        saveButton.textContent =
+            "Saving...";
+
+
+        showError("");
+
+
+        try {
+
+            const response =
+                await fetch(
+                    await apiUrl(),
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+
+            const text =
+                await response.text();
+
+
+            let data;
+
+
+            try {
+
+                data =
+                    JSON.parse(text);
+
+            } catch (error) {
+
+                throw new Error(
+                    "Server error: " +
+                    text
+                        .slice(0, 200)
+                        .replace(
+                            /\s+/g,
+                            " "
+                        )
+                );
+
+            }
+
+
+            if (
+                !response.ok ||
+                !data.ok
+            ) {
+
+                throw new Error(
+                    data.error ||
+                    "Could not save product."
+                );
+
+            }
+
+
+            closeModal();
+
+
+            showToast(
+                data.message ||
+                "Product added successfully."
+            );
+
+
+            if (
+                typeof window.reloadProducts ===
+                "function"
+            ) {
+
+                window.reloadProducts(
+                    true
+                );
+
+            }
+
+
+        } catch (error) {
+
+            showError(
+                error.message
+            );
+
+
+        } finally {
+
+            saving = false;
+
+
+            saveButton.disabled =
+                false;
+
+
+            saveButton.textContent =
+                "Save Product";
+
+        }
+
+    }
+
 
     // =========================
     // IMAGE PREVIEW
     // =========================
 
     function previewImage(event) {
-        const file = event.target.files[0];
 
-        if (!file) return;
+        const file =
+            event.target.files[0];
+
+
+        if (!file) {
+
+            clearImage();
+
+            return;
+
+        }
+
 
         const allowedTypes = [
+
             "image/png",
+
             "image/jpeg",
+
             "image/webp"
+
         ];
 
+
         if (
-            !allowedTypes.includes(file.type) ||
-            file.size > MAX_IMAGE_SIZE
+            !allowedTypes.includes(
+                file.type
+            )
         ) {
+
             event.target.value = "";
 
+
+            clearImage();
+
+
             showError(
-                "Choose a PNG, JPG or WebP image up to 2 MB."
+                "Choose a PNG, JPG or WebP image."
             );
 
+
+            return;
+
+        }
+
+
+        if (
+            file.size >
+            MAX_IMAGE_SIZE
+        ) {
+
+            event.target.value = "";
+
+
+            clearImage();
+
+
+            showError(
+                "Choose an image up to 2 MB."
+            );
+
+
+            return;
+
+        }
+
+
+        if (imageURL) {
+
+            URL.revokeObjectURL(
+                imageURL
+            );
+
+        }
+
+
+        imageURL =
+            URL.createObjectURL(
+                file
+            );
+
+
+        const preview =
+            modal.querySelector(
+                "#apImagePreview"
+            );
+
+
+        const placeholder =
+            modal.querySelector(
+                "#apImagePlaceholder"
+            );
+
+
+        preview.src =
+            imageURL;
+
+
+        preview.hidden =
+            false;
+
+
+        placeholder.hidden =
+            true;
+
+
+        modal.querySelector(
+            "#apRemoveImage"
+        ).hidden =
+            false;
+
+
+        showError("");
+
+    }
+
+
+    // =========================
+    // CLEAR IMAGE
+    // =========================
+
+    function clearImage() {
+
+        if (!modal) {
             return;
         }
 
+
         if (imageURL) {
-            URL.revokeObjectURL(imageURL);
-        }
 
-        imageURL = URL.createObjectURL(file);
+            URL.revokeObjectURL(
+                imageURL
+            );
 
-        const preview = modal.querySelector("#apImagePreview");
 
-        preview.src = imageURL;
-        preview.hidden = false;
-
-        modal.querySelector("#apRemoveImage").hidden = false;
-
-        showError("");
-    }
-
-    function clearImage() {
-        if (imageURL) {
-            URL.revokeObjectURL(imageURL);
             imageURL = null;
+
         }
 
-        const preview = modal.querySelector("#apImagePreview");
 
-        preview.removeAttribute("src");
-        preview.hidden = true;
+        const preview =
+            modal.querySelector(
+                "#apImagePreview"
+            );
 
-        modal.querySelector("#apImage").value = "";
-        modal.querySelector("#apRemoveImage").hidden = true;
+
+        const input =
+            modal.querySelector(
+                "#apImage"
+            );
+
+
+        const removeButton =
+            modal.querySelector(
+                "#apRemoveImage"
+            );
+
+
+        const placeholder =
+            modal.querySelector(
+                "#apImagePlaceholder"
+            );
+
+
+        preview?.removeAttribute(
+            "src"
+        );
+
+
+        if (preview) {
+
+            preview.hidden =
+                true;
+
+        }
+
+
+        if (input) {
+
+            input.value =
+                "";
+
+        }
+
+
+        if (removeButton) {
+
+            removeButton.hidden =
+                true;
+
+        }
+
+
+        if (placeholder) {
+
+            placeholder.hidden =
+                false;
+
+        }
+
     }
+
+
+    // =========================
+    // ERROR
+    // =========================
 
     function showError(message) {
-        const error = modal.querySelector("#apError");
 
-        error.textContent = message;
-        error.hidden = !message;
+        if (!modal) {
+            return;
+        }
+
+
+        const error =
+            modal.querySelector(
+                "#apError"
+            );
+
+
+        error.textContent =
+            message;
+
+
+        error.hidden =
+            !message;
+
     }
+
+
+    // =========================
+    // TOAST
+    // =========================
+
+    function showToast(message) {
+
+        document
+            .querySelector(
+                ".ap-toast"
+            )
+            ?.remove();
+
+
+        const toast =
+            document.createElement(
+                "div"
+            );
+
+
+        toast.className =
+            "ap-toast";
+
+
+        toast.textContent =
+            message;
+
+
+        document.body.appendChild(
+            toast
+        );
+
+
+        setTimeout(
+            () => toast.remove(),
+            3500
+        );
+
+    }
+
 })();
