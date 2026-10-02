@@ -142,6 +142,7 @@
             class="settings-form"
             id="accountForm"
             method="post"
+            novalidate
           >
 
             <!-- ADMIN USERNAME -->
@@ -158,11 +159,6 @@
                 type="text"
                 autocomplete="username"
                 placeholder="Enter new admin username"
-                minlength="3"
-                maxlength="50"
-                pattern="[A-Za-z0-9._\-]{3,50}"
-                title="3-50 characters: letters, numbers, dot, underscore, or dash"
-                required
               >
 
             </div>
@@ -184,11 +180,7 @@
                   type="tel"
                   inputmode="numeric"
                   autocomplete="tel"
-                  maxlength="11"
-                  pattern="[0-9]{11}"
-                  title="Contact number must be exactly 11 digits"
                   placeholder="09xxxxxxxxx"
-                  required
                 >
 
               </div>
@@ -203,10 +195,10 @@
                 <input
                   id="facebookLink"
                   name="facebookLink"
-                  type="url"
+                  type="text"
+                  inputmode="url"
                   autocomplete="url"
                   placeholder="https://facebook.com/your-page"
-                  required
                 >
 
               </div>
@@ -225,7 +217,8 @@
               <input
                 id="emailAddress"
                 name="emailAddress"
-                type="email"
+                type="text"
+                inputmode="email"
                 autocomplete="email"
                 placeholder="*********@gmail.com"
               >
@@ -279,6 +272,7 @@
             class="settings-form"
             id="changePasswordForm"
             method="post"
+            novalidate
           >
 
             <!-- CURRENT PASSWORD -->
@@ -296,7 +290,6 @@
                   type="password"
                   autocomplete="current-password"
                   placeholder="Enter your current password"
-                  required
                 >
 
                 <button
@@ -328,7 +321,6 @@
                   type="password"
                   autocomplete="new-password"
                   placeholder="Enter your new password"
-                  required
                 >
 
                 <button
@@ -360,7 +352,6 @@
                   type="password"
                   autocomplete="new-password"
                   placeholder="Re-enter your new password"
-                  required
                 >
 
                 <button

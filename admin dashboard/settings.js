@@ -484,23 +484,8 @@
         }
 
 
-        // Check if ANY field is blank
-
-        const hasBlankField =
-          inputs.some(
-            (input) => {
-              return normalize(input) === "";
-            }
-          );
-
-
-        // Disable if:
-        // 1. Any field is blank
-        // 2. Nothing was changed
-
         setDisabled(
           confirmBtn,
-          hasBlankField ||
           !hasChanges()
         );
 
@@ -743,80 +728,6 @@
           );
 
 
-          // Browser validation
-
-          if (
-            !accountForm.reportValidity()
-          ) {
-
-            return;
-
-          }
-
-
-          // =========================
-          // REQUIRED FIELDS
-          // =========================
-
-          const hasBlankField =
-            inputs.some(
-              (input) => {
-                return normalize(input) === "";
-              }
-            );
-
-
-          if (hasBlankField) {
-
-            showMessage(
-              accountMessage,
-              "Please complete all account information fields.",
-              "error-message"
-            );
-
-            updateConfirmState();
-
-            return;
-
-          }
-
-
-          // =========================
-          // CONTACT NUMBER
-          // =========================
-
-          if (contactNumber) {
-
-            const digits =
-              normalize(
-                contactNumber
-              );
-
-
-            if (
-              digits.length !== 11
-            ) {
-
-              contactNumber.setCustomValidity(
-                "Contact number must be exactly 11 digits."
-              );
-
-              contactNumber.reportValidity();
-
-              return;
-
-            }
-
-
-            contactNumber.setCustomValidity("");
-
-          }
-
-
-          // =========================
-          // DISABLE WHILE SAVING
-          // =========================
-
           setDisabled(
             confirmBtn,
             true
@@ -866,10 +777,6 @@
               );
 
 
-            // =========================
-            // UPDATE DISPLAY
-            // =========================
-
             if (accountAdminUsername) {
 
               accountAdminUsername.textContent =
@@ -877,8 +784,6 @@
 
             }
 
-
-            // Save new baseline
 
             captureBaseline();
 
@@ -969,10 +874,6 @@
 
       function clearPasswordFeedback() {
 
-        newPassword.setCustomValidity("");
-
-        confirmPassword.setCustomValidity("");
-
         passwordMessage.textContent = "";
 
         passwordMessage.classList.remove(
@@ -1016,23 +917,6 @@
 
               updatePasswordButton();
 
-
-              if (
-                newPassword.value !== "" &&
-                confirmPassword.value !== "" &&
-                newPassword.value !==
-                  confirmPassword.value
-              ) {
-
-                passwordMessage.textContent =
-                  "Password does not match.";
-
-                passwordMessage.classList.add(
-                  "password-error"
-                );
-
-              }
-
             }
           );
 
@@ -1056,47 +940,6 @@
           if (
             changePasswordBtn.disabled
           ) {
-
-            return;
-
-          }
-
-
-          if (
-            !passwordForm.reportValidity()
-          ) {
-
-            return;
-
-          }
-
-
-          if (
-            newPassword.value ===
-            currentPassword.value
-          ) {
-
-            newPassword.setCustomValidity(
-              "Please choose a password different from your current password."
-            );
-
-            newPassword.reportValidity();
-
-            return;
-
-          }
-
-
-          if (
-            newPassword.value !==
-            confirmPassword.value
-          ) {
-
-            confirmPassword.setCustomValidity(
-              "Your new password and confirmation do not match."
-            );
-
-            confirmPassword.reportValidity();
 
             return;
 
