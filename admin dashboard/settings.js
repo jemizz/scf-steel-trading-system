@@ -1108,6 +1108,126 @@
     }
 
 
+    const messageNotifList =
+      document.getElementById("messageNotifList");
+
+    const messageNotifCount =
+      document.getElementById("messageNotifCount");
+
+    const notificationTabButton =
+      content.querySelector(
+        '[data-settings-tab="notification"]'
+      );
+
+
+    function escapeText(value) {
+      const node = document.createElement("span");
+      node.textContent = value == null ? "" : String(value);
+      return node.innerHTML;
+    }
+
+
+    async function loadMessageNotifications() {
+
+      if (!messageNotifList || !messageNotifCount) {
+        return;
+      }
+
+      messageNotifCount.textContent = "Loading messages...";
+      messageNotifList.innerHTML = "";
+
+      try {
+
+        const response = await fetch("messages.php?action=list", {
+          method: "POST",
+          headers: {
+            "Accept": "application/json"
+          },
+          body: new URLSearchParams({ action: "list" })
+        });
+
+        const raw = await response.text();
+        let data = null;
+
+        try {
+          data = raw ? JSON.parse(raw) : null;
+        } catch (parseError) {
+          throw new Error(
+            raw.replace(/\s+/g, " ").trim().slice(0, 180) ||
+            "messages.php did not return JSON."
+          );
+        }
+
+        if (!response.ok || !data.success) {
+          throw new Error((data && data.message) || "Unable to load messages.");
+        }
+
+        const notifications = Array.isArray(data.messages)
+          ? data.messages
+          : [];
+
+        const unread = notifications.filter(
+          (item) => String(item.status || "").toLowerCase() !== "read"
+        ).length;
+
+        messageNotifCount.textContent = unread > 0
+          ? unread + " unread message" + (unread === 1 ? "" : "s")
+          : notifications.length + " message" + (notifications.length === 1 ? "" : "s");
+
+        if (notificationTabButton) {
+          notificationTabButton.textContent = unread > 0
+            ? "Notification (" + unread + ")"
+            : "Notification";
+        }
+
+        if (notifications.length === 0) {
+          messageNotifList.innerHTML =
+            '<div class="message-notif-item"><p>No customer messages yet.</p></div>';
+          return;
+        }
+
+        messageNotifList.innerHTML = notifications.map((item) => {
+          const isUnread = String(item.status || "").toLowerCase() !== "read";
+          const unreadClass = isUnread ? " is-unread" : "";
+          const who = item.name || "Customer";
+          const contact = [item.phone, item.email].filter(Boolean).join(" · ");
+
+          return `
+            <article class="message-notif-item${unreadClass}">
+              <div class="message-notif-top">
+                <strong>${escapeText(who)}</strong>
+                <span class="message-notif-meta">${escapeText(isUnread ? "Unread" : "Read")}</span>
+              </div>
+              <div class="message-notif-meta">${escapeText(contact || "No contact")} · ${escapeText(item.created_at || "")}</div>
+              <p>${escapeText(item.message || "No message")}</p>
+            </article>
+          `;
+        }).join("");
+
+      } catch (error) {
+
+        messageNotifCount.textContent = "Unable to load messages.";
+        messageNotifList.innerHTML =
+          '<div class="message-notif-item"><p>' +
+          escapeText(error.message || "Unable to load messages.") +
+          "</p></div>";
+
+      }
+
+    }
+
+
+    loadMessageNotifications();
+
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (button.dataset.settingsTab === "notification") {
+          loadMessageNotifications();
+        }
+      });
+    });
+
+
     // =========================
     // INITIAL TAB
     // =========================
