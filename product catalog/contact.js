@@ -1,6 +1,6 @@
 // =========================
 // SCF STEEL TRADING
-// CONTACT PAGE DATA
+// CONTACT PAGE
 // =========================
 
 (() => {
@@ -8,6 +8,10 @@
 
     const PUBLIC_CONTACT_API =
         "../admin dashboard/settings.php?action=get_public_contact";
+
+    // =========================
+    // FORMAT DISPLAYED PHONE
+    // =========================
 
     function formatPhone(phone) {
         if (!phone) return "";
@@ -21,13 +25,37 @@
         return phone;
     }
 
+    // =========================
+    // CONTACT NUMBER VALIDATION
+    // =========================
+
+   function setupContactValidation() {
+    const contactInput = document.getElementById("contact");
+
+    if (!contactInput) return;
+
+    contactInput.setAttribute("inputmode", "numeric");
+    contactInput.setAttribute("maxlength", "11");
+    contactInput.setAttribute("pattern", "[0-9]{11}");
+    contactInput.setAttribute("title", "Enter exactly 11 digits.");
+
+    contactInput.addEventListener("input", function () {
+        this.value = this.value.replace(/[^0-9]/g, "").slice(0, 11);
+    });
+}
+
+    // =========================
+    // LOAD CONTACT INFORMATION
+    // =========================
+
     function loadContactInformation() {
         fetch(PUBLIC_CONTACT_API, {
             method: "GET",
             cache: "no-store"
         })
             .then(async (response) => {
-                const data = await response.json().catch(() => ({}));
+                const data =
+                    await response.json().catch(() => ({}));
 
                 if (!response.ok || !data.success) {
                     throw new Error(
@@ -39,7 +67,6 @@
                 return data.contact || {};
             })
             .then((contact) => {
-
                 const phoneElement =
                     document.getElementById("contactPhone");
 
@@ -57,7 +84,6 @@
                         contact.email ||
                         "Not available";
                 }
-
             })
             .catch((error) => {
                 console.error(
@@ -83,13 +109,22 @@
             });
     }
 
+    // =========================
+    // INITIALIZE PAGE
+    // =========================
+
+    function initializeContactPage() {
+        setupContactValidation();
+        loadContactInformation();
+    }
+
     if (document.readyState === "loading") {
         document.addEventListener(
             "DOMContentLoaded",
-            loadContactInformation,
+            initializeContactPage,
             { once: true }
         );
     } else {
-        loadContactInformation();
+        initializeContactPage();
     }
 })();
