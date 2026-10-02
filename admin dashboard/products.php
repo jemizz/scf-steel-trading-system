@@ -356,8 +356,20 @@ function save_product_image(?string &$destination): ?string
     }
 
     if ($uploadError !== UPLOAD_ERR_OK) {
+        $uploadMessages = [
+            UPLOAD_ERR_INI_SIZE => 'The image is larger than the server limit (upload_max_filesize in php.ini).',
+            UPLOAD_ERR_FORM_SIZE => 'The image is too large.',
+            UPLOAD_ERR_PARTIAL => 'The image was only partly uploaded. Try again.',
+            UPLOAD_ERR_NO_TMP_DIR => 'Server error: missing temporary upload folder.',
+            UPLOAD_ERR_CANT_WRITE => 'Server error: could not write the upload to disk.',
+            UPLOAD_ERR_EXTENSION => 'A PHP extension blocked the upload.'
+        ];
+
+        error_log('Image upload error code ' . $uploadError);
+
         throw new InvalidArgumentException(
-            'Image upload failed. Choose an image up to 2 MB.'
+            $uploadMessages[$uploadError]
+                ?? 'Image upload failed. Choose an image up to 2 MB.'
         );
     }
 
@@ -392,6 +404,14 @@ function save_product_image(?string &$destination): ?string
         );
     }
 
+    if (!is_writable($folder)) {
+        error_log('Upload folder is not writable: ' . $folder);
+
+        throw new InvalidArgumentException(
+            'The uploads/products folder is not writable by the server.'
+        );
+    }
+
     $filename = 'product-'
         . date('Ymd-His')
         . '-'
@@ -410,7 +430,9 @@ function save_product_image(?string &$destination): ?string
         );
     }
 
-    return 'uploads/products/' . $filename;
+    // Only the filename is stored in categories.image_path.
+    // The file itself lives in /uploads/products/.
+    return $filename;
 }
 
 
@@ -439,7 +461,7 @@ function map_row(array $row): array
         'name' => $row['name'],
         'spec' => spec_of($row),
         'description' => $row['description'] ?? null,
-        'image' => $row['image_path'] ?? null,
+        'image' => $row['category_image'] ?? null,
         'notes' => $row['notes'] ?? null,
 
         'is_active' => (int) $row['is_active'],
@@ -469,7 +491,8 @@ $select = "
     SELECT
         p.*,
         c.name AS category_name,
-        c.product_id
+        c.product_id,
+        c.image_path AS category_image
     FROM products p
     LEFT JOIN categories c ON c.id = p.category_id
 ";
@@ -568,7 +591,7 @@ if ($method === 'GET') {
     $products = array_map('map_row', $rows);
 
     $categories = $pdo->query(
-        'SELECT id, product_id, name, parent_id, sort_order
+        'SELECT id, product_id, name, parent_id, sort_order, image_path
          FROM categories
          ORDER BY sort_order, name'
     )->fetchAll();
@@ -673,6 +696,215 @@ if ($method === 'GET') {
         'categories' => $categories,
         'products' => $products
     ]);
+}
+
+
+// =========================
+// UPDATE PRODUCT IMAGE
+// =========================
+// Multipart upload (not JSON), so it must run before the
+// JSON-based action block below.
+
+if (
+    $method === 'POST' &&
+    ($_GET['action'] ?? '') === 'update-image'
+) {
+    $destination = null;
+
+    try {
+        // When the upload is bigger than post_max_size, PHP empties
+        // $_POST and $_FILES completely, so the real cause is hidden.
+        if (
+            empty($_POST) &&
+            empty($_FILES) &&
+            (int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > 0
+        ) {
+            throw new InvalidArgumentException(
+                'The image is too large for the server (post_max_size = '
+                . ini_get('post_max_size') . ').'
+            );
+        }
+
+        $id = valid_id($_POST['id'] ?? null);
+
+        $imagePath = save_product_image($destination);
+
+        if ($imagePath === null) {
+            throw new InvalidArgumentException(
+                'Choose an image to upload.'
+            );
+        }
+
+        $pdo->beginTransaction();
+
+        $lookup = $pdo->prepare(
+            $select . '
+            WHERE p.id = ?
+              AND p.is_active = 1
+            FOR UPDATE'
+        );
+
+        $lookup->execute([$id]);
+        $record = $lookup->fetch();
+
+        if (!$record) {
+            throw new InvalidArgumentException(
+                'This record is no longer active. Refresh the page.'
+            );
+        }
+
+        if (assigned_product_id($record) === null) {
+            throw new InvalidArgumentException(
+                'This product has no numbered category yet, so it has no image slot.'
+            );
+        }
+
+        // The image belongs to the product's category row.
+        // All variants share it automatically.
+        $categoryId = (int) $record['category_id'];
+
+        $oldStmt = $pdo->prepare(
+            'SELECT image_path FROM categories WHERE id = ?'
+        );
+        $oldStmt->execute([$categoryId]);
+        $oldImage = $oldStmt->fetchColumn();
+        $oldImage = is_string($oldImage) ? trim($oldImage) : '';
+
+        // Is the old file also used by another category?
+        $sharedStmt = $pdo->prepare(
+            'SELECT COUNT(*) FROM categories
+             WHERE image_path = ? AND id <> ?'
+        );
+
+        // ---- Decide the final file name -------------------------
+        // Keep the existing name (flat-bar.jpg -> flat-bar.png/jpg).
+        // Random upload names and missing images fall back to a slug
+        // of the category name (I-Beam -> i-beam.png).
+        $folder = dirname(__DIR__) . '/uploads/products';
+        $extension = strtolower(
+            pathinfo($imagePath, PATHINFO_EXTENSION)
+        );
+
+        $baseName = '';
+
+        if (
+            $oldImage !== '' &&
+            !preg_match('#^(https?:)?//#i', $oldImage)
+        ) {
+            $baseName = pathinfo(
+                basename($oldImage),
+                PATHINFO_FILENAME
+            );
+        }
+
+        if (
+            $baseName === '' ||
+            strpos($baseName, 'product-') === 0 ||
+            !preg_match('/^[A-Za-z0-9._-]+$/', $baseName)
+        ) {
+            $baseName = trim(
+                (string) preg_replace(
+                    '/[^a-z0-9]+/',
+                    '-',
+                    strtolower((string) $record['category_name'])
+                ),
+                '-'
+            );
+
+            if ($baseName === '') {
+                $baseName = 'category-' . $categoryId;
+            }
+        }
+
+        $finalName = $baseName . '.' . $extension;
+
+        // Name already used by a different category? Make it unique.
+        $sharedStmt->execute([$finalName, $categoryId]);
+
+        if ((int) $sharedStmt->fetchColumn() > 0) {
+            $finalName = $baseName . '-' . $categoryId . '.' . $extension;
+        }
+
+        $finalPath = $folder . '/' . $finalName;
+        $replacedExisting = is_file($finalPath);
+
+        // ---- Update the database only if the name changed ------
+        if ($finalName !== $oldImage) {
+            $update = $pdo->prepare(
+                'UPDATE categories
+                 SET image_path = ?
+                 WHERE id = ?'
+            );
+
+            $update->execute([$finalName, $categoryId]);
+
+            if ($update->rowCount() !== 1) {
+                throw new RuntimeException(
+                    'categories row ' . $categoryId . ' was not updated.'
+                );
+            }
+        }
+
+        // ---- Put the new file in place --------------------------
+        // rename() replaces an existing file with the same name.
+        if (!rename($destination, $finalPath)) {
+            throw new RuntimeException(
+                'Could not move the image to ' . $finalPath
+            );
+        }
+
+        // If the upload replaced an existing file, there is nothing
+        // to clean up if the commit fails; otherwise the catch block
+        // below removes the new file.
+        $destination = $replacedExisting ? null : $finalPath;
+
+        $pdo->commit();
+
+        // ---- Delete the previous file (different name/extension) -
+        if (
+            $oldImage !== '' &&
+            $oldImage === basename($oldImage) &&
+            $oldImage !== $finalName
+        ) {
+            $sharedStmt->execute([$oldImage, $categoryId]);
+
+            if ((int) $sharedStmt->fetchColumn() === 0) {
+                @unlink($folder . '/' . $oldImage);
+            }
+        }
+
+        $imagePath = $finalName;
+        $destination = null;
+
+        respond([
+            'ok' => true,
+            'image' => $imagePath,
+            'category_id' => $categoryId,
+            'message' => 'Image updated successfully.'
+        ]);
+
+    } catch (Throwable $error) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+
+        if ($destination !== null && is_file($destination)) {
+            @unlink($destination);
+        }
+
+        $validation = $error instanceof InvalidArgumentException;
+
+        if (!$validation) {
+            error_log((string) $error);
+        }
+
+        respond([
+            'ok' => false,
+            'error' => $validation
+                ? $error->getMessage()
+                : 'Could not update the image.'
+        ], $validation ? 422 : 500);
+    }
 }
 
 
@@ -834,7 +1066,6 @@ if ($method === 'POST' && isset($_GET['action'])) {
                 'catalog' => $metadata['catalog'],
                 'name' => $itemName,
                 'description' => $metadata['description'],
-                'image_path' => $metadata['image_path'],
                 'notes' => null,
 
                 'is_active' => 1,
@@ -1113,6 +1344,16 @@ if ($method === 'POST') {
                 );
             }
 
+            if ($imagePath !== null) {
+                $setImage = $pdo->prepare(
+                    'UPDATE categories
+                     SET image_path = ?
+                     WHERE id = ?'
+                );
+
+                $setImage->execute([$imagePath, $categoryId]);
+            }
+
             $assignedProductId = (int) (
                 $existingCategory['product_id'] ?? 0
             );
@@ -1140,16 +1381,18 @@ if ($method === 'POST') {
                     product_id,
                     name,
                     parent_id,
-                    sort_order
+                    sort_order,
+                    image_path
                  )
-                 VALUES (?, ?, ?, ?)'
+                 VALUES (?, ?, ?, ?, ?)'
             );
 
             $createCategory->execute([
                 $assignedProductId,
                 $name,
                 $mainCategoryId,
-                $highestSortOrder + 1
+                $highestSortOrder + 1,
+                $imagePath
             ]);
 
             $categoryId = (int) $pdo->lastInsertId();
@@ -1167,7 +1410,6 @@ if ($method === 'POST') {
             'description' => $description !== ''
                 ? $description
                 : null,
-            'image_path' => $imagePath,
             'notes' => null,
 
             // A product stays active in the admin list even

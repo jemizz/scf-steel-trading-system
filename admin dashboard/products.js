@@ -92,21 +92,32 @@
             : category;
     }
 
+    // categories.image_path stores only the file name
+    // (e.g. "flat-bar.jpg"). The file is read from the
+    // uploads/products folder, next to the API folder.
+    const PRODUCT_IMAGE_FOLDER = "../uploads/products/";
+
+    // Uploaded images keep the same file name, so the browser
+    // must be told to reload them after a change.
+    let imageVersion = Date.now();
+
     function imagePath(path) {
         if (!path) return "";
 
-        path = String(path);
+        path = String(path).trim();
 
-        if (path.startsWith("uploads/")) {
-            return new URL(
-                "../" + path,
-                new URL(apiUrl, window.location.href)
-            ).href;
+        // Full URLs are used as they are.
+        if (/^(https?:)?\/\//.test(path)) {
+            return path;
         }
 
-        return path.includes("/")
-            ? path
-            : "images/" + path;
+        // Older records saved as "uploads/products/file.jpg".
+        const fileName = path.split("/").pop();
+
+        return new URL(
+            PRODUCT_IMAGE_FOLDER + encodeURIComponent(fileName),
+            new URL(apiUrl, window.location.href)
+        ).href + "?v=" + imageVersion;
     }
 
     function productCode(product) {
@@ -206,6 +217,24 @@
                                 id="detailCount"
                                 class="scf-count"
                             ></span>
+
+                            <div class="scf-image-actions">
+                                <button
+                                    type="button"
+                                    id="changeImageBtn"
+                                    class="scf-secondary scf-image-btn"
+                                    hidden
+                                >
+                                    Change Image
+                                </button>
+
+                                <input
+                                    type="file"
+                                    id="imageInput"
+                                    accept="image/png,image/jpeg,image/webp"
+                                    hidden
+                                >
+                            </div>
                         </div>
                     </div>
 
@@ -683,6 +712,7 @@
             manage ? "Manage Specifications" : "Product Details";
 
         byId("addVariantBtn").hidden = !manage;
+        byId("changeImageBtn").hidden = !manage;
 
         byId("detailName").textContent = selected.name;
 
@@ -1027,6 +1057,75 @@
 
         editor.showModal();
     }
+
+
+    // =========================
+    // CHANGE PRODUCT IMAGE
+    // =========================
+
+    byId("changeImageBtn").addEventListener("click", () => {
+        if (busy || !manage || !selected) return;
+
+        byId("imageInput").click();
+    });
+
+    byId("imageInput").addEventListener("change", async () => {
+        const input = byId("imageInput");
+        const file = input.files[0];
+
+        // Allow choosing the same file again later.
+        input.value = "";
+
+        if (!file || busy || !manage || !selected) return;
+
+        const error = byId("detailError");
+        const button = byId("changeImageBtn");
+
+        error.textContent = "";
+
+        if (!["image/png", "image/jpeg", "image/webp"].includes(file.type)) {
+            error.textContent = "Image must be PNG, JPG, or WebP.";
+            return;
+        }
+
+        if (file.size > 2 * 1024 * 1024) {
+            error.textContent = "Image must be 2 MB or smaller.";
+            return;
+        }
+
+        busy = true;
+        button.disabled = true;
+        button.textContent = "Uploading...";
+
+        try {
+            const formData = new FormData();
+
+            formData.append("id", String(selected.id));
+            formData.append("image", file);
+
+            const response = await fetch(
+                apiUrl + "?action=update-image",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+            await readResponse(response);
+            imageVersion = Date.now();
+            await refreshSelected();
+
+        } catch (uploadError) {
+            console.error("Image upload failed:", uploadError);
+            error.textContent = uploadError.message;
+            alert("Image upload failed: " + uploadError.message);
+
+        } finally {
+            busy = false;
+            button.disabled = false;
+            button.textContent = "Change Image";
+        }
+    });
 
 
     // =========================
