@@ -120,61 +120,201 @@ function getFiltered() {
 }
 
 function render() {
+
   const filtered = getFiltered();
 
-  countHint.textContent = `${filtered.length} message${filtered.length === 1 ? "" : "s"}`;
+  countHint.textContent =
+    `${filtered.length} message${filtered.length === 1 ? "" : "s"}`;
+
 
   if (filtered.length === 0) {
+
     tbody.innerHTML = "";
+
     setEmpty(true);
+
     return;
   }
 
+
   setEmpty(false);
 
+
   tbody.innerHTML = filtered.map((m) => {
+
     const status = normalizeStatus(m.status);
 
-    const badge = status === "unread"
-      ? `<span class="badge badge-unread">Unread</span>`
-      : `<span class="badge badge-read">Read</span>`;
+
+    const badge =
+      status === "unread"
+        ? `<span class="badge badge-unread">Unread</span>`
+        : `<span class="badge badge-read">Read</span>`;
+
+
+    /*
+       If unread:
+       clicking the envelope marks it as READ.
+
+       If read:
+       clicking the envelope marks it as UNREAD.
+    */
+
+    const toggleTitle =
+      status === "unread"
+        ? "Mark as Read"
+        : "Mark as Unread";
+
+
+    const toggleIcon =
+      status === "unread"
+
+        ? `
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+
+            <rect
+              x="3"
+              y="5"
+              width="18"
+              height="14"
+              rx="2"
+            ></rect>
+
+            <path d="m4 7 8 6 8-6"></path>
+
+          </svg>
+        `
+
+        : `
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+
+            <path d="M3 9.5 12 15l9-5.5"></path>
+
+            <path
+              d="
+                M5 7h14
+                a2 2 0 0 1 2 2
+                v9
+                a2 2 0 0 1-2 2
+                H5
+                a2 2 0 0 1-2-2
+                V9
+                a2 2 0 0 1 2-2Z
+              "
+            ></path>
+
+          </svg>
+        `;
+
 
     return `
+
       <tr data-id="${esc(m.id)}">
-        <td>${esc(formatDate(m.created_at))}</td>
-        <td>${esc(m.name || "—")}</td>
-        <td>${esc(m.email || "—")}</td>
-        <td>${esc(m.phone || "—")}</td>
-        <td>${badge}</td>
+
         <td>
-          <div class="row-actions">
-            <button class="m-btn js-view" type="button">View</button>
-            <button class="m-btn js-toggle" type="button">
-              ${status === "unread" ? "Mark Read" : "Mark Unread"}
-            </button>
-            <button class="m-btn m-btn-danger js-delete" type="button">Delete</button>
-          </div>
+          ${esc(formatDate(m.created_at))}
         </td>
+
+        <td>
+          ${esc(m.name || "—")}
+        </td>
+
+        <td>
+          ${esc(m.email || "—")}
+        </td>
+
+        <td>
+          ${esc(m.phone || "—")}
+        </td>
+
+        <td>
+          ${badge}
+        </td>
+
+
+        <!-- ACTIONS -->
+        <td>
+
+          <div class="row-actions">
+
+
+            <!-- VIEW -->
+            <button
+              class="action-icon action-view js-view"
+              type="button"
+              title="View Message"
+              aria-label="View Message"
+            >
+
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                <path
+                  d="
+                    M2.5 12
+                    s3.5-6 9.5-6
+                    9.5 6 9.5 6
+                    -3.5 6-9.5 6
+                    S2.5 12 2.5 12Z
+                  "
+                ></path>
+
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="2.7"
+                ></circle>
+
+              </svg>
+
+            </button>
+
+
+            <!-- MARK READ / UNREAD -->
+            <button
+              class="action-icon action-toggle js-toggle"
+              type="button"
+              title="${toggleTitle}"
+              aria-label="${toggleTitle}"
+            >
+
+              ${toggleIcon}
+
+            </button>
+
+
+            <!-- DELETE -->
+            <button
+              class="action-icon action-delete js-delete"
+              type="button"
+              title="Delete Message"
+              aria-label="Delete Message"
+            >
+
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+
+                <path d="M4 7h16"></path>
+
+                <path d="M9 7V4h6v3"></path>
+
+                <path d="M6 7l1 13h10l1-13"></path>
+
+                <path d="M10 11v5"></path>
+
+                <path d="M14 11v5"></path>
+
+              </svg>
+
+            </button>
+
+
+          </div>
+
+        </td>
+
       </tr>
+
     `;
+
   }).join("");
-}
-
-async function markAsRead(id) {
-  const item = messages.find((x) => String(x.id) === String(id));
-  if (!item || normalizeStatus(item.status) === "read") return;
-
-  await apiRequest("set_status", {
-    id,
-    status: "read"
-  });
-
-  item.status = "read";
-  render();
-
-  if (currentId === String(id)) {
-    fillModal(id);
-  }
 }
 
 function fillModal(id) {
@@ -271,16 +411,76 @@ function exportJSON() {
 }
 
 tbody.addEventListener("click", (e) => {
-  const tr = e.target.closest("tr[data-id]");
-  if (!tr) return;
-  const id = tr.getAttribute("data-id");
 
-  if (e.target.classList.contains("js-view")) openModal(id);
-  if (e.target.classList.contains("js-toggle")) toggleRead(id);
+  const button = e.target.closest(
+    ".js-view, .js-toggle, .js-delete"
+  );
 
-  if (e.target.classList.contains("js-delete")) {
-    if (confirm("Delete this message?")) deleteOne(id);
+
+  if (!button) {
+    return;
   }
+
+
+  const tr = button.closest(
+    "tr[data-id]"
+  );
+
+
+  if (!tr) {
+    return;
+  }
+
+
+  const id =
+    tr.getAttribute("data-id");
+
+
+  // =========================
+  // VIEW
+  // =========================
+
+  if (
+    button.classList.contains("js-view")
+  ) {
+
+    openModal(id);
+
+    return;
+  }
+
+
+  // =========================
+  // MARK READ / UNREAD
+  // =========================
+
+  if (
+    button.classList.contains("js-toggle")
+  ) {
+
+    toggleRead(id);
+
+    return;
+  }
+
+
+  // =========================
+  // DELETE
+  // =========================
+
+  if (
+    button.classList.contains("js-delete")
+  ) {
+
+    if (
+      confirm("Delete this message?")
+    ) {
+
+      deleteOne(id);
+    }
+
+  }
+
 });
 
 searchInput.addEventListener("input", render);
