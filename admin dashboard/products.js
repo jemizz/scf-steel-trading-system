@@ -90,11 +90,10 @@
             : "images/" + path;
     }
 
+    // One row per category: every product name under the same
+    // category (e.g. Paints & Chemicals) is grouped together.
     function groupKey(product) {
-        return JSON.stringify([
-            Number(product.category_id),
-            product.name
-        ]);
+        return String(Number(product.category_id));
     }
 
     function formatProductId(id) {
@@ -480,13 +479,14 @@
 
     function searchable(product) {
         return [
-            formatProductId(product.id),
+            formatProductId(product.product_id ?? product.id),
             product.name,
             product.catalog,
             product.category,
 
             ...product.variants.flatMap(variant => [
                 variant.id,
+                variant.name,
                 variant.spec,
 
                 ...fields.map(
@@ -558,7 +558,7 @@
             return `
                 <tr>
                     <td>
-                        ${escape(formatProductId(product.id))}
+                        ${escape(formatProductId(product.product_id ?? product.id))}
                     </td>
 
                     <td>
@@ -738,6 +738,7 @@
 
             const searchText = [
                 variant.id,
+                variant.name,
                 variant.spec,
 
                 ...fields.map(
@@ -784,6 +785,16 @@
                 )
             );
         });
+
+        // Show which product each record belongs to when a
+        // category holds several product names.
+        const productNames = new Set(
+            selected.variants.map(variant => variant.name)
+        );
+
+        if (productNames.size > 1) {
+            columns.unshift(["name", "Product"]);
+        }
 
         const hasNotes = selected.variants.some(
             variant => hasValue(variant.notes)

@@ -10,9 +10,41 @@
 
     const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // tugma sa products.php (2 MB)
 
-    function apiUrl() {
-        return window.PRODUCTS_API_URL ||
-            new URL("api/products.php", basePath).href;
+    // Hinahanap ang tamang products.php (kapareho ng products.js),
+    // para hindi HTML 404 page ang matanggap kapag iba ang folder.
+    let resolvedApi;
+
+    async function apiUrl() {
+        if (resolvedApi) return resolvedApi;
+
+        const candidates = [
+            window.PRODUCTS_API_URL,
+            new URL("api/products.php", basePath).href,
+            new URL("products.php", basePath).href,
+            new URL("../api/products.php", basePath).href,
+            new URL("api/products.php", document.baseURI).href,
+            new URL("products.php", document.baseURI).href,
+            new URL("../api/products.php", document.baseURI).href,
+            new URL("/api/products.php", document.baseURI).href
+        ].filter(Boolean);
+
+        for (const url of new Set(candidates)) {
+            try {
+                const response = await fetch(url, { cache: "no-store" });
+                const data = JSON.parse(await response.text());
+
+                if (data && data.ok && Array.isArray(data.categories)) {
+                    resolvedApi = url;
+                    return url;
+                }
+            } catch (error) {
+                // subukan ang susunod na path
+            }
+        }
+
+        throw new Error(
+            "Could not find products.php. Set window.PRODUCTS_API_URL or check the API folder."
+        );
     }
 
     // =========================
@@ -119,7 +151,7 @@
         select.id = "apCategory";
         select.name = "category_id";
 
-        const response = await fetch(apiUrl());
+        const response = await fetch(await apiUrl(), { cache: "no-store" });
         const data = await response.json();
 
         if (!data.ok) {
@@ -189,7 +221,7 @@
         showError("");
 
         try {
-            const response = await fetch(apiUrl(), {
+            const response = await fetch(await apiUrl(), {
                 method: "POST",
                 body: formData
             });

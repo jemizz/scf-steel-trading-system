@@ -46,6 +46,7 @@ function map_row(array $row): array
         'id' => (int) $row['id'],
         'category_id' => (int) $row['category_id'],
         'category' => $row['category_name'] ?? '',
+        'product_id' => $row['display_product_id'] !== null ? (int) $row['display_product_id'] : null,
         'catalog' => $row['catalog'] ?? '',
         'catalog_label' => catalog_label((string) ($row['catalog'] ?? '')),
         'name' => $row['name'],
@@ -73,7 +74,8 @@ function map_row(array $row): array
 $select = "
     SELECT
         p.*,
-        c.name AS category_name
+        c.name AS category_name,
+        c.product_id AS display_product_id
     FROM products p
     LEFT JOIN categories c ON c.id = p.category_id
 ";
@@ -89,9 +91,9 @@ if ($method === 'GET') {
             exit;
         }
         $siblings = $pdo->prepare(
-            $select . ' WHERE p.name = ? AND p.category_id = ? AND p.is_active = 1 ORDER BY p.id'
+            $select . ' WHERE p.category_id = ? AND p.is_active = 1 ORDER BY p.id'
         );
-        $siblings->execute([$row['name'], $row['category_id']]);
+        $siblings->execute([$row['category_id']]);
         echo json_encode([
             'ok' => true,
             'product' => map_row($row),
@@ -107,12 +109,15 @@ if ($method === 'GET') {
     if (!empty($_GET['grouped'])) {
         $groups = [];
         foreach ($products as $product) {
-            $key = json_encode([$product['category_id'], $product['name']]);
+            // One group per category, so every product name under the
+            // same category (e.g. Paints & Chemicals) stays together.
+            $key = (string) $product['category_id'];
             if (!isset($groups[$key])) {
                 $groups[$key] = [
                     'id' => $product['id'], // Representative variant ID, not a parent product ID.
+                    'product_id' => $product['product_id'], // categories.product_id, shown as P-0001
                     'category_id' => $product['category_id'],
-                    'name' => $product['name'],
+                    'name' => $product['category'] !== '' ? $product['category'] : $product['name'],
                     'catalog' => $product['catalog'],
                     'catalog_label' => $product['catalog_label'],
                     'category' => $product['category'],
@@ -211,16 +216,16 @@ if ($method === 'POST' && isset($_GET['action'])) {
 
         if ($_GET['action'] === 'deactivate-group') {
             $pdo->beginTransaction();
-            $lookup = $pdo->prepare('SELECT name, category_id FROM products WHERE id = ? AND is_active = 1 FOR UPDATE');
+            $lookup = $pdo->prepare('SELECT category_id FROM products WHERE id = ? AND is_active = 1 FOR UPDATE');
             $lookup->execute([$id]);
             $group = $lookup->fetch();
             if (!$group) throw new InvalidArgumentException('This product is no longer active. Refresh the page.');
-            // Check the name/category shown in the confirmation, in case it changed.
-            if (($input['name'] ?? '') !== $group['name'] || (int) ($input['category_id'] ?? 0) !== (int) $group['category_id']) {
+            // Check the category shown in the confirmation, in case it changed.
+            if ((int) ($input['category_id'] ?? 0) !== (int) $group['category_id']) {
                 throw new InvalidArgumentException('The product changed. Refresh before deleting.');
             }
-            $delete = $pdo->prepare('UPDATE products SET is_active = 0 WHERE name = ? AND category_id = ? AND is_active = 1');
-            $delete->execute([$group['name'], $group['category_id']]);
+            $delete = $pdo->prepare('UPDATE products SET is_active = 0 WHERE category_id = ? AND is_active = 1');
+            $delete->execute([$group['category_id']]);
             $count = $delete->rowCount();
             $pdo->commit();
             echo json_encode(['ok' => true, 'affected' => $count]);
