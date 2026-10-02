@@ -264,7 +264,7 @@
                         </div>
 
 
-                        <form class="inquiry-form" action="#" method="post">
+                        <form id="inquiryForm" class="inquiry-form" action="#" method="post">
 
 
                             <!-- NAME + CONTACT -->
@@ -318,6 +318,9 @@
                                             id="contact"
                                             name="contact"
                                             type="tel"
+                                            inputmode="numeric"
+                                            pattern="[0-9]{11}"
+                                            maxlength="11"
                                             placeholder="09XX-XXX-XXXX"
                                             required
                                         >
