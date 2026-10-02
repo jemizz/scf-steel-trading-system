@@ -371,6 +371,141 @@ function defineDefaultQuickFunctions() {
     safeBind("quickAddProduct", "openAddProductModal");
   }
 
+  function isUnread(item) {
+    return String(item && item.status || "").trim().toLowerCase() !== "read";
+  }
+
+  function notificationTime(value) {
+    if (!value) return "";
+    const date = new Date(String(value).replace(" ", "T"));
+    if (Number.isNaN(date.getTime())) return String(value);
+    return date.toLocaleString(undefined, {
+      month: "short",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit"
+    });
+  }
+
+  async function notificationRequest(action, payload = {}) {
+    const body = new URLSearchParams();
+    body.set("action", action);
+    Object.entries(payload).forEach(([key, value]) => {
+      body.set(key, value ?? "");
+    });
+
+    const response = await fetch("messages.php", {
+      method: "POST",
+      headers: { "Accept": "application/json" },
+      body
+    });
+    const raw = await response.text();
+    let data = null;
+
+    try {
+      data = raw ? JSON.parse(raw) : null;
+    } catch (error) {
+      throw new Error("messages.php did not return JSON.");
+    }
+
+    if (!response.ok || !data.success) {
+      throw new Error((data && data.message) || "Unable to load notifications.");
+    }
+
+    return data;
+  }
+
+  function renderTopbarNotifications(messages) {
+    const list = host.querySelector("#notificationList");
+    const badge = host.querySelector("#notificationBadge");
+    const empty = host.querySelector("#notificationEmpty");
+    if (!list || !badge) return;
+
+    const unread = messages.filter(isUnread);
+
+    if (unread.length > 0) {
+      badge.textContent = unread.length > 99 ? "99+" : String(unread.length);
+      badge.classList.add("show");
+    } else {
+      badge.textContent = "";
+      badge.classList.remove("show");
+    }
+
+    list.querySelectorAll(".notification-item").forEach((item) => item.remove());
+
+    if (empty) {
+      empty.hidden = messages.length > 0;
+    }
+
+    messages.slice(0, 12).forEach((item) => {
+      const row = document.createElement("div");
+      row.className = "notification-item" + (isUnread(item) ? " unread" : "");
+      row.dataset.id = item.id;
+
+      const icon = document.createElement("div");
+      icon.className = "notification-item-icon";
+      icon.textContent = "M";
+
+      const content = document.createElement("div");
+      content.className = "notification-content";
+
+      const title = document.createElement("strong");
+      title.textContent = item.name || "New inquiry";
+
+      const text = document.createElement("p");
+      text.textContent = item.message || "Customer sent a message.";
+
+      const time = document.createElement("span");
+      time.className = "notification-time";
+      time.textContent = notificationTime(item.created_at);
+
+      content.append(title, text);
+      row.append(icon, content, time);
+
+      row.addEventListener("click", async () => {
+        try {
+          if (isUnread(item)) {
+            await notificationRequest("set_status", {
+              id: item.id,
+              status: "read"
+            });
+          }
+        } catch (error) {
+          console.error(error);
+        }
+        window.location.href = "messages.html";
+      });
+
+      list.appendChild(row);
+    });
+  }
+
+  async function loadTopbarNotifications() {
+    try {
+      const data = await notificationRequest("list");
+      renderTopbarNotifications(Array.isArray(data.messages) ? data.messages : []);
+    } catch (error) {
+      console.error("Topbar notification error:", error);
+    }
+  }
+
+  window.markAllNotificationsRead = async function () {
+    try {
+      const data = await notificationRequest("list");
+      const messages = Array.isArray(data.messages) ? data.messages : [];
+      const unread = messages.filter(isUnread);
+
+      await Promise.all(unread.map((item) => notificationRequest("set_status", {
+        id: item.id,
+        status: "read"
+      })));
+
+      await loadTopbarNotifications();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   function initNotifications() {
     const btn = host.querySelector("#notificationBtn");
     const menu = host.querySelector("#notificationMenu");
@@ -385,6 +520,7 @@ function defineDefaultQuickFunctions() {
       e.stopPropagation();
       menu.classList.toggle("show");
       btn.classList.toggle("active");
+      loadTopbarNotifications();
     });
 
     document.addEventListener("click", (e) => {
@@ -397,13 +533,15 @@ function defineDefaultQuickFunctions() {
 
     const markAllBtn = host.querySelector("#markAllReadBtn");
     if (markAllBtn) {
-      markAllBtn.addEventListener("click", () => {
-        if (typeof window.markAllNotificationsRead === "function") {
-          window.markAllNotificationsRead();
-        }
-        close();
+      markAllBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        await window.markAllNotificationsRead();
       });
     }
+
+    loadTopbarNotifications();
+    if (window.__tbNotifTimer) clearInterval(window.__tbNotifTimer);
+    window.__tbNotifTimer = setInterval(loadTopbarNotifications, 20000);
   }
 
   // Load topbar.html then init
