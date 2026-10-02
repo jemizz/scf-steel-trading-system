@@ -121,6 +121,7 @@ async function fetchProductsJson() {
             }
 
             API_URL = url;
+            window.PRODUCTS_API_URL = new URL(url, document.baseURI).href;
             return data;
         } catch (e) {
             errors.push(`${url} -> ${e.message}`);
@@ -142,7 +143,7 @@ function showLoadError(message) {
     }
 }
 
-async function loadProducts() {
+async function loadProducts(goLast = false) {
     try {
         const data = await fetchProductsJson();
 
@@ -163,6 +164,11 @@ async function loadProducts() {
         products.sort((a, b) => a.id - b.id);
 
         filterProducts();
+
+        if (goLast) {
+            currentPage = Math.max(1, Math.ceil(filteredProducts.length / PAGE_SIZE));
+            displayProducts();
+        }
 
     } catch (error) {
         console.error("Products load error:", error);
@@ -402,6 +408,6 @@ if (productsTableBody) {
 }
 
 // Para ma-refresh ng ibang script (hal. add-product.js) ang table
-window.reloadProducts = loadProducts;
+window.reloadProducts = goLast => loadProducts(!!goLast);
 
 })();

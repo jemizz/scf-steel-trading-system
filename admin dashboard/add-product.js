@@ -6,6 +6,14 @@
     let imageURL;
     let previousOverflow = "";
     let previousButton;
+    let saving = false;
+
+    const MAX_IMAGE_SIZE = 2 * 1024 * 1024; // tugma sa products.php (2 MB)
+
+    function apiUrl() {
+        return window.PRODUCTS_API_URL ||
+            new URL("api/products.php", basePath).href;
+    }
 
     // =========================
     // CONNECT EXISTING BUTTONS
@@ -40,7 +48,8 @@
         document.head.appendChild(stylesheet);
 
         const response = await fetch(
-            new URL("add-product.html", basePath)
+            new URL("add-product.html", basePath),
+            { cache: "no-store" }
         );
 
         if (!response.ok) {
@@ -89,14 +98,142 @@
 
         modal.querySelector("#apForm").addEventListener(
             "submit",
-            function (event) {
-                event.preventDefault();
+            saveProduct
+        );
+    }
 
-                alert(
-                    "Front-end preview only. Saving will be connected later."
+    // =========================
+    // CATEGORIES (from database)
+    // =========================
+
+    async function loadCategories() {
+        // Gumagana kahit luma pa ang add-product.html (name="category")
+        const select =
+            modal.querySelector("#apCategory") ||
+            modal.querySelector('select[name="category_id"], select[name="category"]');
+
+        if (!select) {
+            throw new Error("Category dropdown not found in add-product.html.");
+        }
+
+        select.id = "apCategory";
+        select.name = "category_id";
+
+        const response = await fetch(apiUrl());
+        const data = await response.json();
+
+        if (!data.ok) {
+            throw new Error(data.error || "Could not load categories.");
+        }
+
+        // Main categories lang (walang subcategory)
+        const parents = (data.categories || []).filter(c => !c.parent_id);
+
+        select.replaceChildren(new Option("Select a category", ""));
+
+        parents.forEach(parent => {
+            select.appendChild(new Option(parent.name, parent.id));
+        });
+    }
+
+    // =========================
+    // SAVE TO DATABASE
+    // =========================
+
+    async function saveProduct(event) {
+        event.preventDefault();
+
+        if (saving) return;
+
+        const form = modal.querySelector("#apForm");
+        const saveButton = modal.querySelector("#apSave");
+
+        const name = form.elements["name"].value.trim();
+        const categoryId = form.elements["category_id"].value;
+        const description = form.elements["description"].value.trim();
+        const showInCatalog = form.elements["showInCatalog"].checked;
+        const imageFile = modal.querySelector("#apImage").files[0];
+
+        const variants = [...modal.querySelectorAll("#apVariants tr")].map(row => ({
+            sku: row.children[0].querySelector("input").value.trim(),
+            spec: row.children[1].querySelector("input").value.trim(),
+            unit: row.children[2].querySelector("select").value,
+            price: row.children[3].querySelector("input").value,
+            min_stock: row.children[4].querySelector("input").value
+        }));
+
+        if (!name || !categoryId) {
+            showError("Product name and category are required.");
+            return;
+        }
+
+        if (variants.length === 0 ||
+            variants.some(v => !v.spec || v.price === "")) {
+            showError("Each variant needs a specification and a price.");
+            return;
+        }
+
+        const formData = new FormData();
+
+        formData.append("name", name);
+        formData.append("category_id", categoryId);
+        formData.append("description", description);
+        formData.append("variants", JSON.stringify(variants));
+
+        if (showInCatalog) formData.append("showInCatalog", "1");
+        if (imageFile) formData.append("image", imageFile);
+
+        saving = true;
+        saveButton.disabled = true;
+        saveButton.textContent = "Saving...";
+        showError("");
+
+        try {
+            const response = await fetch(apiUrl(), {
+                method: "POST",
+                body: formData
+            });
+
+            const text = await response.text();
+            let data;
+
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                throw new Error(
+                    "Server error: " + text.slice(0, 150).replace(/\s+/g, " ")
                 );
             }
-        );
+
+            if (!data.ok) {
+                throw new Error(data.error || "Could not save the product.");
+            }
+
+            closeModal();
+            showToast(data.message || "Product saved.");
+
+            if (typeof window.reloadProducts === "function") {
+                window.reloadProducts(true);
+            }
+
+        } catch (error) {
+            showError(error.message);
+        } finally {
+            saving = false;
+            saveButton.disabled = false;
+            saveButton.textContent = "Save Product";
+        }
+    }
+
+    function showToast(message) {
+        const toast = document.createElement("div");
+
+        toast.className = "ap-toast";
+        toast.textContent = message;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => toast.remove(), 3500);
     }
 
     // =========================
@@ -117,6 +254,8 @@
             }
 
             if (modal.open) return;
+
+            await loadCategories();
 
             modal.querySelector("#apForm").reset();
             modal.querySelector("#apVariants").replaceChildren();
@@ -154,9 +293,8 @@
             <td>
                 <input
                     type="text"
-                    aria-label="Product ID"
-                    placeholder="ST-001"
-                    required
+                    aria-label="SKU"
+                    placeholder="Optional"
                 >
             </td>
 
@@ -260,12 +398,12 @@
 
         if (
             !allowedTypes.includes(file.type) ||
-            file.size > 500 * 1024
+            file.size > MAX_IMAGE_SIZE
         ) {
             event.target.value = "";
 
             showError(
-                "Choose a PNG, JPG or WebP image up to 500 KB."
+                "Choose a PNG, JPG or WebP image up to 2 MB."
             );
 
             return;
