@@ -5,7 +5,8 @@
     // SETTINGS
     // =========================
 
-    const tableBody = document.getElementById("productsTableBody");
+    const byId = id => document.getElementById(id);
+    const tableBody = byId("productsTableBody");
 
     if (!tableBody) return;
 
@@ -19,11 +20,12 @@
         "/api/products.php"
     ];
 
+
     // =========================
     // STATE
     // =========================
 
-    let apiUrl;
+    let apiUrl = null;
 
     let products = [];
     let filteredProducts = [];
@@ -36,11 +38,10 @@
     let busy = false;
     let editingId = null;
 
+
     // =========================
     // HELPERS
     // =========================
-
-    const byId = id => document.getElementById(id);
 
     function escape(value) {
         return String(value ?? "").replace(
@@ -64,11 +65,13 @@
     }
 
     function money(value) {
-        if (!hasValue(value)) {
-            return "Not set";
-        }
+        if (!hasValue(value)) return "Not set";
 
-        return Number(value).toLocaleString("en-PH", {
+        const amount = Number(value);
+
+        if (!Number.isFinite(amount)) return "Not set";
+
+        return amount.toLocaleString("en-PH", {
             style: "currency",
             currency: "PHP"
         });
@@ -81,21 +84,45 @@
             .replace(/^-|-$/g, "");
     }
 
+    function catalogSlug(value) {
+        const category = slug(value);
+
+        return category === "hardware-materials"
+            ? "hardware-items"
+            : category;
+    }
+
     function imagePath(path) {
         if (!path) return "";
+
+        path = String(path);
+
+        if (path.startsWith("uploads/")) {
+            return new URL(
+                "../" + path,
+                new URL(apiUrl, window.location.href)
+            ).href;
+        }
 
         return path.includes("/")
             ? path
             : "images/" + path;
     }
 
-    function groupKey(product) {
-        return String(Number(product.category_id));
-    }
+    function productCode(product) {
+        const id = Number(product.product_id);
 
-    function formatProductId(id) {
+        if (!Number.isInteger(id) || id < 1) {
+            return "Not assigned";
+        }
+
         return "P-" + String(id).padStart(4, "0");
     }
+
+    function groupKey(product) {
+        return product.group_key;
+    }
+
 
     // =========================
     // ACTION ICONS
@@ -123,12 +150,10 @@
     };
 
     function actionButton(action, id, label) {
-        const deleteClass = action === "delete" ? "delete" : "";
-
         return `
             <button
                 type="button"
-                class="action-btn ${deleteClass}"
+                class="action-btn ${action === "delete" ? "delete" : ""}"
                 data-action="${action}"
                 data-id="${Number(id)}"
                 title="${escape(label)}"
@@ -141,8 +166,9 @@
         `;
     }
 
+
     // =========================
-    // CREATE PRODUCT MODALS
+    // CREATE MODALS
     // =========================
 
     document.body.insertAdjacentHTML(
@@ -196,7 +222,7 @@
                         <input
                             type="search"
                             id="variantSearch"
-                            placeholder="Search dimensions, color or record ID..."
+                            placeholder="Search item, dimensions, color or record ID..."
                             aria-label="Search specifications"
                         >
 
@@ -252,7 +278,16 @@
                 <footer class="scf-dialog-footer">
                     <button
                         type="button"
+                        id="addVariantBtn"
                         class="scf-primary"
+                        hidden
+                    >
+                        + Add Variant
+                    </button>
+
+                    <button
+                        type="button"
+                        class="scf-secondary"
                         data-close="productDetailsDialog"
                     >
                         Close
@@ -275,7 +310,7 @@
                             type="button"
                             class="scf-close"
                             data-close="variantEditDialog"
-                            aria-label="Close editor"
+                            aria-label="Close variant form"
                         >
                             ×
                         </button>
@@ -283,6 +318,11 @@
 
                     <div class="scf-dialog-body">
                         <p id="editRecordLabel"></p>
+
+                        <p id="variantFormHint" hidden>
+                            Enter at least one specification.
+                            Price and unit are required.
+                        </p>
 
                         <div
                             id="variantFields"
@@ -321,8 +361,9 @@
     const details = byId("productDetailsDialog");
     const editor = byId("variantEditDialog");
 
+
     // =========================
-    // SPECIFICATION FIELDS
+    // VARIANT FIELDS
     // =========================
 
     const fields = [
@@ -352,8 +393,9 @@
         );
     }
 
+
     // =========================
-    // READ API RESPONSE
+    // API RESPONSE
     // =========================
 
     async function readResponse(response) {
@@ -367,17 +409,36 @@
             );
         }
 
-        if (!response.ok || !data.ok) {
+        if (!response.ok || !data || !data.ok) {
             throw new Error(
-                data.error || "Request failed."
+                data?.error || "Request failed."
             );
         }
 
         return data;
     }
 
+    function validateProductList(data) {
+        if (
+            !Array.isArray(data.products) ||
+            data.products.some(product => (
+                !Array.isArray(product.variants) ||
+                typeof product.group_key !== "string" ||
+                !Object.prototype.hasOwnProperty.call(
+                    product,
+                    "product_id"
+                )
+            ))
+        ) {
+            throw new Error(
+                "Install the updated products.php file together with products.js."
+            );
+        }
+    }
+
+
     // =========================
-    // LOAD GROUPED PRODUCTS
+    // LOAD PRODUCTS
     // =========================
 
     async function loadProducts() {
@@ -387,57 +448,63 @@
             if (apiUrl) {
                 const response = await fetch(
                     apiUrl + "?grouped=1",
-                    {
-                        cache: "no-store"
-                    }
+                    { cache: "no-store" }
                 );
 
                 data = await readResponse(response);
+
             } else {
+                let lastError = null;
+
                 for (const path of API_PATHS) {
                     try {
                         const response = await fetch(
                             path + "?grouped=1",
-                            {
-                                cache: "no-store"
-                            }
+                            { cache: "no-store" }
                         );
 
-                        data = await readResponse(response);
+                        const candidate = await readResponse(response);
 
-                        if (!Array.isArray(data.products)) {
-                            throw new Error("Missing products list.");
-                        }
+                        validateProductList(candidate);
 
                         apiUrl = path;
-                        break;
-                    } catch (error) {
-                        const lastPath = API_PATHS[API_PATHS.length - 1];
+                        data = candidate;
 
-                        if (path === lastPath) {
-                            throw error;
-                        }
+                        break;
+
+                    } catch (error) {
+                        lastError = error;
                     }
+                }
+
+                if (!apiUrl) {
+                    throw lastError || new Error(
+                        "Could not locate the products API."
+                    );
                 }
             }
 
-            if (
-                !Array.isArray(data.products) ||
-                data.products.some(
-                    product => !Array.isArray(product.variants)
-                )
-            ) {
-                throw new Error(
-                    "Please install the updated products.php file."
-                );
-            }
+            validateProductList(data);
 
-            products = data.products;
+            // Sort by the stored Product ID, not by variant record ID.
+            products = data.products.sort((first, second) => {
+                const firstId =
+                    Number(first.product_id) || Number.MAX_SAFE_INTEGER;
+
+                const secondId =
+                    Number(second.product_id) || Number.MAX_SAFE_INTEGER;
+
+                return firstId - secondId ||
+                    first.name.localeCompare(second.name);
+            });
+
             filterProducts(false);
 
             return true;
+
         } catch (error) {
             products = [];
+
             filterProducts(false);
 
             const empty = byId("productsEmptyState");
@@ -452,15 +519,17 @@
         }
     }
 
+
     // =========================
-    // SEARCH AND CATEGORY FILTER
+    // SEARCH AND FILTER
     // =========================
 
     function searchable(product) {
         return [
-            formatProductId(product.product_id ?? product.id),
+            productCode(product),
             product.name,
             product.catalog,
+            product.catalog_label,
             product.category,
 
             ...product.variants.flatMap(variant => [
@@ -487,7 +556,8 @@
                 !query || searchable(product).includes(query);
 
             const matchesCategory =
-                !category || slug(product.catalog) === category;
+                !category ||
+                catalogSlug(product.catalog) === category;
 
             return matchesSearch && matchesCategory;
         });
@@ -499,8 +569,9 @@
         renderProducts();
     }
 
+
     // =========================
-    // DISPLAY MAIN PRODUCTS TABLE
+    // MAIN PRODUCT TABLE
     // =========================
 
     function renderProducts() {
@@ -509,71 +580,74 @@
             Math.ceil(filteredProducts.length / PAGE_SIZE)
         );
 
-        page = Math.min(page, totalPages);
+        page = Math.max(1, Math.min(page, totalPages));
 
         const visible = filteredProducts.slice(
             (page - 1) * PAGE_SIZE,
             page * PAGE_SIZE
         );
 
-        tableBody.innerHTML = visible.map(product => {
-            return `
-                <tr>
-                    <td>
-                        ${escape(formatProductId(product.product_id ?? product.id))}
-                    </td>
+        tableBody.innerHTML = visible.map(product => `
+            <tr>
+                <td>
+                    ${escape(productCode(product))}
+                </td>
 
-                    <td>
-                        <div class="product-info">
-    <div class="product-image">
-        ${
-            product.image
-                ? `<img
-                    src="${escape(imagePath(product.image))}"
-                    alt=""
-                >`
-                : ""
-        }
-    </div>
-
-    <div class="product-details">
-        <strong>${escape(product.name)}</strong>
-    </div>
-</div>
-                    </td>
-
-                    <td>
-                        ${escape(product.catalog)}
-                    </td>
-
-                    <td>
-                        ${product.variants.length} variants
-                    </td>
-
-                    <td>
-                        <div class="product-actions">
-                            ${actionButton(
-                                "view",
-                                product.id,
-                                "View " + product.name
-                            )}
-
-                            ${actionButton(
-                                "edit",
-                                product.id,
-                                "Edit specifications for " + product.name
-                            )}
-
-                            ${actionButton(
-                                "delete",
-                                product.id,
-                                "Deactivate all variants of " + product.name
-                            )}
+                <td>
+                    <div class="product-info">
+                        <div class="product-image">
+                            ${
+                                product.image
+                                    ? `
+                                        <img
+                                            src="${escape(imagePath(product.image))}"
+                                            alt=""
+                                        >
+                                    `
+                                    : ""
+                            }
                         </div>
-                    </td>
-                </tr>
-            `;
-        }).join("");
+
+                        <div class="product-details">
+                            <strong>
+                                ${escape(product.name)}
+                            </strong>
+                        </div>
+                    </div>
+                </td>
+
+                <td>
+                    ${escape(product.catalog)}
+                </td>
+
+                <td>
+                    ${product.variants.length}
+                    ${product.variants.length === 1 ? "variant" : "variants"}
+                </td>
+
+                <td>
+                    <div class="product-actions">
+                        ${actionButton(
+                            "view",
+                            product.id,
+                            "View " + product.name
+                        )}
+
+                        ${actionButton(
+                            "edit",
+                            product.id,
+                            "Manage variants for " + product.name
+                        )}
+
+                        ${actionButton(
+                            "delete",
+                            product.id,
+                            "Deactivate all variants of " + product.name
+                        )}
+                    </div>
+                </td>
+            </tr>
+        `).join("");
 
         byId("visibleProductCount").textContent = visible.length;
         byId("totalProductCount").textContent = filteredProducts.length;
@@ -597,21 +671,27 @@
                 : "Products added to the system will appear here.";
     }
 
+
     // =========================
     // PRODUCT DETAILS
     // =========================
 
     function populateDetails() {
+        if (!selected) return;
+
         byId("productDetailsTitle").textContent =
-            manage
-                ? "Manage Specifications"
-                : "Product Details";
+            manage ? "Manage Specifications" : "Product Details";
+
+        byId("addVariantBtn").hidden = !manage;
 
         byId("detailName").textContent = selected.name;
-        byId("detailCategory").textContent = selected.catalog;
+
+        byId("detailCategory").textContent =
+            `${productCode(selected)} · ${selected.catalog}`;
 
         byId("detailCount").textContent =
-            selected.variants.length + " variants";
+            selected.variants.length +
+            (selected.variants.length === 1 ? " variant" : " variants");
 
         byId("detailDescription").textContent =
             selected.description || "";
@@ -623,6 +703,8 @@
 
         if (selected.image) {
             image.src = imagePath(selected.image);
+        } else {
+            image.removeAttribute("src");
         }
 
         const currentColor = byId("variantColor").value;
@@ -644,9 +726,7 @@
             `).join("");
 
         byId("variantColor").value =
-            colors.includes(currentColor)
-                ? currentColor
-                : "";
+            colors.includes(currentColor) ? currentColor : "";
 
         byId("variantColor").hidden = !colors.length;
 
@@ -663,18 +743,22 @@
         byId("detailError").textContent = "";
 
         populateDetails();
+
         details.showModal();
     }
 
+
     // =========================
-    // DISPLAY VARIANTS TABLE
+    // VARIANT TABLE
     // =========================
 
     function renderVariants() {
+        if (!selected) return;
+
         const query = byId("variantSearch")
             .value
-            .toLowerCase()
-            .trim();
+            .trim()
+            .toLowerCase();
 
         const color = byId("variantColor").value;
 
@@ -686,16 +770,13 @@
                 variant.id,
                 variant.name,
                 variant.spec,
-                ...fields.map(([key]) => variant[key]),
-                variant.notes
+                ...fields.map(([key]) => variant[key])
             ]
                 .join(" ")
                 .toLowerCase();
 
-            const matchesSearch =
-                !query || searchText.includes(query);
-
-            return matchesColor && matchesSearch;
+            return matchesColor &&
+                (!query || searchText.includes(query));
         });
 
         const pageCount = Math.max(
@@ -703,15 +784,16 @@
             Math.ceil(variants.length / VARIANT_PAGE_SIZE)
         );
 
-        variantPage = Math.min(variantPage, pageCount);
+        variantPage = Math.max(
+            1,
+            Math.min(variantPage, pageCount)
+        );
 
         const visible = variants.slice(
             (variantPage - 1) * VARIANT_PAGE_SIZE,
             variantPage * VARIANT_PAGE_SIZE
         );
 
-        // Show fields used by this product.
-        // Keep columns stable while searching.
         const columns = fields.filter(([key]) => {
             return (
                 key === "price" ||
@@ -722,21 +804,17 @@
             );
         });
 
-        const productNames = new Set(
-            selected.variants.map(variant => variant.name)
+        // Show original item names for mixed product groups,
+        // such as Welding glass and Steel brush.
+        const showItemName = selected.variants.some(
+            variant => variant.name !== selected.name
         );
 
-        if (productNames.size > 1) {
-            columns.unshift(["name", "Product"]);
+        if (showItemName) {
+            columns.unshift(["name", "Product / Item"]);
         }
 
-        const hasNotes = selected.variants.some(
-            variant => hasValue(variant.notes)
-        );
-
-        if (hasNotes) {
-            columns.push(["notes", "Notes"]);
-        }
+        // No Notes column is added.
 
         byId("variantHead").innerHTML = `
             <tr>
@@ -752,15 +830,13 @@
 
         const rows = visible.map(variant => {
             const cells = columns.map(([key]) => {
-                let value;
-
-                if (isPrice(key)) {
-                    value = money(variant[key]);
-                } else {
-                    value = hasValue(variant[key])
-                        ? variant[key]
-                        : "Not set";
-                }
+                const value = isPrice(key)
+                    ? money(variant[key])
+                    : (
+                        hasValue(variant[key])
+                            ? variant[key]
+                            : "Not set"
+                    );
 
                 return `<td>${escape(value)}</td>`;
             }).join("");
@@ -796,15 +872,13 @@
 
         const columnCount = columns.length + (manage ? 2 : 1);
 
-        byId("variantBody").innerHTML =
-            rows ||
-            `
-                <tr>
-                    <td colspan="${columnCount}">
-                        No matching specifications.
-                    </td>
-                </tr>
-            `;
+        byId("variantBody").innerHTML = rows || `
+            <tr>
+                <td colspan="${columnCount}">
+                    No matching specifications.
+                </td>
+            </tr>
+        `;
 
         byId("variantCount").textContent =
             `Showing ${visible.length} of ${variants.length} variants`;
@@ -816,11 +890,14 @@
         byId("variantNext").disabled = variantPage >= pageCount;
     }
 
+
     // =========================
-    // REFRESH OPEN PRODUCT
+    // REFRESH SELECTED GROUP
     // =========================
 
     async function refreshSelected() {
+        if (!selected) return;
+
         const key = groupKey(selected);
         const loaded = await loadProducts();
 
@@ -845,13 +922,20 @@
         }
     }
 
+
     // =========================
     // POST API ACTION
     // =========================
 
     async function postAction(action, payload) {
+        if (!apiUrl) {
+            throw new Error(
+                "The products API is not loaded. Refresh the page."
+            );
+        }
+
         const response = await fetch(
-            apiUrl + "?action=" + action,
+            apiUrl + "?action=" + encodeURIComponent(action),
             {
                 method: "POST",
 
@@ -866,20 +950,55 @@
         return readResponse(response);
     }
 
+
     // =========================
-    // OPEN VARIANT EDITOR
+    // ADD / EDIT VARIANT FORM
     // =========================
 
-    function openEditor(variant) {
-        editingId = Number(variant.id);
+    function openEditor(variant = null) {
+        editingId = variant ? Number(variant.id) : null;
+
+        const adding = editingId === null;
+        const values = variant || { price_unit: "pc" };
+
+        byId("variantEditTitle").textContent =
+            adding ? "Add Variant" : "Edit Specification";
+
+        byId("saveVariant").textContent =
+            adding ? "Add Variant" : "Save Changes";
+
+        byId("variantFormHint").hidden = !adding;
 
         byId("editRecordLabel").textContent =
-            `${selected.name} — Record ${editingId}`;
+            adding
+                ? `${selected.name} — New Variant`
+                : `${variant.name} — Record ${editingId}`;
 
         byId("editError").textContent = "";
 
+        const itemNameField = adding
+            ? `
+                <label>
+                    Product / Item Name *
+
+                    <input
+                        type="text"
+                        name="item_name"
+                        maxlength="200"
+                        value="${escape(selected.name)}"
+                        required
+                    >
+                </label>
+            `
+            : "";
+
         byId("variantFields").innerHTML =
+            itemNameField +
             fields.map(([key, label, max]) => {
+                const required =
+                    adding &&
+                    (key === "price" || key === "price_unit");
+
                 const attributes = isPrice(key)
                     ? `
                         type="number"
@@ -894,12 +1013,13 @@
 
                 return `
                     <label>
-                        ${escape(label)}
+                        ${escape(label)}${required ? " *" : ""}
 
                         <input
                             name="${key}"
-                            value="${escape(variant[key])}"
+                            value="${escape(values[key])}"
                             ${attributes}
+                            ${required ? "required" : ""}
                         >
                     </label>
                 `;
@@ -907,6 +1027,18 @@
 
         editor.showModal();
     }
+
+
+    // =========================
+    // ADD VARIANT BUTTON
+    // =========================
+
+    byId("addVariantBtn").addEventListener("click", () => {
+        if (busy || !manage || !selected) return;
+
+        openEditor();
+    });
+
 
     // =========================
     // MAIN TABLE ACTIONS
@@ -938,7 +1070,7 @@
         if (action !== "delete") return;
 
         const confirmed = confirm(
-            `Deactivate "${product.name}" and ALL ${product.variants.length} specifications?\n\n` +
+            `Deactivate "${product.name}" and ALL ${product.variants.length} records in this group?\n\n` +
             "They will be hidden from active lists. Existing records will be retained."
         );
 
@@ -954,14 +1086,23 @@
                 category_id: product.category_id
             });
 
-            await loadProducts();
+            const loaded = await loadProducts();
+
+            if (!loaded) {
+                alert(
+                    "The group was deactivated, but the list could not refresh. Reload the page."
+                );
+            }
+
         } catch (error) {
             alert(error.message);
+
         } finally {
             busy = false;
             button.disabled = false;
         }
     });
+
 
     // =========================
     // VARIANT TABLE ACTIONS
@@ -970,7 +1111,7 @@
     byId("variantBody").addEventListener("click", async event => {
         const button = event.target.closest("[data-action]");
 
-        if (!button || busy || !manage) return;
+        if (!button || busy || !manage || !selected) return;
 
         const variant = selected.variants.find(
             item => Number(item.id) === Number(button.dataset.id)
@@ -988,9 +1129,9 @@
         if (action !== "delete") return;
 
         const confirmed = confirm(
-            `Deactivate ONLY record ${variant.id} of ${selected.name}?\n` +
+            `Deactivate ONLY record ${variant.id} of ${variant.name}?\n` +
             `${variant.spec || ""}\n\n` +
-            "Other specifications will remain active."
+            "Other records in this group will remain active."
         );
 
         if (!confirmed) return;
@@ -1003,54 +1144,108 @@
         try {
             const response = await fetch(
                 apiUrl + "?id=" + encodeURIComponent(variant.id),
-                {
-                    method: "DELETE"
-                }
+                { method: "DELETE" }
             );
 
             await readResponse(response);
             await refreshSelected();
+
         } catch (error) {
             byId("detailError").textContent = error.message;
+
         } finally {
             busy = false;
             button.disabled = false;
         }
     });
 
+
     // =========================
-    // SAVE VARIANT CHANGES
+    // SAVE VARIANT
     // =========================
 
-    byId("variantEditForm").addEventListener("submit", async event => {
-        event.preventDefault();
+    byId("variantEditForm").addEventListener(
+        "submit",
+        async event => {
+            event.preventDefault();
 
-        if (busy) return;
+            if (busy || !selected) return;
 
-        busy = true;
+            const adding = editingId === null;
 
-        byId("saveVariant").disabled = true;
-        byId("editError").textContent = "";
+            busy = true;
 
-        try {
-            const values = Object.fromEntries(
-                new FormData(event.currentTarget)
-            );
+            byId("saveVariant").disabled = true;
+            byId("editError").textContent = "";
 
-            await postAction("update-variant", {
-                ...values,
-                id: editingId
-            });
+            try {
+                const values = Object.fromEntries(
+                    new FormData(event.currentTarget)
+                );
 
-            editor.close();
-            await refreshSelected();
-        } catch (error) {
-            byId("editError").textContent = error.message;
-        } finally {
-            busy = false;
-            byId("saveVariant").disabled = false;
+                if (adding) {
+                    if (!String(values.item_name || "").trim()) {
+                        throw new Error(
+                            "Product / Item Name is required."
+                        );
+                    }
+
+                    const hasSpecification = fields.some(([key]) => {
+                        return (
+                            key !== "price_unit" &&
+                            !isPrice(key) &&
+                            String(values[key] || "").trim() !== ""
+                        );
+                    });
+
+                    if (!hasSpecification) {
+                        throw new Error(
+                            "Enter at least one specification, such as dimensions, size or type."
+                        );
+                    }
+
+                    if (
+                        String(values.price ?? "").trim() === "" ||
+                        String(values.price_unit ?? "").trim() === ""
+                    ) {
+                        throw new Error(
+                            "Price and unit are required."
+                        );
+                    }
+                }
+
+                await postAction(
+                    adding ? "add-variant" : "update-variant",
+                    {
+                        ...values,
+                        id: adding ? selected.id : editingId,
+                        name: selected.name,
+                        category_id: selected.category_id
+                    }
+                );
+
+                if (adding) {
+                    byId("variantSearch").value = "";
+                    byId("variantColor").value = "";
+
+                    // Show the final page containing the newly added record.
+                    variantPage = Number.MAX_SAFE_INTEGER;
+                }
+
+                editor.close();
+
+                await refreshSelected();
+
+            } catch (error) {
+                byId("editError").textContent = error.message;
+
+            } finally {
+                busy = false;
+                byId("saveVariant").disabled = false;
+            }
         }
-    });
+    );
+
 
     // =========================
     // MODAL CLOSE BUTTONS
@@ -1071,37 +1266,35 @@
             }
         });
 
-        dialog.addEventListener("close", () => {
-            document.body.classList.toggle(
-                "scf-dialog-open",
-                details.open || editor.open
-            );
-        });
+        dialog.addEventListener("close", updateDialogScroll);
     });
 
+
     // =========================
-    // PREVENT BACKGROUND SCROLL
+    // BACKGROUND SCROLL
     // =========================
 
-    const dialogObserver = new MutationObserver(() => {
+    function updateDialogScroll() {
         document.body.classList.toggle(
             "scf-dialog-open",
             details.open || editor.open
         );
+    }
+
+    const dialogObserver = new MutationObserver(
+        updateDialogScroll
+    );
+
+    [details, editor].forEach(dialog => {
+        dialogObserver.observe(dialog, {
+            attributes: true,
+            attributeFilter: ["open"]
+        });
     });
 
-    dialogObserver.observe(details, {
-        attributes: true,
-        attributeFilter: ["open"]
-    });
-
-    dialogObserver.observe(editor, {
-        attributes: true,
-        attributeFilter: ["open"]
-    });
 
     // =========================
-    // HANDLE MISSING IMAGES
+    // MISSING IMAGES
     // =========================
 
     document.addEventListener(
@@ -1121,6 +1314,7 @@
         },
         true
     );
+
 
     // =========================
     // SEARCH AND FILTER EVENTS
@@ -1146,8 +1340,9 @@
         renderVariants();
     });
 
+
     // =========================
-    // MAIN TABLE PAGINATION
+    // PRODUCT PAGINATION
     // =========================
 
     byId("previousPage").addEventListener("click", () => {
@@ -1158,9 +1353,17 @@
     });
 
     byId("nextPage").addEventListener("click", () => {
-        page++;
-        renderProducts();
+        const totalPages = Math.max(
+            1,
+            Math.ceil(filteredProducts.length / PAGE_SIZE)
+        );
+
+        if (page < totalPages) {
+            page++;
+            renderProducts();
+        }
     });
+
 
     // =========================
     // VARIANT PAGINATION
@@ -1178,6 +1381,7 @@
         renderVariants();
     });
 
+
     // =========================
     // DATE AND TIME
     // =========================
@@ -1189,37 +1393,46 @@
         const timeElement = byId("currentTime");
 
         if (dateElement) {
-            dateElement.textContent = now.toLocaleDateString("en-US", {
-                weekday: "short",
-                month: "short",
-                day: "numeric",
-                year: "numeric"
-            });
+            dateElement.textContent = now.toLocaleDateString(
+                "en-US",
+                {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric"
+                }
+            );
         }
 
         if (timeElement) {
-            timeElement.textContent = now.toLocaleTimeString("en-US", {
-                hour: "numeric",
-                minute: "2-digit",
-                second: "2-digit",
-                hour12: true
-            });
+            timeElement.textContent = now.toLocaleTimeString(
+                "en-US",
+                {
+                    hour: "numeric",
+                    minute: "2-digit",
+                    second: "2-digit",
+                    hour12: true
+                }
+            );
         }
     }
 
     updateDateTime();
+
     setInterval(updateDateTime, 1000);
+
 
     // =========================
     // EXTERNAL REFRESH
-    // Used by add-product.js
     // =========================
 
     window.reloadProducts = loadProducts;
+
 
     // =========================
     // INITIAL LOAD
     // =========================
 
     loadProducts();
+
 })();
