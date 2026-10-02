@@ -1,8 +1,5 @@
-// messages.js (UI-only for now: no database, no localStorage)
+// messages.js — loads customer inquiries from the inquiries table
 
-// =========================
-// ELEMENTS
-// =========================
 const messagesBody = document.getElementById("messagesBody");
 const tbody = document.getElementById("messagesTbody");
 const countHint = document.getElementById("countHint");
@@ -14,7 +11,6 @@ const refreshBtn = document.getElementById("refreshBtn");
 const exportBtn = document.getElementById("exportBtn");
 const clearAllBtn = document.getElementById("clearAllBtn");
 
-// Modal
 const modalBackdrop = document.getElementById("modalBackdrop");
 const closeModalBtn = document.getElementById("closeModalBtn");
 const modalMeta = document.getElementById("modalMeta");
@@ -27,50 +23,21 @@ const modalMessage = document.getElementById("modalMessage");
 const toggleReadBtn = document.getElementById("toggleReadBtn");
 const deleteBtn = document.getElementById("deleteBtn");
 
-// =========================
-// STATE (Dummy data for UI preview)
-// Later: replace `messages = [...]` with API/DB fetch
-// =========================
-let messages = [
-  // Uncomment to test UI with sample rows:
-  // {
-  //   id: 1,
-  //   created_at: new Date().toISOString(),
-  //   name: "Juan Dela Cruz",
-  //   email: "juan@email.com",
-  //   phone: "0917 123 4567",
-  //   message: "Hello, may available po ba na stocks? Pa-quote po. Thank you.",
-  //   status: "unread"
-  // },
-  // {
-  //   id: 2,
-  //   created_at: new Date(Date.now() - 3600 * 1000).toISOString(),
-  //   name: "Maria Santos",
-  //   email: "maria@email.com",
-  //   phone: "0999 888 7777",
-  //   message: "Good day! Pwede po malaman delivery options and lead time?",
-  //   status: "read"
-  // }
-];
+const MESSAGES_API = "messages.php";
 
+let messages = [];
 let currentId = null;
 
-// =========================
-// HELPERS
-// =========================
 function esc(str) {
-  return String(str ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+  const node = document.createElement("span");
+  node.textContent = str == null ? "" : String(str);
+  return node.innerHTML;
 }
 
 function formatDate(iso) {
   if (!iso) return "";
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "";
+  const d = new Date(String(iso).replace(" ", "T"));
+  if (Number.isNaN(d.getTime())) return String(iso);
   return d.toLocaleString(undefined, {
     year: "numeric",
     month: "short",
@@ -85,27 +52,67 @@ function setEmpty(isEmpty) {
 }
 
 function normalizeStatus(s) {
-  return s === "read" ? "read" : "unread";
+  return String(s || "").trim().toLowerCase() === "read" ? "read" : "unread";
 }
 
-// =========================
-// FILTER + RENDER
-// =========================
+async function apiRequest(action, payload = {}) {
+  const body = new URLSearchParams();
+  body.set("action", action);
+
+  Object.entries(payload).forEach(([key, value]) => {
+    body.set(key, value ?? "");
+  });
+
+  const response = await fetch(MESSAGES_API, {
+    method: "POST",
+    headers: {
+      "Accept": "application/json"
+    },
+    body
+  });
+
+  const raw = await response.text();
+  let data = null;
+
+  try {
+    data = raw ? JSON.parse(raw) : null;
+  } catch (error) {
+    const preview = raw.replace(/\s+/g, " ").trim().slice(0, 180);
+    throw new Error(preview || "messages.php did not return JSON.");
+  }
+
+  if (!response.ok || !data.success) {
+    throw new Error((data && data.message) || "Request failed.");
+  }
+
+  return data;
+}
+
+async function loadMessages() {
+  countHint.textContent = "Loading messages...";
+
+  try {
+    const data = await apiRequest("list");
+    messages = Array.isArray(data.messages) ? data.messages : [];
+    render();
+  } catch (error) {
+    console.error("Load messages error:", error);
+    messages = [];
+    tbody.innerHTML = "";
+    setEmpty(true);
+    countHint.textContent = error.message || "Unable to load messages.";
+  }
+}
+
 function getFiltered() {
   const q = (searchInput.value || "").trim().toLowerCase();
-  const st = statusFilter.value; // all | unread | read
+  const st = statusFilter.value;
 
   return messages.filter((m) => {
     const status = normalizeStatus(m.status);
     const matchStatus = st === "all" || status === st;
 
-    const hay = [
-      m.name,
-      m.email,
-      m.phone,
-      m.message
-    ].join(" ").toLowerCase();
-
+    const hay = [m.name, m.email, m.phone, m.message].join(" ").toLowerCase();
     const matchQuery = !q || hay.includes(q);
 
     return matchStatus && matchQuery;
@@ -153,11 +160,8 @@ function render() {
   }).join("");
 }
 
-// =========================
-// MODAL
-// =========================
 function openModal(id) {
-  const m = messages.find(x => String(x.id) === String(id));
+  const m = messages.find((x) => String(x.id) === String(id));
   if (!m) return;
 
   currentId = String(id);
@@ -183,30 +187,45 @@ function closeModal() {
   modalBackdrop.setAttribute("aria-hidden", "true");
 }
 
-// =========================
-// ACTIONS
-// =========================
-function toggleRead(id) {
-  const idx = messages.findIndex(x => String(x.id) === String(id));
-  if (idx === -1) return;
+async function toggleRead(id) {
+  const item = messages.find((x) => String(x.id) === String(id));
+  if (!item) return;
 
-  const current = normalizeStatus(messages[idx].status);
-  messages[idx].status = current === "unread" ? "read" : "unread";
+  const nextStatus = normalizeStatus(item.status) === "unread" ? "read" : "unread";
 
-  render();
-  if (currentId === String(id)) openModal(id);
+  try {
+    await apiRequest("set_status", {
+      id,
+      status: nextStatus
+    });
+    item.status = nextStatus;
+    render();
+    if (currentId === String(id)) openModal(id);
+  } catch (error) {
+    alert(error.message || "Unable to update status.");
+  }
 }
 
-function deleteOne(id) {
-  messages = messages.filter(x => String(x.id) !== String(id));
-  render();
-  if (currentId === String(id)) closeModal();
+async function deleteOne(id) {
+  try {
+    await apiRequest("delete", { id });
+    messages = messages.filter((x) => String(x.id) !== String(id));
+    render();
+    if (currentId === String(id)) closeModal();
+  } catch (error) {
+    alert(error.message || "Unable to delete inquiry.");
+  }
 }
 
-function clearAll() {
-  messages = [];
-  render();
-  closeModal();
+async function clearAll() {
+  try {
+    await apiRequest("clear_all");
+    messages = [];
+    render();
+    closeModal();
+  } catch (error) {
+    alert(error.message || "Unable to clear inquiries.");
+  }
 }
 
 function exportJSON() {
@@ -215,7 +234,7 @@ function exportJSON() {
 
   const a = document.createElement("a");
   a.href = url;
-  a.download = `messages_ui_preview_${new Date().toISOString().slice(0, 10)}.json`;
+  a.download = `inquiries_${new Date().toISOString().slice(0, 10)}.json`;
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -223,16 +242,12 @@ function exportJSON() {
   URL.revokeObjectURL(url);
 }
 
-// =========================
-// EVENTS
-// =========================
 tbody.addEventListener("click", (e) => {
   const tr = e.target.closest("tr[data-id]");
   if (!tr) return;
   const id = tr.getAttribute("data-id");
 
   if (e.target.classList.contains("js-view")) openModal(id);
-
   if (e.target.classList.contains("js-toggle")) toggleRead(id);
 
   if (e.target.classList.contains("js-delete")) {
@@ -243,8 +258,7 @@ tbody.addEventListener("click", (e) => {
 searchInput.addEventListener("input", render);
 statusFilter.addEventListener("change", render);
 
-refreshBtn.addEventListener("click", render);
-
+refreshBtn.addEventListener("click", loadMessages);
 exportBtn.addEventListener("click", exportJSON);
 
 clearAllBtn.addEventListener("click", () => {
@@ -252,7 +266,6 @@ clearAllBtn.addEventListener("click", () => {
   clearAll();
 });
 
-// modal
 closeModalBtn.addEventListener("click", closeModal);
 
 modalBackdrop.addEventListener("click", (e) => {
@@ -274,7 +287,4 @@ deleteBtn.addEventListener("click", () => {
   deleteOne(currentId);
 });
 
-// =========================
-// INIT
-// =========================
-render();
+loadMessages();

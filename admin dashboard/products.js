@@ -29,6 +29,7 @@
     const imagePath = path => !path ? '' : path.includes('/') ? path : 'images/' + path;
     const groupKey = product => JSON.stringify([Number(product.category_id), product.name]);
 
+<<<<<<< HEAD
     const icons = {
         view: '<path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12"/><circle cx="12" cy="12" r="3"/>',
         edit: '<path d="M4 20h4L19 9l-4-4L4 16v4zM13 7l4 4"/>',
@@ -68,6 +69,215 @@
                         <button type="button" id="variantPrevious" aria-label="Previous variants page">‹</button>
                         <span id="variantPage">1</span>
                         <button type="button" id="variantNext" aria-label="Next variants page">›</button>
+=======
+    const dateEl = document.getElementById("currentDate");
+    const timeEl = document.getElementById("currentTime");
+
+    if (dateEl) dateEl.textContent = date;
+    if (timeEl) timeEl.textContent = time;
+}
+
+updateDateTime();
+setInterval(updateDateTime, 1000);
+
+
+// =========================
+// SETTINGS (palitan kung kailangan)
+// =========================
+const API_CANDIDATES = [
+    "api/products.php",
+    "products.php",
+    "../api/products.php",
+    "/api/products.php"
+];
+let API_URL = API_CANDIDATES[0];
+const IMAGE_BASE = "images/";        // folder ng mga larawan (flat-bar.jpg -> images/flat-bar.jpg)
+const PAGE_SIZE = 10;
+
+
+// =========================
+// PRODUCT ELEMENTS
+// =========================
+const productsTableBody = document.getElementById("productsTableBody");
+const emptyState = document.getElementById("productsEmptyState");
+const totalProductCount = document.getElementById("totalProductCount");
+const visibleProductCount = document.getElementById("visibleProductCount");
+const productSearch = document.getElementById("productSearch");
+const categoryFilter = document.getElementById("categoryFilter");
+const statusFilter = document.getElementById("statusFilter");
+const previousPageBtn = document.getElementById("previousPage");
+const nextPageBtn = document.getElementById("nextPage");
+const currentPageEl = document.getElementById("currentPage");
+
+
+// =========================
+// STATE
+// =========================
+let products = [];
+let filteredProducts = [];
+let currentPage = 1;
+
+
+// =========================
+// HELPERS
+// =========================
+function slugify(text) {
+    return String(text || "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "");
+}
+
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function imageUrl(path) {
+    if (!path) return "";
+    if (path.includes("/")) return path;   // hal. uploads/products/...
+    return IMAGE_BASE + path;              // hal. flat-bar.jpg
+}
+
+
+// =========================
+// LOAD PRODUCTS FROM DATABASE
+// =========================
+async function fetchProductsJson() {
+    const errors = [];
+
+    for (const url of API_CANDIDATES) {
+        try {
+            const response = await fetch(url);
+            const text = await response.text();
+
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                errors.push(`${url} -> HTTP ${response.status}, hindi JSON: ${text.slice(0, 120).replace(/\s+/g, " ")}`);
+                continue;
+            }
+
+            if (!data.ok) {
+                errors.push(`${url} -> ${data.error || "ok=false"}`);
+                continue;
+            }
+
+            API_URL = url;
+            window.PRODUCTS_API_URL = new URL(url, document.baseURI).href;
+            return data;
+        } catch (e) {
+            errors.push(`${url} -> ${e.message}`);
+        }
+    }
+
+    throw new Error(errors.join("\n"));
+}
+
+function showLoadError(message) {
+    const title = emptyState.querySelector("h3");
+    const text = emptyState.querySelector("p");
+
+    if (title) title.textContent = "Could not load products";
+    if (text) {
+        text.style.whiteSpace = "pre-wrap";
+        text.style.maxWidth = "600px";
+        text.textContent = message;
+    }
+}
+
+async function loadProducts(goLast = false) {
+    try {
+        const data = await fetchProductsJson();
+
+        products = data.products.map(p => ({
+            id: p.id,
+            productId: "P-" + String(p.id).padStart(4, "0"),
+            name: p.name,
+            variant: p.spec || "",
+            category: p.catalog || "",
+            subcategory: p.category || "",
+            price: p.price ?? 0,
+            unit: p.price_unit || "pc",
+            image: p.image,
+            // Walang stock table sa database, kaya pansamantalang In Stock lahat.
+            status: "in-stock"
+        }));
+
+        products.sort((a, b) => a.id - b.id);
+
+        filterProducts();
+
+        if (goLast) {
+            currentPage = Math.max(1, Math.ceil(filteredProducts.length / PAGE_SIZE));
+            displayProducts();
+        }
+
+    } catch (error) {
+        console.error("Products load error:", error);
+        products = [];
+        filteredProducts = [];
+        displayProducts();
+        showLoadError(error.message);
+    }
+}
+
+
+// =========================
+// DISPLAY PRODUCTS
+// =========================
+function displayProducts() {
+    productsTableBody.innerHTML = "";
+
+    const total = filteredProducts.length;
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const pageItems = filteredProducts.slice(start, start + PAGE_SIZE);
+
+    totalProductCount.textContent = products.length;
+    visibleProductCount.textContent = pageItems.length;
+
+    if (currentPageEl) currentPageEl.textContent = currentPage;
+    if (previousPageBtn) previousPageBtn.disabled = currentPage <= 1;
+    if (nextPageBtn) nextPageBtn.disabled = currentPage >= totalPages;
+
+    if (pageItems.length === 0) {
+        emptyState.style.display = "flex";
+        return;
+    }
+
+    emptyState.style.display = "none";
+
+    pageItems.forEach(product => {
+        const row = document.createElement("tr");
+        const img = imageUrl(product.image);
+
+        row.innerHTML = `
+            <td>${escapeHtml(product.productId)}</td>
+
+            <td>
+                <div class="product-info">
+                    <div class="product-image">
+                        ${
+                            img
+                                ? `<img src="${escapeHtml(img)}" alt="${escapeHtml(product.name)}" onerror="this.remove()">`
+                                : ""
+                        }
+                    </div>
+
+                    <div class="product-details">
+                        <strong>${escapeHtml(product.name)}</strong>
+                        <span>${escapeHtml(product.variant)}</span>
+>>>>>>> 33262330f430e0870277be66e8ec87b032bdebca
                     </div>
                 </div>
             </div>
@@ -325,4 +535,15 @@
     setInterval(updateDateTime, 1000);
     window.reloadProducts = loadProducts;
     loadProducts();
+<<<<<<< HEAD
 })();
+=======
+} else {
+    console.error("productsTableBody not found");
+}
+
+// Para ma-refresh ng ibang script (hal. add-product.js) ang table
+window.reloadProducts = goLast => loadProducts(!!goLast);
+
+})();
+>>>>>>> 33262330f430e0870277be66e8ec87b032bdebca

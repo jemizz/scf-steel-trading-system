@@ -30,11 +30,6 @@
         <!-- CONTENT -->
         <div class="ap-body">
 
-            <p class="ap-notice">
-                Demo mode — saved only in this browser.
-                Database connection is pending.
-            </p>
-
             <!-- PRODUCT INFORMATION -->
             <section class="ap-section">
 
@@ -62,15 +57,10 @@
                         <label>
                             Category *
 
-                            <select name="category" required>
+                            <select name="category_id" id="apCategory" required>
                                 <option value="">
                                     Select a category
                                 </option>
-
-                                <option>Steel Products</option>
-                                <option>Roofing Materials</option>
-                                <option>Hardware Materials</option>
-                                <option>Stainless Products</option>
                             </select>
                         </label>
 
@@ -107,7 +97,7 @@
                         </label>
 
                         <small>
-                            PNG, JPG or WebP · up to 500 KB
+                            PNG, JPG or WebP · up to 2 MB
                         </small>
 
                         <button
@@ -129,6 +119,7 @@
                     <input
                         type="checkbox"
                         name="showInCatalog"
+                        checked
                     >
 
                     <span>
@@ -178,7 +169,7 @@
 
                         <thead>
                             <tr>
-                                <th>Product ID</th>
+                                <th>SKU (optional)</th>
                                 <th>Specifications *</th>
                                 <th>Unit *</th>
                                 <th>Price (₱) *</th>

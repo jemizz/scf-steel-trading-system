@@ -241,7 +241,7 @@ if ($method === 'POST') {
     $name = trim((string) ($_POST['name'] ?? ''));
     $categoryId = (int) ($_POST['category_id'] ?? 0);
     $description = trim((string) ($_POST['description'] ?? ''));
-    $showInCatalog = isset($_POST['showInCatalog']) ? 1 : 0;
+    $showInCatalog = 1; // laging active para lumabas agad sa Products table
     $variants = json_decode((string) ($_POST['variants'] ?? '[]'), true);
     if ($name === '' || $categoryId <= 0 || !is_array($variants) || count($variants) === 0) {
         http_response_code(422);
