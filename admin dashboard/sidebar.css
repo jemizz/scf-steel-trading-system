@@ -130,36 +130,41 @@ body {
 
 /* Sidebar Icons */
 
-.sidebar-link svg {
-    width: 16px;
-    height: 16px;
+/* =========================
+   SIDEBAR ICONS
+========================= */
 
-    min-width: 16px;
-    max-width: 16px;
+.sidebar-link svg {
+    width: 17px;
+    height: 17px;
+
+    min-width: 17px;
 
     flex-shrink: 0;
 
     fill: none;
     stroke: currentColor;
 
-    stroke-width: 1.5;
+    stroke-width: 1.7;
     stroke-linecap: round;
     stroke-linejoin: round;
+
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease;
 }
 
 
-/* Hover */
+/* Slight icon movement on hover */
 
-.sidebar-link:hover {
-    background-color: #343638;
-    color: #ffffff;
+.sidebar-link:hover svg {
+    transform: translateX(1px);
 }
 
 
-/* Current Page */
+/* Active icon */
 
-.sidebar-link.active {
-    background-color: #505255;
+.sidebar-link.active svg {
     color: #ffffff;
 }
 
@@ -259,21 +264,32 @@ body {
 
 /* Bottom Icons */
 
-.bottom-link svg {
-    width: 14px;
-    height: 14px;
+/* =========================
+   BOTTOM ICONS
+========================= */
 
-    min-width: 14px;
-    max-width: 14px;
+.bottom-link svg {
+    width: 15px;
+    height: 15px;
+
+    min-width: 15px;
 
     flex-shrink: 0;
 
     fill: none;
     stroke: currentColor;
 
-    stroke-width: 1.5;
+    stroke-width: 1.7;
     stroke-linecap: round;
     stroke-linejoin: round;
+
+    transition:
+        transform 0.2s ease,
+        color 0.2s ease;
+}
+
+.bottom-link:hover svg {
+    transform: translateX(1px);
 }
 
 
