@@ -29,20 +29,20 @@
     // CONTACT NUMBER VALIDATION
     // =========================
 
-   function setupContactValidation() {
-    const contactInput = document.getElementById("contact");
+    function setupContactValidation() {
+        const contactInput = document.getElementById("contact");
 
-    if (!contactInput) return;
+        if (!contactInput) return;
 
-    contactInput.setAttribute("inputmode", "numeric");
-    contactInput.setAttribute("maxlength", "11");
-    contactInput.setAttribute("pattern", "[0-9]{11}");
-    contactInput.setAttribute("title", "Enter exactly 11 digits.");
+        contactInput.setAttribute("inputmode", "numeric");
+        contactInput.setAttribute("maxlength", "11");
+        contactInput.setAttribute("pattern", "[0-9]{11}");
+        contactInput.setAttribute("title", "Enter exactly 11 digits.");
 
-    contactInput.addEventListener("input", function () {
-        this.value = this.value.replace(/[^0-9]/g, "").slice(0, 11);
-    });
-}
+        contactInput.addEventListener("input", function () {
+            this.value = this.value.replace(/[^0-9]/g, "").slice(0, 11);
+        });
+    }
 
     // =========================
     // LOAD CONTACT INFORMATION
@@ -86,10 +86,7 @@
                 }
             })
             .catch((error) => {
-                console.error(
-                    "Contact information error:",
-                    error
-                );
+                console.error("Contact information error:", error);
 
                 const phoneElement =
                     document.getElementById("contactPhone");
@@ -98,15 +95,94 @@
                     document.getElementById("contactEmail");
 
                 if (phoneElement) {
-                    phoneElement.textContent =
-                        "Not available";
+                    phoneElement.textContent = "Not available";
                 }
 
                 if (emailElement) {
-                    emailElement.textContent =
-                        "Not available";
+                    emailElement.textContent = "Not available";
                 }
             });
+    }
+
+    // =========================
+    // INQUIRY FORM
+    // =========================
+
+    function setupInquiryForm() {
+        const form = document.getElementById("inquiryForm");
+
+        if (!form) return;
+
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault();
+
+            const submitButton = form.querySelector(".send-btn");
+            const formData = new FormData(form);
+
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = "Sending...";
+            }
+
+            try {
+                const response = await fetch("contact.php", {
+                    method: "POST",
+                    body: formData,
+                    headers: {
+                        "Accept": "application/json"
+                    }
+                });
+
+                const raw = await response.text();
+                let data = null;
+
+                try {
+                    data = raw ? JSON.parse(raw) : null;
+                } catch (parseError) {
+                    const preview = raw
+                        .replace(/\s+/g, " ")
+                        .trim()
+                        .slice(0, 180);
+
+                    throw new Error(
+                        preview
+                            ? "Server did not return JSON: " + preview
+                            : "Empty response from contact.php. Open the page through localhost, not as a file."
+                    );
+                }
+
+                if (!response.ok || !data.success) {
+                    throw new Error(
+                        (data && data.message) ||
+                        "Unable to submit inquiry."
+                    );
+                }
+
+                alert(
+                    data.message ||
+                    "Inquiry submitted successfully."
+                );
+
+                form.reset();
+
+            } catch (error) {
+                console.error(
+                    "Inquiry submission error:",
+                    error
+                );
+
+                alert(
+                    error.message ||
+                    "Something went wrong. Please try again."
+                );
+
+            } finally {
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = "Send Inquiry";
+                }
+            }
+        });
     }
 
     // =========================
@@ -116,6 +192,7 @@
     function initializeContactPage() {
         setupContactValidation();
         loadContactInformation();
+        setupInquiryForm();
     }
 
     if (document.readyState === "loading") {
