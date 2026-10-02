@@ -1061,3 +1061,6 @@
     }
 
 }
+.transaction-overlay[hidden] {
+    display: none !important;
+}
