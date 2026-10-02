@@ -5,14 +5,16 @@
 >
     <form id="apForm">
 
-        <!-- HEADER -->
+        <!-- =========================
+             HEADER
+        ========================= -->
         <header class="ap-header">
 
             <div>
                 <h2 id="apTitle">Add Product</h2>
 
                 <p>
-                    Register a product and the specifications you sell.
+                    Register a new product.
                 </p>
             </div>
 
@@ -27,23 +29,48 @@
 
         </header>
 
-        <!-- CONTENT -->
+
+        <!-- =========================
+             CONTENT
+        ========================= -->
         <div class="ap-body">
 
-            <!-- PRODUCT INFORMATION -->
             <section class="ap-section">
 
                 <div class="ap-section-title">
-                    <span class="ap-number">1</span>
-                    <h3>Product information</h3>
+
+                    <span class="ap-number">
+                        1
+                    </span>
+
+                    <h3>
+                        Product Information
+                    </h3>
+
                 </div>
+
 
                 <div class="ap-details">
 
+                    <!-- PRODUCT FIELDS -->
                     <div class="ap-fields">
 
+                        <!-- PRODUCT ID -->
                         <label>
-                            Product name *
+                            Product ID
+
+                            <input
+                                type="text"
+                                id="apProductId"
+                                value="Auto-generated"
+                                readonly
+                            >
+                        </label>
+
+
+                        <!-- PRODUCT NAME -->
+                        <label>
+                            Product Name *
 
                             <input
                                 type="text"
@@ -54,22 +81,30 @@
                             >
                         </label>
 
-                        <label>
+
+                        <!-- CATEGORY -->
+                        <label class="ap-wide">
                             Category *
 
-                            <select name="category_id" id="apCategory" required>
+                            <select
+                                name="category_id"
+                                id="apCategory"
+                                required
+                            >
                                 <option value="">
                                     Select a category
                                 </option>
                             </select>
                         </label>
 
+
+                        <!-- DESCRIPTION -->
                         <label class="ap-wide">
                             Description
 
                             <textarea
                                 name="description"
-                                rows="3"
+                                rows="5"
                                 maxlength="1000"
                                 placeholder="Describe the product and its uses."
                             ></textarea>
@@ -77,7 +112,10 @@
 
                     </div>
 
-                    <!-- IMAGE -->
+
+                    <!-- =========================
+                         PRODUCT IMAGE
+                    ========================= -->
                     <div class="ap-image-box">
 
                         <img
@@ -86,19 +124,31 @@
                             hidden
                         >
 
+
+                        <div
+                            id="apImagePlaceholder"
+                            class="ap-image-placeholder"
+                        >
+                            No image selected
+                        </div>
+
+
                         <label>
-                            Product image
+                            Product Image
 
                             <input
                                 id="apImage"
+                                name="image"
                                 type="file"
                                 accept="image/png,image/jpeg,image/webp"
                             >
                         </label>
 
+
                         <small>
                             PNG, JPG or WebP · up to 2 MB
                         </small>
+
 
                         <button
                             type="button"
@@ -113,7 +163,10 @@
 
                 </div>
 
-                <!-- CATALOG VISIBILITY -->
+
+                <!-- =========================
+                     PRODUCT CATALOG
+                ========================= -->
                 <label class="ap-catalog">
 
                     <input
@@ -123,80 +176,24 @@
                     >
 
                     <span>
+
                         <strong>
-                            Show in Public Catalog
+                            Show in Product Catalog
                         </strong>
 
                         <small>
-                            One product card with all its variants.
-                            Stock quantities stay off the catalog.
+                            Display this product in the public product catalog.
+                            Stock quantities will not be shown.
                         </small>
+
                     </span>
 
                 </label>
 
             </section>
 
-            <!-- VARIANTS -->
-            <section class="ap-section">
 
-                <div class="ap-section-title ap-spread">
-
-                    <div>
-                        <span class="ap-number">2</span>
-                        <h3>Product variants</h3>
-                    </div>
-
-                    <button
-                        type="button"
-                        id="apAddVariant"
-                        class="ap-secondary"
-                    >
-                        + Add Variant
-                    </button>
-
-                </div>
-
-                <p class="ap-help">
-                    Add one row per specification. Include units,
-                    for example: 1 × 1 inch, 1.2 mm thick, 6 m long.
-                    For items without variants, enter “Standard”.
-                </p>
-
-                <div class="ap-table-wrap">
-
-                    <table class="ap-table">
-
-                        <thead>
-                            <tr>
-                                <th>SKU (optional)</th>
-                                <th>Specifications *</th>
-                                <th>Unit *</th>
-                                <th>Price (₱) *</th>
-                                <th>Min. stock</th>
-
-                                <th>
-                                    <span class="ap-sr-only">
-                                        Remove
-                                    </span>
-                                </th>
-                            </tr>
-                        </thead>
-
-                        <tbody id="apVariants"></tbody>
-
-                    </table>
-
-                </div>
-
-                <p class="ap-help">
-                    New variants start at 0 stock.
-                    Record received quantities through
-                    Stock In / Receive Purchase Order.
-                </p>
-
-            </section>
-
+            <!-- ERROR -->
             <p
                 id="apError"
                 class="ap-error"
@@ -206,12 +203,18 @@
 
         </div>
 
-        <!-- FOOTER -->
+
+        <!-- =========================
+             FOOTER
+        ========================= -->
         <footer class="ap-footer">
 
-            <span id="apVariantCount">1 variant</span>
+            <span>
+                Variants can be managed separately after creating the product.
+            </span>
 
             <div>
+
                 <button
                     type="button"
                     class="ap-secondary"
@@ -220,6 +223,7 @@
                     Cancel
                 </button>
 
+
                 <button
                     type="submit"
                     class="ap-primary"
@@ -227,9 +231,11 @@
                 >
                     Save Product
                 </button>
+
             </div>
 
         </footer>
 
     </form>
+
 </dialog>
