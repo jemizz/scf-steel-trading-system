@@ -504,15 +504,18 @@ function defineDefaultQuickFunctions() {
               text: item.message || "Customer sent a message.",
               time: notificationTime(item.created_at),
               unread: isUnread(item),
-              onClick: async () => {
-                try {
-                  if (isUnread(item)) {
-                    await notificationRequest("set_status", { id: item.id, status: "read" });
-                  }
-                } catch (error) {
-                  console.error(error);
+              onClick: () => {
+                // isara ang notification dropdown
+                host.querySelector("#notificationMenu")?.classList.remove("show");
+                host.querySelector("#notificationBtn")?.classList.remove("active");
+
+                if (typeof window.openInquiryById === "function") {
+                  // Nasa Messages page na: buksan agad ang modal
+                  window.openInquiryById(item.id).then(loadTopbarNotifications);
+                } else {
+                  // Nasa ibang page: pumunta sa Messages at buksan doon
+                  window.location.href = "messages.html?open=" + encodeURIComponent(item.id);
                 }
-                window.location.href = "messages.html";
               }
             })
           });
