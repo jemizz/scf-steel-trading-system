@@ -779,10 +779,28 @@
 
             if (accountAdminUsername) {
 
-              accountAdminUsername.textContent =
+            accountAdminUsername.textContent =
                 adminUsername?.value.trim() || "";
 
-            }
+        }
+
+
+        // =========================
+        // UPDATE SIDEBAR USERNAME
+        // =========================
+
+        const sidebarAdminUsername =
+            document.getElementById(
+                "sidebarAdminUsername"
+            );
+
+        if (sidebarAdminUsername) {
+
+            sidebarAdminUsername.textContent =
+                adminUsername?.value.trim() ||
+                "Administrator";
+
+        }
 
 
             captureBaseline();
