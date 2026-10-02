@@ -59,15 +59,26 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeFilter) typeFilter.addEventListener("change", renderEmptyUI);
   if (statusFilter) statusFilter.addEventListener("change", renderEmptyUI);
 
-  if (createPoBtn) {
-  createPoBtn.addEventListener("click", () => {
-    if (typeof openNewPurchaseOrder === "function") {
-      openNewPurchaseOrder(); // same modal ng Quick Access → New Purchase Order
-    } else {
-      // fallback kung sakaling hindi pa loaded si topbar.js
-      window.location.href = "new-purchase-order.html";
-    }
-  });
+  // =========================
+// CREATE PURCHASE ORDER
+// =========================
+
+if (createPoBtn) {
+    createPoBtn.addEventListener("click", () => {
+        if (
+            typeof window.openNewPurchaseOrderModal === "function"
+        ) {
+            window.openNewPurchaseOrderModal();
+        } else {
+            console.error(
+                "openNewPurchaseOrderModal is unavailable. Check topbar.js."
+            );
+
+            alert(
+                "New Purchase Order is still loading. Please try again."
+            );
+        }
+    });
 }
 
   renderEmptyUI();

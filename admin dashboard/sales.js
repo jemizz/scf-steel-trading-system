@@ -111,16 +111,22 @@
     );
   }
 
-  const newSaleBtn = document.getElementById("newSaleBtn");
+  // =========================
+// NEW SALE BUTTON
+// =========================
+
+const newSaleBtn = document.getElementById("newSaleBtn");
 
 newSaleBtn?.addEventListener("click", () => {
-  // gamitin mismo yung function ng Quick Access
-  if (typeof openNewTransaction === "function") {
-    openNewTransaction();
-  } else {
-    // fallback
-    window.location.href = "new-transaction.html";
-  }
+    if (typeof window.openNewTransactionModal === "function") {
+        window.openNewTransactionModal();
+    } else {
+        console.error(
+            "openNewTransactionModal is unavailable. Check topbar.js."
+        );
+
+        alert("New Transaction is still loading. Please try again.");
+    }
 });
   /* =========================
      SUMMARY CARDS

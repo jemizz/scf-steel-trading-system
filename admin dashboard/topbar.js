@@ -13,71 +13,11 @@
   const QUICK_PAGES = {
     transaction: "new-transaction.html",
     purchaseOrder: "new-purchase-order.html",
-    stockIn: "stock-in.html",
-    stockOut: "stock-out.html",
+    stockIn: "stock-movements.html",
+    stockOut: "stock-movements.html",
     addProduct: "add-product.html",
   };
 
-  // ----------------------------
-  // Modal system (built-in)
-  // ----------------------------
-  const MODAL_OVERLAY_ID = "tbModalOverlay";
-
-  function ensureModalStyles() {
-    if (document.getElementById("tbModalStyles")) return;
-
-    const style = document.createElement("style");
-    style.id = "tbModalStyles";
-    style.textContent = `
-      .tb-modal-overlay[hidden] { display: none !important; }
-      .tb-modal-overlay{
-        position: fixed; inset: 0;
-        background: rgba(0,0,0,.45);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        padding: 24px;
-      }
-      .tb-modal{
-        width: min(1100px, 96vw);
-        max-height: 92vh;
-        overflow: hidden;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 20px 60px rgba(0,0,0,.35);
-        display: flex;
-        flex-direction: column;
-      }
-      .tb-modal-header{
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        padding: 12px 16px;
-        border-bottom: 1px solid rgba(0,0,0,.08);
-      }
-      .tb-modal-title{
-        font-size: 16px;
-        font-weight: 700;
-      }
-      .tb-modal-close{
-        width: 36px; height: 36px;
-        border: 1px solid rgba(0,0,0,.15);
-        background: #fff;
-        border-radius: 10px;
-        cursor: pointer;
-        font-size: 18px;
-        line-height: 1;
-      }
-      .tb-modal-body{
-        padding: 16px;
-        overflow: auto;
-      }
-      body.tb-modal-open { overflow: hidden; }
-    `;
-    document.head.appendChild(style);
-  }
 
   function ensureModalShell() {
     let overlay = document.getElementById(MODAL_OVERLAY_ID);
@@ -168,33 +108,186 @@
     }
   }
 
-  // Define defaults ONLY if user didn't define them already
-  function defineDefaultQuickFunctions() {
-    if (typeof window.openNewTransactionModal !== "function") {
-      window.openNewTransactionModal = () =>
-        openModalFromUrl(QUICK_PAGES.transaction, "New Transaction");
+  // =========================
+// LOAD TRANSACTION / PO HTML
+// =========================
+
+const pendingModalLoads = new Map();
+
+async function loadNativeModal(url, overlayId, initialize) {
+    const existingOverlay = document.getElementById(overlayId);
+
+    if (existingOverlay) {
+        if (existingOverlay.dataset.initialized !== "true") {
+            initialize();
+            existingOverlay.dataset.initialized = "true";
+        }
+
+        return existingOverlay;
     }
 
-    if (typeof window.openNewPurchaseOrderModal !== "function") {
-      window.openNewPurchaseOrderModal = () =>
-        openModalFromUrl(QUICK_PAGES.purchaseOrder, "New Purchase Order");
+    // Prevent duplicate HTML when a button is clicked repeatedly.
+    if (pendingModalLoads.has(overlayId)) {
+        return pendingModalLoads.get(overlayId);
     }
+
+    const loading = (async () => {
+        const response = await fetch(url, {
+            cache: "no-store"
+        });
+
+        if (!response.ok) {
+            throw new Error(
+                `Unable to load ${url}: HTTP ${response.status}`
+            );
+        }
+
+        const html = await response.text();
+
+        const parsed = new DOMParser().parseFromString(
+            html,
+            "text/html"
+        );
+
+        const modal = parsed.getElementById(overlayId);
+
+        if (!modal) {
+            throw new Error(
+                `${url} is missing #${overlayId}`
+            );
+        }
+
+        // Insert the actual modal directly into the page.
+        // Do not place it inside the topbar's generic modal.
+        modal.hidden = true;
+        document.body.appendChild(modal);
+
+        try {
+            initialize();
+            modal.dataset.initialized = "true";
+        } catch (error) {
+            modal.remove();
+            throw error;
+        }
+
+        return modal;
+    })();
+
+    pendingModalLoads.set(overlayId, loading);
+
+    try {
+        return await loading;
+    } finally {
+        pendingModalLoads.delete(overlayId);
+    }
+}
+
+
+// =========================
+// QUICK ACCESS FUNCTIONS
+// =========================
+
+function defineDefaultQuickFunctions() {
+    window.openNewTransactionModal = async function () {
+        try {
+            if (
+                typeof window.initializeTransactionModal !==
+                "function"
+            ) {
+                throw new Error(
+                    "new-transaction.js is not loaded."
+                );
+            }
+
+            const overlay = await loadNativeModal(
+                QUICK_PAGES.transaction,
+                "transactionOverlay",
+                window.initializeTransactionModal
+            );
+
+            overlay.hidden = false;
+
+            overlay.querySelector(
+                "#closeTransactionBtn"
+            )?.focus();
+        } catch (error) {
+            console.error(
+                "Transaction modal error:",
+                error
+            );
+
+            alert(
+                "Unable to open New Transaction. " +
+                "Check the browser console for details."
+            );
+        }
+    };
+
+    window.openNewPurchaseOrderModal = async function () {
+        try {
+            if (
+                typeof window.initializePurchaseOrderModal !==
+                "function" ||
+                typeof window.openPurchaseOrderModal !==
+                "function"
+            ) {
+                throw new Error(
+                    "new-purchase-order.js is not loaded."
+                );
+            }
+
+            const overlay = await loadNativeModal(
+                QUICK_PAGES.purchaseOrder,
+                "purchaseOrderOverlay",
+                window.initializePurchaseOrderModal
+            );
+
+            overlay.hidden = false;
+
+            // Your existing function resets the form,
+            // adds .show, and prevents background scrolling.
+            window.openPurchaseOrderModal();
+
+            overlay.querySelector(
+                "#closePurchaseOrder"
+            )?.focus();
+        } catch (error) {
+            console.error(
+                "Purchase order modal error:",
+                error
+            );
+
+            alert(
+                "Unable to open New Purchase Order. " +
+                "Check the browser console for details."
+            );
+        }
+    };
 
     if (typeof window.openStockInModal !== "function") {
-      window.openStockInModal = () =>
-        openModalFromUrl(QUICK_PAGES.stockIn, "Stock In");
+        window.openStockInModal = () =>
+            openModalFromUrl(
+                QUICK_PAGES.stockIn,
+                "Stock In"
+            );
     }
 
     if (typeof window.openStockOutModal !== "function") {
-      window.openStockOutModal = () =>
-        openModalFromUrl(QUICK_PAGES.stockOut, "Stock Out");
+        window.openStockOutModal = () =>
+            openModalFromUrl(
+                QUICK_PAGES.stockOut,
+                "Stock Out"
+            );
     }
 
     if (typeof window.openAddProductModal !== "function") {
-      window.openAddProductModal = () =>
-        openModalFromUrl(QUICK_PAGES.addProduct, "Add Product");
+        window.openAddProductModal = () =>
+            openModalFromUrl(
+                QUICK_PAGES.addProduct,
+                "Add Product"
+            );
     }
-  }
+}
 
   // ----------------------------
   // Topbar behaviors
