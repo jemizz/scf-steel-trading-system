@@ -414,9 +414,16 @@
 }
 
 
-.notification-btn:hover,
-.notification-btn.active {
+.notification-btn:hover {
     background-color: #f1f2f3;
+}
+
+
+/* Gray while the notification menu is open; removed when closed */
+.notification-btn.active,
+.notification-btn.active:hover {
+    background-color: #e2e4e6;
+    color: #272829;
 }
 
 
@@ -432,8 +439,6 @@
     font-size: 17px;
 
     line-height: 1;
-
-    filter: grayscale(1);
 }
 
 
@@ -520,14 +525,16 @@
 
     padding: 0 18px;
 
-    border-bottom: 1px solid #e8e9ea;
+    background-color: #272829;
+
+    border-bottom: 1px solid #272829;
 }
 
 
 .notification-header h2 {
     margin: 0 0 4px;
 
-    color: #343638;
+    color: #ffffff;
 
     font-size: 14px;
     font-weight: 600;
@@ -537,9 +544,9 @@
 .notification-header p {
     margin: 0;
 
-    color: #9a9da0;
+    color: #e4e6e8;
 
-    font-size: 9px;
+    font-size: 10px;
 }
 
 
@@ -549,20 +556,21 @@
     padding: 0;
 
     background: none;
-    color: #686d71;
+    color: #ffffff;
 
     border: none;
 
     font-family: "Geologica", sans-serif;
 
-    font-size: 9px;
+    font-size: 10px;
+    font-weight: 500;
 
     cursor: pointer;
 }
 
 
 .notification-header button:hover {
-    color: #272829;
+    color: #ffffff;
 
     text-decoration: underline;
 }
@@ -611,9 +619,7 @@
 
     border-radius: 50%;
 
-    font-size: 18px;
-
-    filter: grayscale(1);
+    color: #8b8f92;
 }
 
 
@@ -643,7 +649,7 @@
 .notification-item {
     display: grid;
 
-    grid-template-columns: 38px 1fr auto;
+    grid-template-columns: 1fr auto;
 
     gap: 12px;
 
@@ -666,28 +672,6 @@
 
 .notification-item.unread {
     background-color: #f6f7f8;
-}
-
-
-/* =========================
-   NOTIFICATION ITEM ICON
-========================= */
-
-.notification-item-icon {
-    width: 36px;
-    height: 36px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background-color: #f1f2f3;
-
-    border-radius: 50%;
-
-    color: #666b6f;
-
-    font-size: 14px;
 }
 
 
@@ -868,4 +852,96 @@
         width: 300px;
     }
 
+}
+
+
+/* =========================
+   NOTIFICATION COUNT PILL
+========================= */
+
+.notification-count {
+    display: none;
+
+    margin-left: 6px;
+    padding: 2px 7px;
+
+    background-color: rgba(255, 255, 255, 0.28);
+    color: #ffffff;
+
+    border-radius: 10px;
+
+    font-size: 9px;
+    font-weight: 500;
+
+    vertical-align: middle;
+}
+
+.notification-count.show {
+    display: inline-block;
+}
+
+
+/* =========================
+   NOTIFICATION TABS
+========================= */
+
+.notification-tabs {
+    display: flex;
+    gap: 6px;
+
+    padding: 10px 14px;
+
+    border-bottom: 1px solid #e8e9ea;
+}
+
+.notification-tab {
+    padding: 6px 12px;
+
+    background: none;
+    color: #6b7075;
+
+    border: none;
+    border-radius: 5px;
+
+    font-family: "Geologica", sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease;
+}
+
+.notification-tab:hover {
+    background-color: #f3f4f5;
+    color: #272829;
+}
+
+.notification-tab.active {
+    background-color: #272829;
+    color: #ffffff;
+}
+
+
+/* =========================
+   NOTIFICATION META (time + unread dot)
+========================= */
+
+.notification-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+
+    gap: 8px;
+}
+
+.notification-dot {
+    width: 7px;
+    height: 7px;
+
+    background-color: #d94d4d;
+
+    border-radius: 50%;
 }

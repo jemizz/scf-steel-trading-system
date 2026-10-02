@@ -315,4 +315,34 @@ deleteBtn.addEventListener("click", () => {
   deleteOne(currentId);
 });
 
-loadMessages();
+// Open a specific inquiry (called by the topbar notifications)
+window.openInquiryById = async function (id) {
+  if (!messages.some((x) => String(x.id) === String(id))) {
+    await loadMessages(); // may bagong inquiry na wala pa sa list
+  }
+
+  const m = messages.find((x) => String(x.id) === String(id));
+  if (!m) return;
+
+  currentId = String(id);
+  fillModal(id);
+  modalBackdrop.classList.add("show");
+  modalBackdrop.setAttribute("aria-hidden", "false");
+
+  if (normalizeStatus(m.status) === "unread") {
+    try {
+      await markAsRead(id);
+    } catch (error) {
+      alert(error.message || "Unable to mark as read.");
+    }
+  }
+};
+
+loadMessages().then(() => {
+  // Galing sa ibang page: messages.html?open=ID
+  const openId = new URLSearchParams(window.location.search).get("open");
+  if (openId) {
+    window.openInquiryById(openId);
+    history.replaceState(null, "", window.location.pathname);
+  }
+});

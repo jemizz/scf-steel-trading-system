@@ -415,11 +415,161 @@ function defineDefaultQuickFunctions() {
     return data;
   }
 
-  function renderTopbarNotifications(messages) {
+  // ----------------------------
+  // Notification rendering (tabs: All / Inquiries / Alerts)
+  // ----------------------------
+  const MAX_INDIVIDUAL = 3;
+  let notifMessages = [];
+  let notifTab = "all";
+
+  // Anything with type "alert" or "system" is an alert; the rest are inquiries.
+  function isAlert(item) {
+    const t = String(item && item.type || "").trim().toLowerCase();
+    return t === "alert" || t === "system";
+  }
+
+  function timeValue(item) {
+    const d = new Date(String(item && item.created_at || "").replace(" ", "T"));
+    return Number.isNaN(d.getTime()) ? 0 : d.getTime();
+  }
+
+  function buildNotificationRow({ title, text, time, unread, onClick }) {
+    const row = document.createElement("div");
+    row.className = "notification-item" + (unread ? " unread" : "");
+    row.style.gridTemplateColumns = "minmax(0, 1fr) auto";
+
+    const content = document.createElement("div");
+    content.className = "notification-content";
+
+    const strong = document.createElement("strong");
+    strong.textContent = title;
+
+    const p = document.createElement("p");
+    p.textContent = text;
+
+    content.append(strong, p);
+
+    const meta = document.createElement("div");
+    meta.className = "notification-meta";
+
+    const t = document.createElement("span");
+    t.className = "notification-time";
+    t.textContent = time;
+    meta.appendChild(t);
+
+    if (unread) {
+      const dot = document.createElement("span");
+      dot.className = "notification-dot";
+      meta.appendChild(dot);
+    }
+
+    row.append(content, meta);
+    row.addEventListener("click", onClick);
+    return row;
+  }
+
+  function drawNotificationList() {
     const list = host.querySelector("#notificationList");
-    const badge = host.querySelector("#notificationBadge");
     const empty = host.querySelector("#notificationEmpty");
-    if (!list || !badge) return;
+    if (!list) return;
+
+    list.querySelectorAll(".notification-item").forEach((el) => el.remove());
+
+    const inquiries = notifMessages.filter((m) => !isAlert(m));
+    const alerts = notifMessages.filter(isAlert);
+
+    const entries = [];
+
+    if (notifTab === "all" || notifTab === "inquiries") {
+      const unreadInq = inquiries.filter(isUnread);
+
+      if (unreadInq.length > MAX_INDIVIDUAL) {
+        // More than 3 unread inquiries -> ONE grouped notification
+        entries.push({
+          sort: Math.max(...unreadInq.map(timeValue)),
+          row: buildNotificationRow({
+            title: `${unreadInq.length} new inquiries`,
+            text: "You have new customer inquiries. Click to view all messages.",
+            time: notificationTime(unreadInq[0].created_at),
+            unread: true,
+            onClick: () => { window.location.href = "messages.html"; }
+          })
+        });
+      } else {
+        inquiries.slice(0, MAX_INDIVIDUAL).forEach((item) => {
+          entries.push({
+            sort: timeValue(item),
+            row: buildNotificationRow({
+              title: item.name || "New inquiry",
+              text: item.message || "Customer sent a message.",
+              time: notificationTime(item.created_at),
+              unread: isUnread(item),
+              onClick: () => {
+                // isara ang notification dropdown
+                host.querySelector("#notificationMenu")?.classList.remove("show");
+                host.querySelector("#notificationBtn")?.classList.remove("active");
+
+                if (typeof window.openInquiryById === "function") {
+                  // Nasa Messages page na: buksan agad ang modal
+                  window.openInquiryById(item.id).then(loadTopbarNotifications);
+                } else {
+                  // Nasa ibang page: pumunta sa Messages at buksan doon
+                  window.location.href = "messages.html?open=" + encodeURIComponent(item.id);
+                }
+              }
+            })
+          });
+        });
+      }
+    }
+
+    if (notifTab === "all" || notifTab === "alerts") {
+      alerts.slice(0, 12).forEach((item) => {
+        entries.push({
+          sort: timeValue(item),
+          row: buildNotificationRow({
+            title: item.name || item.title || "System alert",
+            text: item.message || "",
+            time: notificationTime(item.created_at),
+            unread: isUnread(item),
+            onClick: async () => {
+              try {
+                if (isUnread(item)) {
+                  await notificationRequest("set_status", { id: item.id, status: "read" });
+                }
+              } catch (error) {
+                console.error(error);
+              }
+              if (item.link) window.location.href = item.link;
+              else loadTopbarNotifications();
+            }
+          })
+        });
+      });
+    }
+
+    entries.sort((x, y) => y.sort - x.sort);
+    entries.forEach((entry) => list.appendChild(entry.row));
+
+    if (empty) {
+      empty.style.display = entries.length > 0 ? "none" : "flex";
+
+      const label = empty.querySelector("strong");
+      if (label) {
+        label.textContent =
+          notifTab === "inquiries" ? "No inquiries" :
+          notifTab === "alerts" ? "No alerts" :
+          "No notifications";
+      }
+    }
+  }
+
+  function renderTopbarNotifications(messages) {
+    const badge = host.querySelector("#notificationBadge");
+    const count = host.querySelector("#notificationCount");
+    if (!badge) return;
+
+    notifMessages = messages;
 
     const unread = messages.filter(isUnread);
 
@@ -431,52 +581,24 @@ function defineDefaultQuickFunctions() {
       badge.classList.remove("show");
     }
 
-    list.querySelectorAll(".notification-item").forEach((item) => item.remove());
-
-    if (empty) {
-      empty.hidden = messages.length > 0;
+    if (count) {
+      count.textContent = `${unread.length} Unread`;
+      count.classList.toggle("show", unread.length > 0);
     }
 
-    messages.slice(0, 12).forEach((item) => {
-      const row = document.createElement("div");
-      row.className = "notification-item" + (isUnread(item) ? " unread" : "");
-      row.dataset.id = item.id;
+    drawNotificationList();
+  }
 
-      const icon = document.createElement("div");
-      icon.className = "notification-item-icon";
-      icon.textContent = "M";
+  function initNotificationTabs() {
+    const tabs = host.querySelectorAll(".notification-tab");
 
-      const content = document.createElement("div");
-      content.className = "notification-content";
-
-      const title = document.createElement("strong");
-      title.textContent = item.name || "New inquiry";
-
-      const text = document.createElement("p");
-      text.textContent = item.message || "Customer sent a message.";
-
-      const time = document.createElement("span");
-      time.className = "notification-time";
-      time.textContent = notificationTime(item.created_at);
-
-      content.append(title, text);
-      row.append(icon, content, time);
-
-      row.addEventListener("click", async () => {
-        try {
-          if (isUnread(item)) {
-            await notificationRequest("set_status", {
-              id: item.id,
-              status: "read"
-            });
-          }
-        } catch (error) {
-          console.error(error);
-        }
-        window.location.href = "messages.html";
+    tabs.forEach((tab) => {
+      tab.addEventListener("click", (e) => {
+        e.stopPropagation();
+        notifTab = tab.dataset.tab || "all";
+        tabs.forEach((t) => t.classList.toggle("active", t === tab));
+        drawNotificationList();
       });
-
-      list.appendChild(row);
     });
   }
 
@@ -539,6 +661,7 @@ function defineDefaultQuickFunctions() {
       });
     }
 
+    initNotificationTabs();
     loadTopbarNotifications();
     if (window.__tbNotifTimer) clearInterval(window.__tbNotifTimer);
     window.__tbNotifTimer = setInterval(loadTopbarNotifications, 20000);

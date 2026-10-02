@@ -65,10 +65,74 @@ if ($action === 'get_public_contact') {
 }
 
 // login.php saves $_SESSION['user_id'] and $_SESSION['role'] after a successful login.
-$userId = isset($_SESSION['user_id']) ? (int) $_SESSION['user_id'] : 0;
+$userId = isset($_SESSION['user_id'])
+    ? (int) $_SESSION['user_id']
+    : 0;
 
-if ($userId <= 0 || ($_SESSION['role'] ?? '') !== 'Admin') {
+$userRole = strtolower(
+    trim((string) ($_SESSION['role'] ?? ''))
+);
+
+if (
+    $userId <= 0 ||
+    !in_array(
+        $userRole,
+        ['admin', 'administrator'],
+        true
+    )
+) {
     respond(false, 'User session not found.', [], 401);
+}
+// =========================
+// GET SIDEBAR ADMIN
+// =========================
+
+if ($action === 'get_sidebar_admin') {
+
+    try {
+
+        $stmt = $pdo->prepare(
+            'SELECT username
+             FROM users
+             WHERE id = :id
+             LIMIT 1'
+        );
+
+        $stmt->execute([
+            'id' => $userId
+        ]);
+
+        $account = $stmt->fetch();
+
+    } catch (PDOException $e) {
+
+        respond(
+            false,
+            'Unable to load administrator information.',
+            [],
+            500
+        );
+
+    }
+
+    if (!$account) {
+
+        respond(
+            false,
+            'Administrator account not found.',
+            [],
+            404
+        );
+
+    }
+
+    respond(
+        true,
+        '',
+        [
+            'username' => $account['username'] ?? ''
+        ]
+    );
 }
 
 if ($action === 'get_account') {

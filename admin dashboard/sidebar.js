@@ -2,14 +2,19 @@
 // LOAD SIDEBAR
 // =========================
 
-fetch("sidebar.html?v=2")
+fetch("sidebar.html?v=4", {
+    cache: "no-store"
+})
     .then(response => {
 
         if (!response.ok) {
-            throw new Error("Could not load sidebar.");
+            throw new Error(
+                "Could not load sidebar."
+            );
         }
 
         return response.text();
+
     })
 
     .then(data => {
@@ -21,8 +26,19 @@ fetch("sidebar.html?v=2")
             return;
         }
 
-        // Insert sidebar
+
+        // =========================
+        // INSERT SIDEBAR
+        // =========================
+
         sidebarContainer.innerHTML = data;
+
+
+        // =========================
+        // LOAD ADMIN USERNAME
+        // =========================
+
+        loadSidebarAdmin(sidebarContainer);
 
 
         // =========================
@@ -30,10 +46,14 @@ fetch("sidebar.html?v=2")
         // =========================
 
         const currentPage =
-            window.location.pathname.split("/").pop();
+            window.location.pathname
+                .split("/")
+                .pop();
 
         const links =
-            document.querySelectorAll(".sidebar-link");
+            sidebarContainer.querySelectorAll(
+                ".sidebar-link"
+            );
 
         links.forEach(link => {
 
@@ -48,22 +68,38 @@ fetch("sidebar.html?v=2")
 
 
         // =========================
-        // PREVENT PAGE SCROLL WHILE HOVERING SIDEBAR
+        // PREVENT PAGE SCROLL
+        // WHILE HOVERING SIDEBAR
         // =========================
 
-        const sidebar = sidebarContainer.querySelector(".sidebar");
-        const nav = sidebarContainer.querySelector(".sidebar-nav");
+        const sidebar =
+            sidebarContainer.querySelector(
+                ".sidebar"
+            );
+
+        const nav =
+            sidebarContainer.querySelector(
+                ".sidebar-nav"
+            );
 
         if (sidebar && nav) {
 
-            sidebar.addEventListener("wheel", function (event) {
+            sidebar.addEventListener(
+                "wheel",
+                function (event) {
 
-                // Kung hindi scrollable ang nav, harangin ang scroll
-                if (nav.scrollHeight <= nav.clientHeight) {
-                    event.preventDefault();
+                    if (
+                        nav.scrollHeight <=
+                        nav.clientHeight
+                    ) {
+                        event.preventDefault();
+                    }
+
+                },
+                {
+                    passive: false
                 }
-
-            }, { passive: false });
+            );
 
         }
 
@@ -73,18 +109,23 @@ fetch("sidebar.html?v=2")
         // =========================
 
         const logoutBtn =
-            document.getElementById("logoutBtn");
+            sidebarContainer.querySelector(
+                "#logoutBtn"
+            );
 
         if (logoutBtn) {
 
-            logoutBtn.addEventListener("click", function (event) {
+            logoutBtn.addEventListener(
+                "click",
+                function (event) {
 
-                event.preventDefault();
+                    event.preventDefault();
 
-                // Redirect to admin login page
-                window.location.href = "login.html";
+                    window.location.href =
+                        "login.html";
 
-            });
+                }
+            );
 
         }
 
@@ -98,3 +139,95 @@ fetch("sidebar.html?v=2")
         );
 
     });
+
+
+// =========================
+// LOAD SIDEBAR ADMIN
+// =========================
+
+async function loadSidebarAdmin(sidebarContainer) {
+
+    const usernameElement =
+        sidebarContainer.querySelector(
+            "#sidebarAdminUsername"
+        );
+
+    if (!usernameElement) {
+
+        console.error(
+            "sidebarAdminUsername element not found."
+        );
+
+        return;
+    }
+
+    try {
+
+        const response = await fetch(
+            "settings.php?action=get_sidebar_admin",
+            {
+                method: "GET",
+                cache: "no-store",
+                credentials: "same-origin",
+                headers: {
+                    "Accept": "application/json"
+                }
+            }
+        );
+
+        const data = await response.json();
+
+
+        console.log(
+            "SIDEBAR DATA:",
+            data
+        );
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.message ||
+                "Unable to load administrator."
+            );
+
+        }
+
+
+        if (!data.username) {
+
+            throw new Error(
+                "Username is empty."
+            );
+
+        }
+
+
+        // =========================
+        // DISPLAY USERNAME
+        // =========================
+
+        usernameElement.textContent =
+            data.username;
+
+
+        console.log(
+            "USERNAME DISPLAYED:",
+            data.username
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "Sidebar username error:",
+            error
+        );
+
+        usernameElement.textContent =
+            "Administrator";
+
+    }
+
+}
