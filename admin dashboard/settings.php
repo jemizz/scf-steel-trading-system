@@ -20,6 +20,17 @@ function respond(bool $success, string $message = '', array $extra = [], int $st
     exit;
 }
 
+function request_input(): array
+{
+    $input = json_decode(file_get_contents('php://input'), true);
+
+    if (!is_array($input)) {
+        $input = $_POST;
+    }
+
+    return $input;
+}
+
 // =========================
 // PUBLIC CONTACT INFORMATION
 // =========================
@@ -86,18 +97,41 @@ if ($action === 'update_account') {
         respond(false, 'Invalid request method.', [], 405);
     }
 
-    $input = json_decode(file_get_contents('php://input'), true);
-    if (!is_array($input)) {
-        $input = $_POST;
-    }
+    $input = request_input();
 
     $adminUsername = trim((string) ($input['adminUsername'] ?? ''));
     $contactNumber = trim((string) ($input['contactNumber'] ?? ''));
     $emailAddress = trim((string) ($input['emailAddress'] ?? ''));
     $facebookLink = trim((string) ($input['facebookLink'] ?? ''));
 
+    if ($adminUsername === '') {
+        respond(false, 'Admin Username is required.', [], 422);
+    }
+
     if (!preg_match('/^[A-Za-z0-9._-]{3,50}$/', $adminUsername)) {
-        respond(false, 'Admin Username must be 3-50 characters (letters, numbers, dot, underscore, dash).', [], 422);
+        respond(false, 'Admin Username must be 3-50 characters: letters, numbers, dot, underscore, or dash.', [], 422);
+    }
+
+    if ($contactNumber === '') {
+        respond(false, 'Contact number is required.', [], 422);
+    }
+
+    if (!preg_match('/^[0-9]{11}$/', $contactNumber)) {
+        respond(false, 'Contact number must be exactly 11 digits.', [], 422);
+    }
+
+    if ($facebookLink === '') {
+        respond(false, 'Facebook link is required.', [], 422);
+    }
+
+    if (strlen($facebookLink) > 255 || !filter_var($facebookLink, FILTER_VALIDATE_URL)) {
+        respond(false, 'Please enter a valid Facebook link.', [], 422);
+    }
+
+    if ($emailAddress !== '') {
+        if (strlen($emailAddress) > 150 || !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
+            respond(false, 'Please enter a valid email address.', [], 422);
+        }
     }
 
     $stmt = $pdo->prepare(
@@ -114,18 +148,6 @@ if ($action === 'update_account') {
 
     if ($stmt->fetch()) {
         respond(false, 'That Admin Username is already being used.', [], 409);
-    }
-
-    if ($contactNumber !== '' && !preg_match('/^[0-9]{11}$/', $contactNumber)) {
-        respond(false, 'Contact number must be exactly 11 digits.', [], 422);
-    }
-
-    if ($emailAddress !== '' && !filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
-        respond(false, 'Please enter a valid email address.', [], 422);
-    }
-
-    if ($facebookLink !== '' && !filter_var($facebookLink, FILTER_VALIDATE_URL)) {
-        respond(false, 'Please enter a valid Facebook link.', [], 422);
     }
 
     if ($emailAddress !== '') {
@@ -157,9 +179,9 @@ if ($action === 'update_account') {
 
     $stmt->execute([
         'username' => $adminUsername,
-        'contact_no' => $contactNumber !== '' ? $contactNumber : null,
+        'contact_no' => $contactNumber,
         'email' => $emailAddress !== '' ? $emailAddress : null,
-        'links' => $facebookLink !== '' ? $facebookLink : null,
+        'links' => $facebookLink,
         'id' => $userId
     ]);
 
@@ -173,17 +195,22 @@ if ($action === 'change_password') {
         respond(false, 'Invalid request method.', [], 405);
     }
 
-    $input = json_decode(file_get_contents('php://input'), true);
-    if (!is_array($input)) {
-        $input = $_POST;
-    }
+    $input = request_input();
 
     $currentPassword = (string) ($input['currentPassword'] ?? '');
     $newPassword = (string) ($input['newPassword'] ?? '');
     $confirmPassword = (string) ($input['confirmPassword'] ?? '');
 
-    if ($currentPassword === '' || $newPassword === '' || $confirmPassword === '') {
-        respond(false, 'Please complete all password fields.', [], 422);
+    if ($currentPassword === '') {
+        respond(false, 'Current password is required.', [], 422);
+    }
+
+    if ($newPassword === '') {
+        respond(false, 'New password is required.', [], 422);
+    }
+
+    if ($confirmPassword === '') {
+        respond(false, 'Confirm password is required.', [], 422);
     }
 
     if ($newPassword !== $confirmPassword) {
