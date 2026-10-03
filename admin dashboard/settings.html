@@ -415,8 +415,15 @@
 
         <div class="settings-card">
 
-          <div class="settings-card-header">
+          <div class="settings-card-header has-status">
             <h2>Notification Settings</h2>
+
+            <p
+              class="settings-message"
+              id="notificationMessage"
+              role="status"
+              aria-live="polite"
+            ></p>
           </div>
 
 
@@ -596,50 +603,7 @@
 
             </div>
 
-
-            <!-- PAYMENT DUE -->
-
-            <div class="notif-item">
-
-              <div class="notif-text">
-
-                <strong id="paymentDueLabel">
-                  Payment Due Reminders
-                </strong>
-
-                <p id="paymentDueDescription">
-                  For outstanding wholesale credit payments
-                </p>
-
-              </div>
-
-              <label class="switch">
-
-                <input
-                  type="checkbox"
-                  id="notifPaymentDue"
-                  aria-labelledby="paymentDueLabel"
-                  aria-describedby="paymentDueDescription"
-                >
-
-                <span
-                  class="slider"
-                  aria-hidden="true"
-                ></span>
-
-              </label>
-
-            </div>
-
           </div>
-
-
-          <p
-            class="settings-message"
-            id="notificationMessage"
-            role="status"
-            aria-live="polite"
-          ></p>
 
 
           <div class="settings-form-actions">
@@ -649,7 +613,7 @@
               class="save-settings-btn"
               id="saveNotificationSettings"
             >
-              Save Notification Settings
+              Save Changes
             </button>
 
           </div>

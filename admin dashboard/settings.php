@@ -145,8 +145,7 @@ $notificationColumns = [
     'lowStock'    => 'low_stock',
     'fabrication' => 'fabrication',
     'poDelivery'  => 'po_delivery',
-    'dailySales'  => 'daily_sales',
-    'paymentDue'  => 'payment_due'
+    'dailySales'  => 'daily_sales'
 ];
 
 // Customer inquiries are ON by default; the rest are OFF.
@@ -155,8 +154,7 @@ $notificationDefaults = [
     'lowStock'    => false,
     'fabrication' => false,
     'poDelivery'  => false,
-    'dailySales'  => false,
-    'paymentDue'  => false
+    'dailySales'  => false
 ];
 
 function ensure_notification_table(PDO $pdo): void
@@ -169,7 +167,6 @@ function ensure_notification_table(PDO $pdo): void
             fabrication TINYINT(1) NOT NULL DEFAULT 0,
             po_delivery TINYINT(1) NOT NULL DEFAULT 0,
             daily_sales TINYINT(1) NOT NULL DEFAULT 0,
-            payment_due TINYINT(1) NOT NULL DEFAULT 0,
             updated_at  TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP
                                    ON UPDATE CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
@@ -225,24 +222,23 @@ if ($action === 'save_notification_settings') {
         $stmt = $pdo->prepare(
             'INSERT INTO notification_settings
                 (id, inquiries, low_stock, fabrication,
-                 po_delivery, daily_sales, payment_due)
+                 po_delivery, daily_sales)
              VALUES
                 (1, :inquiries, :low_stock, :fabrication,
-                 :po_delivery, :daily_sales, :payment_due)
+                 :po_delivery, :daily_sales)
              ON DUPLICATE KEY UPDATE
                 inquiries   = VALUES(inquiries),
                 low_stock   = VALUES(low_stock),
                 fabrication = VALUES(fabrication),
                 po_delivery = VALUES(po_delivery),
-                daily_sales = VALUES(daily_sales),
-                payment_due = VALUES(payment_due)'
+                daily_sales = VALUES(daily_sales)'
         );
         $stmt->execute($values);
     } catch (PDOException $e) {
         respond(false, 'Unable to save notification settings.', [], 500);
     }
 
-    respond(true, 'Notification settings saved.');
+    respond(true, 'Preferences saved.');
 }
 
 if ($action === 'get_account') {

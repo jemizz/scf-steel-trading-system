@@ -186,6 +186,45 @@ body {
 }
 
 
+/* Header with an inline status message (Notifications).
+   The message sits beside the title, so showing or hiding it
+   never moves the list or the Save button. */
+
+.settings-content .settings-card-header.has-status {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  min-height: 34px;
+
+  margin-bottom: 16px;
+}
+
+.settings-content .settings-card-header.has-status h2 {
+  margin: 0;
+}
+
+.settings-content .settings-card-header.has-status .settings-message {
+  flex-shrink: 0;
+
+  margin: 0;
+
+  padding:
+    6px
+    12px;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 500;
+
+  line-height: 1.4;
+}
+
+
 /* =========================
    ACCOUNT SUMMARY
 ========================= */

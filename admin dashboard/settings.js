@@ -1076,8 +1076,7 @@
       notifLowStock:    "lowStock",
       notifFabrication: "fabrication",
       notifPoDelivery:  "poDelivery",
-      notifDailySales:  "dailySales",
-      notifPaymentDue:  "paymentDue"
+      notifDailySales:  "dailySales"
     };
 
     const NOTIF_DEFAULTS = {
@@ -1085,8 +1084,7 @@
       lowStock:    false,
       fabrication: false,
       poDelivery:  false,
-      dailySales:  false,
-      paymentDue:  false
+      dailySales:  false
     };
 
     function readCachedPrefs() {
@@ -1160,6 +1158,7 @@
     ) {
 
       let switchesTouched = false;
+      let messageTimer = null;
 
       // 1) Show the cached values right away
       applyPrefsToSwitches(readCachedPrefs());
@@ -1202,6 +1201,7 @@
             "change",
             () => {
               switchesTouched = true;
+              clearTimeout(messageTimer);
               notificationMessage.textContent = "";
             }
           );
@@ -1238,9 +1238,15 @@
             showMessage(
               notificationMessage,
               data.message ||
-              "Notification settings saved.",
+              "Preferences saved.",
               "success-message"
             );
+
+            // Hide the confirmation after a few seconds
+            clearTimeout(messageTimer);
+            messageTimer = setTimeout(() => {
+              notificationMessage.textContent = "";
+            }, 3500);
 
           } catch (error) {
 
