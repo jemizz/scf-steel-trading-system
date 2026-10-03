@@ -85,6 +85,23 @@ const PRICE_FIELDS = [
     'price_per_ft'
 ];
 
+// (NEW) User-friendly labels for validation messages
+const FIELD_LABELS = [
+    'dimensions' => 'Dimensions',
+    'size' => 'Size',
+    'thickness' => 'Thickness',
+    'kilos' => 'Weight / Kilos',
+    'gauge' => 'Gauge',
+    'color' => 'Color',
+    'variant' => 'Variant / Type',
+    'brand' => 'Brand',
+    'price_unit' => 'Unit',
+    'price' => 'Price',
+    'price_half' => 'Half Price',
+    'price_quarter' => 'Quarter Price',
+    'price_per_ft' => 'Price per Foot'
+];
+
 
 // =========================
 // BASIC HELPERS
@@ -137,6 +154,18 @@ function limited_text(
     }
 
     return $text;
+}
+
+// (NEW) Pattern checker for optional fields
+function optional_pattern(string $value, string $pattern, string $errorMessage): void
+{
+    if ($value === '') {
+        return;
+    }
+
+    if (!preg_match($pattern, $value)) {
+        throw new InvalidArgumentException($errorMessage);
+    }
 }
 
 function assigned_product_id(array $row): ?int
@@ -221,6 +250,7 @@ function spec_of(array $row): string
         'color',
         'variant',
         'brand'
+        // Grade removed / not included
     ] as $field) {
         $value = $row[$field] ?? null;
 
@@ -236,16 +266,60 @@ function variant_values(array $input): array
 {
     $values = [];
 
+    // (NEW) Ignore grade if a client sends it
+    unset($input['grade']);
+
     foreach (TEXT_LIMITS as $field => $limit) {
         if (!array_key_exists($field, $input)) {
             continue;
         }
 
+        $label = FIELD_LABELS[$field] ?? $field;
+
         $value = limited_text(
             $input[$field],
             $limit,
-            $field
+            $label
         );
+
+        // (NEW) Field-specific character restrictions
+        switch ($field) {
+            case 'kilos':
+                // numbers only, allow decimals
+                optional_pattern(
+                    $value,
+                    '/^\d+(\.\d+)?$/D',
+                    'Weight / Kilos must be a number only (no special characters).'
+                );
+                break;
+
+            case 'gauge':
+                // numbers only, allow decimals
+                optional_pattern(
+                    $value,
+                    '/^\d+(\.\d+)?$/D',
+                    'Gauge must be a number only (no letters or special characters).'
+                );
+                break;
+
+            case 'color':
+                // letters only, allow spaces and hyphen
+                optional_pattern(
+                    $value,
+                    '/^[\p{L}\s-]+$/u',
+                    'Color must contain letters only (no numbers or special characters).'
+                );
+                break;
+
+            case 'brand':
+                // letters + numbers + spaces + hyphen only
+                optional_pattern(
+                    $value,
+                    '/^[\p{L}0-9\s-]+$/u',
+                    'Brand must not contain special characters.'
+                );
+                break;
+        }
 
         $values[$field] = $value === '' ? null : $value;
     }
@@ -1137,15 +1211,6 @@ if ($method === 'POST' && isset($_GET['action'])) {
 // =========================
 // ADD PRODUCT
 // =========================
-
-// Matches your current add-product.js:
-// name
-// category_id (main category)
-// description
-// showInCatalog
-// image (optional)
-//
-// Variants are optional.
 
 if ($method === 'POST') {
     $destination = null;

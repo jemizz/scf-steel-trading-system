@@ -193,7 +193,7 @@ body {
 .settings-content .account-summary {
   display: flex;
 
-  align-items: center;
+  align-items: flex-start;
 
   gap: 14px;
 
@@ -211,23 +211,21 @@ body {
   width: 50px;
   height: 50px;
 
-  color: #ffffff;
-  background-color: #272829;
+  background-color: #e4e7ea;
 
+  border: 1px solid #d7dbe0;
   border-radius: 50%;
+
+  overflow: hidden;
 }
 
-.settings-content .avatar svg {
-  width: 26px;
-  height: 26px;
+.settings-content .avatar-icon {
+  display: block;
 
-  fill: none;
+  width: 50px;
+  height: 50px;
 
-  stroke: currentColor;
-
-  stroke-width: 1.5;
-
-  stroke-linecap: round;
+  fill: #000000;
 }
 
 .settings-content .account-meta {

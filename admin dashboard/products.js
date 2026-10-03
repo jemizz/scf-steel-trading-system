@@ -92,6 +92,107 @@
             : category;
     }
 
+    // =========================
+    // INPUT RULES (NEW)
+    // =========================
+    // Requirements:
+    // - Weight/Kilos: no special characters -> numeric only (allow decimals)
+    // - Color: no numbers/special -> letters only (allow spaces and hyphen)
+    // - Gauge: no letters -> numeric only (allow decimals)
+    // - Brand: no special characters -> letters/numbers/spaces/hyphen only
+    // - Grade: removed -> if a grade field exists in DB/API, we do not show or submit it
+
+    function sanitizeNumericString(value) {
+        // digits + single dot
+        return String(value ?? "")
+            .replace(/[^0-9.]/g, "")
+            .replace(/(\..*)\./g, "$1");
+    }
+
+    function sanitizeLettersOnlyString(value) {
+        // letters + spaces + hyphen only
+        return String(value ?? "").replace(/[^a-zA-Z\s-]/g, "");
+    }
+
+    function sanitizeBrandString(value) {
+        // letters + numbers + spaces + hyphen only
+        return String(value ?? "").replace(/[^a-zA-Z0-9\s-]/g, "");
+    }
+
+    function attachVariantInputGuards(root) {
+        if (!root) return;
+
+        const kilos = root.querySelector('input[name="kilos"]');
+        if (kilos && kilos.dataset.guard !== "1") {
+            kilos.dataset.guard = "1";
+            kilos.setAttribute("inputmode", "decimal");
+            kilos.setAttribute("autocomplete", "off");
+            kilos.addEventListener("input", () => {
+                kilos.value = sanitizeNumericString(kilos.value);
+            });
+            kilos.addEventListener("paste", () => {
+                setTimeout(() => {
+                    kilos.value = sanitizeNumericString(kilos.value);
+                }, 0);
+            });
+        }
+
+        const gauge = root.querySelector('input[name="gauge"]');
+        if (gauge && gauge.dataset.guard !== "1") {
+            gauge.dataset.guard = "1";
+            gauge.setAttribute("inputmode", "decimal");
+            gauge.setAttribute("autocomplete", "off");
+            gauge.addEventListener("input", () => {
+                gauge.value = sanitizeNumericString(gauge.value);
+            });
+            gauge.addEventListener("paste", () => {
+                setTimeout(() => {
+                    gauge.value = sanitizeNumericString(gauge.value);
+                }, 0);
+            });
+        }
+
+        const color = root.querySelector('input[name="color"]');
+        if (color && color.dataset.guard !== "1") {
+            color.dataset.guard = "1";
+            color.setAttribute("autocomplete", "off");
+            color.addEventListener("input", () => {
+                color.value = sanitizeLettersOnlyString(color.value);
+            });
+            color.addEventListener("paste", () => {
+                setTimeout(() => {
+                    color.value = sanitizeLettersOnlyString(color.value);
+                }, 0);
+            });
+        }
+
+        const brand = root.querySelector('input[name="brand"]');
+        if (brand && brand.dataset.guard !== "1") {
+            brand.dataset.guard = "1";
+            brand.setAttribute("autocomplete", "off");
+            brand.addEventListener("input", () => {
+                brand.value = sanitizeBrandString(brand.value);
+            });
+            brand.addEventListener("paste", () => {
+                setTimeout(() => {
+                    brand.value = sanitizeBrandString(brand.value);
+                }, 0);
+            });
+        }
+
+        // Remove Grade field if it ever appears in the form
+        const gradeInput = root.querySelector('[name="grade"], #grade');
+        if (gradeInput) {
+            const wrapper =
+                gradeInput.closest("label") ||
+                gradeInput.closest(".form-group") ||
+                gradeInput.closest("div") ||
+                gradeInput.parentElement;
+
+            if (wrapper) wrapper.remove();
+        }
+    }
+
     // categories.image_path stores only the file name
     // (e.g. "flat-bar.jpg"). The file is read from the
     // uploads/products folder, next to the API folder.
@@ -395,6 +496,8 @@
     // VARIANT FIELDS
     // =========================
 
+    // NOTE: Grade removed. If your older code had ["grade","Grade",..],
+    // keep it removed. This .filter also ensures it's never shown.
     const fields = [
         ["dimensions", "Dimensions", 80],
         ["size", "Size", 80],
@@ -409,7 +512,7 @@
         ["price_half", "Half Price"],
         ["price_quarter", "Quarter Price"],
         ["price_per_ft", "Price per Foot"]
-    ];
+    ].filter(([key]) => key !== "grade");
 
     function isPrice(key) {
         return (
@@ -1028,17 +1131,46 @@
                     adding &&
                     (key === "price" || key === "price_unit");
 
-                const attributes = isPrice(key)
-                    ? `
+                // CUSTOM ATTRIBUTES PER FIELD (NEW)
+                // We keep most fields as text, but enforce your restrictions via input guards.
+                // Price fields remain numeric.
+                let attributes = "";
+
+                if (isPrice(key)) {
+                    attributes = `
                         type="number"
                         min="0"
                         max="99999999.99"
                         step="0.01"
-                    `
-                    : `
+                    `;
+                } else if (key === "kilos" || key === "gauge") {
+                    // numeric only (no special chars / no letters)
+                    attributes = `
+                        type="text"
+                        inputmode="decimal"
+                        maxlength="${max}"
+                        autocomplete="off"
+                    `;
+                } else if (key === "color") {
+                    // letters only (no numbers / no special)
+                    attributes = `
+                        type="text"
+                        maxlength="${max}"
+                        autocomplete="off"
+                    `;
+                } else if (key === "brand") {
+                    // no special characters
+                    attributes = `
+                        type="text"
+                        maxlength="${max}"
+                        autocomplete="off"
+                    `;
+                } else {
+                    attributes = `
                         type="text"
                         maxlength="${max}"
                     `;
+                }
 
                 return `
                     <label>
@@ -1053,6 +1185,9 @@
                     </label>
                 `;
             }).join("");
+
+        // Attach "won't accept ..." guards after fields are created (NEW)
+        attachVariantInputGuards(byId("variantFields"));
 
         editor.showModal();
     }
@@ -1280,6 +1415,26 @@
                 const values = Object.fromEntries(
                     new FormData(event.currentTarget)
                 );
+
+                // Apply sanitizing before validation + submit (NEW)
+                // Grade removed: if it exists somehow, ignore it.
+                delete values.grade;
+
+                if (Object.prototype.hasOwnProperty.call(values, "kilos")) {
+                    values.kilos = sanitizeNumericString(values.kilos);
+                }
+
+                if (Object.prototype.hasOwnProperty.call(values, "gauge")) {
+                    values.gauge = sanitizeNumericString(values.gauge);
+                }
+
+                if (Object.prototype.hasOwnProperty.call(values, "color")) {
+                    values.color = sanitizeLettersOnlyString(values.color);
+                }
+
+                if (Object.prototype.hasOwnProperty.call(values, "brand")) {
+                    values.brand = sanitizeBrandString(values.brand);
+                }
 
                 if (adding) {
                     if (!String(values.item_name || "").trim()) {
