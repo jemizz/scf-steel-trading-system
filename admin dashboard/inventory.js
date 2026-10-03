@@ -202,12 +202,6 @@ function displayInventory(items) {
                 </span>
             </td>
 
-
-            <td>
-                ${item.unit}
-            </td>
-
-
             <td>
                 ${item.minimumStock}
             </td>
