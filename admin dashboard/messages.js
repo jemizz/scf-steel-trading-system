@@ -374,6 +374,20 @@ async function toggleRead(id) {
   }
 }
 
+async function markAsRead(id) {
+  const item = messages.find((x) => String(x.id) === String(id));
+  if (!item || normalizeStatus(item.status) === "read") return;
+
+  await apiRequest("set_status", {
+    id,
+    status: "read"
+  });
+
+  item.status = "read";
+  render();
+  if (currentId === String(id)) fillModal(id);
+}
+
 async function deleteOne(id) {
   try {
     await apiRequest("delete", { id });

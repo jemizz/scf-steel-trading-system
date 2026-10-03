@@ -420,7 +420,45 @@ function defineDefaultQuickFunctions() {
   // ----------------------------
   const MAX_INDIVIDUAL = 3;
   let notifMessages = [];
+  let rawNotifMessages = [];
   let notifTab = "all";
+
+  // Notification preferences saved from Settings > Notification
+  const NOTIF_PREFS_KEY = "scfNotificationPrefs";
+
+  // Pull the saved preferences from the database (settings.php),
+  // keep a copy in localStorage so the next page loads instantly.
+  async function syncNotificationPrefs() {
+    try {
+      const response = await fetch("settings.php?action=get_notification_settings", {
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: { "Accept": "application/json" }
+      });
+      const data = await response.json();
+
+      if (!response.ok || !data.success || !data.settings) return;
+
+      const before = localStorage.getItem(NOTIF_PREFS_KEY);
+      const after = JSON.stringify(data.settings);
+
+      if (before !== after) {
+        localStorage.setItem(NOTIF_PREFS_KEY, after);
+        renderTopbarNotifications(rawNotifMessages);
+      }
+    } catch (error) {
+      console.error("Notification settings sync error:", error);
+    }
+  }
+
+  function getNotificationPrefs() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(NOTIF_PREFS_KEY) || "{}");
+      return { inquiries: saved.inquiries !== false }; // default: ON
+    } catch (error) {
+      return { inquiries: true };
+    }
+  }
 
   // Anything with type "alert" or "system" is an alert; the rest are inquiries.
   function isAlert(item) {
@@ -569,6 +607,27 @@ function defineDefaultQuickFunctions() {
     const count = host.querySelector("#notificationCount");
     if (!badge) return;
 
+    rawNotifMessages = messages;
+
+    // Customer inquiries OFF -> hide them (alerts still show)
+    const prefs = getNotificationPrefs();
+    if (!prefs.inquiries) {
+      messages = messages.filter(isAlert);
+    }
+
+    // Hide the "Inquiries" tab while inquiries are OFF
+    const inquiriesTab = host.querySelector('.notification-tab[data-tab="inquiries"]');
+    if (inquiriesTab) {
+      inquiriesTab.style.display = prefs.inquiries ? "" : "none";
+    }
+
+    if (!prefs.inquiries && notifTab === "inquiries") {
+      notifTab = "all";
+      host.querySelectorAll(".notification-tab").forEach((tab) => {
+        tab.classList.toggle("active", tab.dataset.tab === "all");
+      });
+    }
+
     notifMessages = messages;
 
     const unread = messages.filter(isUnread);
@@ -662,9 +721,21 @@ function defineDefaultQuickFunctions() {
     }
 
     initNotificationTabs();
+    syncNotificationPrefs();
     loadTopbarNotifications();
+
+    // Re-apply right away when Settings are saved (same page / other tab)
+    const reapplyPrefs = () => renderTopbarNotifications(rawNotifMessages);
+    window.addEventListener("scf:notification-prefs-changed", reapplyPrefs);
+    window.addEventListener("storage", (e) => {
+      if (e.key === NOTIF_PREFS_KEY) reapplyPrefs();
+    });
+
     if (window.__tbNotifTimer) clearInterval(window.__tbNotifTimer);
-    window.__tbNotifTimer = setInterval(loadTopbarNotifications, 20000);
+    window.__tbNotifTimer = setInterval(() => {
+      syncNotificationPrefs();
+      loadTopbarNotifications();
+    }, 20000);
   }
 
   // Load topbar.html then init

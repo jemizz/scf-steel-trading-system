@@ -25,49 +25,6 @@
   <link rel="stylesheet" href="stock-movements.css">
   <link rel="stylesheet" href="settings.css">
 
-  <style>
-    .message-notif-list {
-      display: grid;
-      gap: 10px;
-      padding: 0 18px 18px;
-    }
-
-    .message-notif-item {
-      padding: 12px 14px;
-      border: 1px solid #edf0f2;
-      border-radius: 6px;
-      background: #fafafa;
-    }
-
-    .message-notif-item.is-unread {
-      background: #eef3ff;
-      border-color: #d5def8;
-    }
-
-    .message-notif-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 4px;
-    }
-
-    .message-notif-top strong {
-      font-size: 13px;
-    }
-
-    .message-notif-item p {
-      margin: 4px 0 0;
-      color: #5f6872;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    .message-notif-meta {
-      color: #818894;
-      font-size: 11px;
-    }
-  </style>
-
 </head>
 
 <body>
@@ -459,27 +416,46 @@
         <div class="settings-card">
 
           <div class="settings-card-header">
-            <h2>Customer Messages</h2>
-          </div>
-
-          <p id="messageNotifCount" style="margin:0 18px 12px; color:#5f6872; font-size:12px;">Loading messages...</p>
-
-          <div id="messageNotifList" class="message-notif-list">
-            <div class="message-notif-item">
-              <p>Loading customer messages...</p>
-            </div>
-          </div>
-
-        </div>
-
-        <div class="settings-card">
-
-          <div class="settings-card-header">
             <h2>Notification Settings</h2>
           </div>
 
 
           <div class="notif-list">
+
+            <!-- CUSTOMER INQUIRIES -->
+
+            <div class="notif-item">
+
+              <div class="notif-text">
+
+                <strong id="inquiriesLabel">
+                  Customer Inquiries
+                </strong>
+
+                <p id="inquiriesDescription">
+                  When a customer sends a new inquiry from the Product Catalog
+                </p>
+
+              </div>
+
+              <label class="switch">
+
+                <input
+                  type="checkbox"
+                  id="notifInquiries"
+                  aria-labelledby="inquiriesLabel"
+                  aria-describedby="inquiriesDescription"
+                >
+
+                <span
+                  class="slider"
+                  aria-hidden="true"
+                ></span>
+
+              </label>
+
+            </div>
+
 
             <!-- LOW STOCK -->
 
