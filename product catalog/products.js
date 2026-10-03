@@ -458,8 +458,12 @@
 
     render();
   }
-
+  
   // =========================
+  // PRODUCT DETAILS PAGE
+  // =========================
+
+   // =========================
   // PRODUCT DETAILS PAGE
   // =========================
 
@@ -468,10 +472,7 @@
 
     for (const key of ["category", "q", "page"]) {
       if (params.has(key)) {
-        backParams.set(
-          key,
-          params.get(key)
-        );
+        backParams.set(key, params.get(key));
       }
     }
 
@@ -480,48 +481,50 @@
       (backParams.size ? "?" + backParams : "");
 
     const product = products.find(
-      (item) =>
-        String(item.id) === params.get("id")
+      (item) => String(item.id) === params.get("id")
     );
 
     if (!product) {
       status(
         "This product is unavailable or is no longer listed. Please return to the catalog."
       );
-
       return;
     }
 
-    document.title =
-      `${product.name} - SCF Steel Trading`;
+    // Defined once and reused (this was the missing variable).
+    const currentCategory = categoryKey(product.catalog);
+
+    document.title = `${product.name} - SCF Steel Trading`;
 
     const categoryUrl =
       "products.html?category=" +
-      encodeURIComponent(
-        categoryKey(product.catalog)
-      );
+      encodeURIComponent(currentCategory);
+
+    // =========================
+    // SIDEBAR: highlight current category
+    // =========================
+
+    document
+      .querySelectorAll("[data-detail-category]")
+      .forEach((link) => {
+        if (link.dataset.detailCategory === currentCategory) {
+          link.setAttribute("aria-current", "true");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      });
 
     // =========================
     // BREADCRUMB
     // =========================
 
-    const categoryLink = node(
-      "a",
-      "",
-      product.catalog
-    );
-
+    const categoryLink = node("a", "", product.catalog);
     categoryLink.href = categoryUrl;
 
-    const catalogLink = node(
-      "a",
-      "",
-      "Products"
-    );
-
+    const catalogLink = node("a", "", "Products");
     catalogLink.href = "products.html";
 
-    $("productBreadcrumb").append(
+    $("productBreadcrumb").replaceChildren(
       catalogLink,
       " / ",
       categoryLink,
@@ -533,35 +536,17 @@
     // PRODUCT CONTENT
     // =========================
 
-    const copy = node(
-      "div",
-      "catalog-detail-copy"
-    );
+    const copy = node("div", "catalog-detail-copy");
 
     copy.append(
-      node(
-        "div",
-        "catalog-meta",
-        product.catalog
-      ),
-      node(
-        "h1",
-        "",
-        product.name
-      )
+      node("div", "catalog-meta", product.catalog),
+      node("h1", "", product.name)
     );
 
-    const description = node(
-      "div",
-      "catalog-description"
-    );
+    const description = node("div", "catalog-description");
 
     description.append(
-      node(
-        "h2",
-        "",
-        "Product Description"
-      ),
+      node("h2", "", "Product Description"),
       node(
         "p",
         "",
@@ -578,51 +563,179 @@
 
     inquiry.href = CONTACT_PAGE;
 
-    copy.append(
-      description,
-      inquiry
-    );
+    copy.append(description, inquiry);
 
-    $("productDetails").replaceChildren(
-      photo(product),
-      copy
-    );
-
+    $("productDetails").replaceChildren(photo(product), copy);
     $("productDetails").hidden = false;
 
     // =========================
     // RELATED PRODUCTS
     // =========================
 
-    const related = products
-      .filter((item) => {
-        const differentProduct =
-          item.id !== product.id;
-
-        const sameCategory =
-          categoryKey(item.catalog) ===
-          categoryKey(product.catalog);
-
-        return (
-          differentProduct &&
-          sameCategory
-        );
-      })
-      .slice(0, 3);
-
-    $("relatedSubtitle").textContent =
-      `More from ${product.catalog}`;
-
-    $("relatedAll").href = categoryUrl;
-
-    $("relatedGrid").replaceChildren(
-      ...related.map(card)
+    const related = products.filter(
+      (item) =>
+        String(item.id) !== String(product.id) &&
+        categoryKey(item.catalog) === currentCategory
     );
 
-    $("relatedSection").hidden =
-      related.length === 0;
+    $("relatedSubtitle").textContent = `More from ${product.catalog}`;
+    $("relatedAll").href = categoryUrl;
+    $("relatedSection").hidden = related.length === 0;
+
+    if (related.length) {
+      setupRelatedCarousel(related);
+    }
 
     status("");
+  }
+
+  // =========================
+  // RELATED PRODUCTS CAROUSEL
+  // =========================
+
+  function setupRelatedCarousel(items) {
+    const track = $("relatedGrid");
+    const prev = $("relatedPrev");
+    const next = $("relatedNext");
+    const dots = $("relatedDots");
+    const live = $("relatedAnnouncement");
+
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    track.replaceChildren(...items.map(card));
+
+    // How many cards fit per "page" (set by CSS --related-visible).
+    function perPage() {
+      const value = Number.parseInt(
+        getComputedStyle(track).getPropertyValue("--related-visible"),
+        10
+      );
+      return value > 0 ? value : 3;
+    }
+
+    // Distance from one card to the next, including the gap.
+    function stride() {
+      const first = track.firstElementChild;
+      const second = first && first.nextElementSibling;
+
+      if (first && second) {
+        return second.offsetLeft - first.offsetLeft;
+      }
+
+      return first ? first.offsetWidth : track.clientWidth;
+    }
+
+    function pageCount() {
+      return Math.max(1, Math.ceil(items.length / perPage()));
+    }
+
+    function currentPage() {
+      const width = stride() * perPage();
+      return Math.min(
+        pageCount() - 1,
+        Math.max(0, Math.round(track.scrollLeft / width))
+      );
+    }
+
+    function goTo(index) {
+      const target = Math.max(0, Math.min(pageCount() - 1, index));
+
+      track.scrollTo({
+        left: target * stride() * perPage(),
+        behavior: reduceMotion ? "auto" : "smooth"
+      });
+    }
+
+    function buildDots() {
+      dots.replaceChildren();
+
+      if (pageCount() <= 1) return;
+
+      for (let i = 0; i < pageCount(); i += 1) {
+        const dot = node("button", "related-dot");
+
+        dot.type = "button";
+        dot.setAttribute("aria-label", `Go to page ${i + 1}`);
+        dot.addEventListener("click", () => goTo(i));
+
+        dots.append(dot);
+      }
+    }
+
+    let lastPage = -1;
+
+    function update() {
+      const page = currentPage();
+      const atStart = track.scrollLeft <= 1;
+      const atEnd =
+        track.scrollLeft + track.clientWidth >= track.scrollWidth - 1;
+
+      prev.disabled = atStart;
+      next.disabled = atEnd;
+
+      [...dots.children].forEach((dot, i) => {
+        if (i === page) {
+          dot.setAttribute("aria-current", "true");
+        } else {
+          dot.removeAttribute("aria-current");
+        }
+      });
+
+      // Hide the controls when everything already fits.
+      const needsControls = pageCount() > 1;
+
+      prev.hidden = !needsControls;
+      next.hidden = !needsControls;
+      dots.hidden = !needsControls;
+
+      // Lets the CSS indent the heading only while the arrows are visible.
+      $("relatedSection").classList.toggle("has-controls", needsControls);
+
+      $("relatedSection")
+        .querySelector(".related-carousel")
+        .style.gridTemplateColumns = needsControls
+          ? ""
+          : "minmax(0, 1fr)";
+
+      if (needsControls && page !== lastPage) {
+        live.textContent = `Page ${page + 1} of ${pageCount()}`;
+        lastPage = page;
+      }
+    }
+
+    prev.addEventListener("click", () => goTo(currentPage() - 1));
+    next.addEventListener("click", () => goTo(currentPage() + 1));
+
+    track.addEventListener("scroll", () => {
+      window.requestAnimationFrame(update);
+    }, { passive: true });
+
+    track.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight") {
+        event.preventDefault();
+        goTo(currentPage() + 1);
+      } else if (event.key === "ArrowLeft") {
+        event.preventDefault();
+        goTo(currentPage() - 1);
+      }
+    });
+
+    // Rebuild when the number of visible cards changes (resize).
+    let lastVisible = perPage();
+
+    window.addEventListener("resize", () => {
+      if (perPage() !== lastVisible) {
+        lastVisible = perPage();
+        track.scrollLeft = 0;
+        buildDots();
+      }
+      update();
+    });
+
+    buildDots();
+    update();
   }
 
   // =========================

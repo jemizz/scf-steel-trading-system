@@ -2,103 +2,227 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>Product Details - SCF Steel Trading</title>
 
   <link
-    href="https://fonts.googleapis.com/css2?family=Geologica:wght@400;500;600;700&family=Orbitron:wght@400;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap"
     rel="stylesheet"
   >
 
-  <!-- Shared website styles -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
+    rel="stylesheet"
+  >
+
   <link rel="stylesheet" href="./navbar.css">
   <link rel="stylesheet" href="./footer.css">
+  <link rel="stylesheet" href="./products.css?v=20261003-4">
 
-  <!-- Same updated stylesheet used by products.html -->
-  <link
-    rel="stylesheet"
-    href="./products.css?v=20261003-2"
-  >
-
-  <!-- Handles both catalog and product details -->
-  <script
-    src="./products.js?v=20261003-2"
-    defer
-  ></script>
+  <script src="./products.js?v=20261003-4" defer></script>
 </head>
 
 <body class="scf-catalog" data-page="details">
 
   <div id="navbar"></div>
 
-  <main class="catalog-container catalog-main">
+  <main class="catalog-container catalog-main details-layout">
 
-    <!-- Back link and breadcrumb -->
-    <div class="catalog-heading catalog-navigation">
-
-      <a id="backToProducts" href="./products.html">
-        ← Back to products
-      </a>
-
-      <nav
-        id="productBreadcrumb"
-        aria-label="Breadcrumb"
-      ></nav>
-
-    </div>
-
-    <!-- Loading, unavailable, or error message -->
-    <p
-      id="catalogStatus"
-      class="catalog-status"
-      role="status"
-    >
-      Loading product...
-    </p>
-
-    <!-- Populated by products.js -->
-    <article
-      id="productDetails"
-      class="catalog-detail"
-      hidden
-    ></article>
-
-    <!-- Related products -->
-    <section
-      id="relatedSection"
-      class="catalog-related"
-      aria-labelledby="relatedTitle"
-      hidden
+    <!-- CATEGORY SIDEBAR -->
+    <aside
+      class="details-sidebar"
+      aria-label="Product browsing"
     >
 
-      <div class="catalog-heading">
+      <section
+        class="details-side-panel"
+        aria-labelledby="browseCategoriesTitle"
+      >
+        <h2 id="browseCategoriesTitle">
+          Browse Categories
+        </h2>
 
-        <div>
-          <h2 id="relatedTitle">Related Products</h2>
-          <p id="relatedSubtitle"></p>
-        </div>
+        <nav
+          class="details-category-list"
+          aria-label="Product categories"
+        >
+          <a
+            href="./products.html?category=steel"
+            data-detail-category="steel"
+          >
+            <span>Steel Products</span>
+            <span aria-hidden="true">›</span>
+          </a>
 
-        <a id="relatedAll" href="./products.html">
-          View category →
+          <a
+            href="./products.html?category=roofing"
+            data-detail-category="roofing"
+          >
+            <span>Roofing Materials</span>
+            <span aria-hidden="true">›</span>
+          </a>
+
+          <a
+            href="./products.html?category=hardware"
+            data-detail-category="hardware"
+          >
+            <span>Hardware Items</span>
+            <span aria-hidden="true">›</span>
+          </a>
+
+          <a
+            href="./products.html?category=stainless"
+            data-detail-category="stainless"
+          >
+            <span>Stainless Products</span>
+            <span aria-hidden="true">›</span>
+          </a>
+        </nav>
+      </section>
+
+      <section
+        class="details-side-panel details-help"
+        aria-labelledby="productHelpTitle"
+      >
+        <h2 id="productHelpTitle">
+          Need help choosing?
+        </h2>
+
+        <p>Tell us about your project.</p>
+
+        <a
+          id="detailsHelpLink"
+          class="catalog-button"
+          href="./contact.html"
+        >
+          Contact us →
         </a>
+      </section>
+
+    </aside>
+
+    <!-- PRODUCT CONTENT -->
+    <div class="details-content">
+
+      <div class="catalog-heading catalog-navigation">
+
+        <a id="backToProducts" href="./products.html">
+          ← Back to products
+        </a>
+
+        <nav
+          id="productBreadcrumb"
+          aria-label="Breadcrumb"
+        ></nav>
 
       </div>
 
-      <div
-        id="relatedGrid"
-        class="catalog-grid"
-      ></div>
+      <p
+        id="catalogStatus"
+        class="catalog-status"
+        role="status"
+      >
+        Loading product...
+      </p>
 
-    </section>
+      <article
+        id="productDetails"
+        class="catalog-detail"
+        hidden
+      ></article>
 
-    <noscript>
-      Please enable JavaScript to view product details.
-    </noscript>
+      <section
+          id="relatedSection"
+          class="catalog-related"
+          aria-labelledby="relatedTitle"
+          aria-roledescription="carousel"
+          hidden
+        >
+          <div class="catalog-heading">
+            <div>
+              <h2 id="relatedTitle">Related Products</h2>
+              <p id="relatedSubtitle"></p>
+            </div>
+
+            <a id="relatedAll" href="./products.html">
+              View category →
+            </a>
+          </div>
+
+          <div class="related-carousel">
+
+            <button
+              id="relatedPrev"
+              class="related-arrow"
+              type="button"
+              aria-label="Previous related products"
+              aria-controls="relatedGrid"
+              disabled
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m14 6-6 6 6 6"></path>
+              </svg>
+            </button>
+
+            <div
+              id="relatedGrid"
+              class="catalog-grid related-track"
+              tabindex="0"
+              aria-label="Related products"
+            ></div>
+
+            <button
+              id="relatedNext"
+              class="related-arrow"
+              type="button"
+              aria-label="Next related products"
+              aria-controls="relatedGrid"
+              disabled
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="m10 6 6 6-6 6"></path>
+              </svg>
+            </button>
+
+          </div>
+
+          <div
+            id="relatedDots"
+            class="related-dots"
+            role="group"
+            aria-label="Related product pages"
+          ></div>
+
+          <p
+            id="relatedAnnouncement"
+            class="related-sr-only"
+            aria-live="polite"
+            aria-atomic="true"
+          ></p>
+        </section>
+
+      <noscript>
+        Please enable JavaScript to view product details.
+      </noscript>
+
+    </div>
 
   </main>
 

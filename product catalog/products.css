@@ -341,13 +341,14 @@
   color: #272b30;
   font-size: 22px;
   font-weight: 600;
+  padding-left: 50px;
   letter-spacing: -0.025em;
   line-height: 1.4;
 }
 
 .scf-catalog .catalog-heading p {
   margin-top: 5px;
-
+  padding-left: 50px;
   color: var(--catalog-muted);
   font-size: 12px;
   line-height: 1.6;
@@ -1016,4 +1017,786 @@
   .scf-catalog .catalog-grid {
     gap: 18px;
   }
+}
+
+/* =========================================
+   DETAILS PAGE WITH CATEGORY SIDEBAR
+========================================= */
+
+.scf-catalog[data-page="details"]
+.catalog-main.details-layout {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+
+  width: min(1320px, calc(100% - 64px));
+  margin-inline: auto;
+  padding-block: 26px 48px;
+}
+
+.scf-catalog .details-content,
+.scf-catalog .details-sidebar {
+  min-width: 0;
+}
+
+/* =========================================
+   SIDEBAR PANELS
+========================================= */
+
+.scf-catalog .details-sidebar {
+  display: grid;
+  gap: 18px;
+}
+
+.scf-catalog .details-side-panel {
+  padding: 16px;
+
+  background: #ffffff;
+  border: 1px solid var(--catalog-border);
+  border-radius: 13px;
+
+  box-shadow: 0 2px 8px rgba(39, 40, 41, 0.025);
+}
+
+.scf-catalog .details-side-panel h2 {
+  margin: 0 0 15px;
+  
+  color: #272829;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.5;
+}
+
+/* =========================================
+   CATEGORY LINKS
+========================================= */
+
+.scf-catalog .details-category-list {
+  display: grid;
+  gap: 8px;
+}
+
+.scf-catalog .details-category-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  min-height: 43px;
+  padding: 10px 11px;
+
+  background: #f3f4f6;
+  border: 1px solid transparent;
+  border-radius: 8px;
+
+  color: #59626e;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  text-decoration: none;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.scf-catalog .details-category-list a > span:last-child {
+  flex-shrink: 0;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.scf-catalog .details-category-list a[aria-current="true"] {
+  background: #272829;
+  border-color: #272829;
+  color: #ffffff;
+}
+
+.scf-catalog .details-category-list a:hover {
+  background: #3a3d40;
+  border-color: #3a3d40;
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.scf-catalog .details-category-list a:active {
+  transform: translateY(0);
+}
+
+/* =========================================
+   HELP PANEL
+========================================= */
+
+.scf-catalog .details-help h2 {
+  margin-bottom: 8px;
+}
+
+.scf-catalog .details-help p {
+  margin: 0 0 16px;
+
+  color: #737c87;
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.scf-catalog .details-help .catalog-button {
+  width: 100%;
+  min-height: 36px;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+
+/* =========================================
+   MAIN PRODUCT PANEL
+========================================= */
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-navigation {
+  min-height: 38px;
+  margin-bottom: 18px;
+}
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-detail {
+  grid-template-columns:
+    minmax(0, 0.85fr)
+    minmax(0, 1.15fr);
+
+  gap: 24px;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-detail > .catalog-photo {
+  position: static;
+  align-self: start;
+
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+}
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-detail > .catalog-photo img {
+  object-fit: contain;
+}
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-detail-copy {
+  min-width: 0;
+  padding: 5px 3px;
+}
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-detail h1 {
+  margin-top: 12px;
+  font-size: clamp(26px, 2.5vw, 32px);
+  line-height: 1.2;
+}
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-description {
+  margin: 18px 0;
+  padding-top: 16px;
+}
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-description p {
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+/* =========================================
+   INQUIRY GUIDE
+========================================= */
+
+.scf-catalog .details-inquiry-guide {
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 14px 16px;
+
+  background: #f4f5f7;
+  border: 1px solid #eceef1;
+  border-radius: 9px;
+}
+
+.scf-catalog .details-inquiry-guide h2 {
+  margin: 0 0 11px;
+
+  color: #3a414a;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.scf-catalog .details-inquiry-guide ul {
+  display: grid;
+  gap: 9px;
+
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scf-catalog .details-inquiry-guide li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+
+  color: #69727e;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.scf-catalog .details-guide-check {
+  display: inline-flex;
+  flex: 0 0 17px;
+  align-items: center;
+  justify-content: center;
+
+  width: 17px;
+  height: 17px;
+  margin-top: 1px;
+
+  background: #69727e;
+  border-radius: 50%;
+
+  color: #ffffff;
+  font-size: 10px;
+  line-height: 1;
+}
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-detail-copy > .catalog-button {
+  width: 100%;
+  min-height: 42px;
+  margin-top: auto;
+  padding: 10px 14px;
+
+  background: #272829;
+  border-color: #272829;
+  color: #ffffff;
+
+  font-size: 12px;
+}
+
+/* Shared action hover on this page */
+
+.scf-catalog[data-page="details"]
+.details-layout .catalog-button:hover {
+  background: #272829;
+  border-color: #272829;
+  color: #ffffff;
+
+  transform: translateY(-1px);
+  box-shadow: 0 5px 12px rgba(39, 40, 41, 0.12);
+}
+
+/* =========================================
+   RELATED PRODUCTS
+========================================= */
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-related {
+  margin-top: 28px;
+}
+
+.scf-catalog[data-page="details"]
+.details-content #relatedGrid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-card > .catalog-photo {
+  aspect-ratio: 16 / 10;
+}
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-card-body {
+  padding: 12px 13px 13px;
+}
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-card h3 {
+  font-size: 15px;
+}
+
+.scf-catalog[data-page="details"]
+.details-content .catalog-card p {
+  font-size: 12px;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1100px) {
+  .scf-catalog[data-page="details"]
+  .catalog-main.details-layout {
+    grid-template-columns: 190px minmax(0, 1fr);
+    width: calc(100% - 40px);
+    gap: 18px;
+  }
+
+  .scf-catalog .details-side-panel {
+    padding: 13px;
+  }
+
+  .scf-catalog[data-page="details"]
+  .details-content .catalog-detail {
+    gap: 18px;
+    padding: 16px;
+  }
+}
+
+/* Sidebar becomes a compact section above the product */
+
+@media (max-width: 960px) {
+  .scf-catalog[data-page="details"]
+  .catalog-main.details-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .scf-catalog .details-sidebar {
+    grid-template-columns: minmax(0, 1fr) 210px;
+    gap: 16px;
+  }
+
+  .scf-catalog .details-category-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 680px) {
+  .scf-catalog[data-page="details"]
+  .catalog-main.details-layout {
+    width: calc(100% - 30px);
+    gap: 20px;
+    padding-block: 20px 36px;
+  }
+
+  .scf-catalog .details-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .scf-catalog .details-side-panel {
+    padding: 14px;
+  }
+
+  .scf-catalog .details-side-panel h2 {
+    font-size: 14px;
+  }
+
+  .scf-catalog .details-help {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+  }
+
+  .scf-catalog .details-help h2 {
+    flex-basis: 100%;
+    margin: 0;
+  }
+
+  .scf-catalog .details-help p {
+    flex: 1;
+    margin: 0;
+  }
+
+  .scf-catalog .details-help .catalog-button {
+    width: auto;
+  }
+
+  .scf-catalog[data-page="details"]
+  .details-content .catalog-detail {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 14px;
+  }
+
+  .scf-catalog[data-page="details"]
+  .details-content .catalog-detail > .catalog-photo {
+    aspect-ratio: 4 / 3;
+  }
+
+  .scf-catalog[data-page="details"]
+  .details-content .catalog-detail-copy {
+    padding: 6px 3px;
+  }
+
+  .scf-catalog[data-page="details"]
+  .details-content .catalog-detail h1 {
+    font-size: 27px;
+  }
+
+  .scf-catalog[data-page="details"]
+  .details-content #relatedGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scf-catalog[data-page="details"]
+  .details-content #relatedGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========================================
+   REDUCED MOTION
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .scf-catalog .details-category-list a,
+  .scf-catalog .details-layout .catalog-button {
+    transition: none;
+  }
+
+  .scf-catalog .details-category-list a:hover,
+  .scf-catalog[data-page="details"]
+  .details-layout .catalog-button:hover {
+    transform: none;
+  }
+}
+
+/* =========================================
+   RELATED PRODUCTS CAROUSEL
+========================================= */
+
+.scf-catalog[data-page="details"] .related-carousel {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 36px;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Overrides the previous related-product grid */
+
+.scf-catalog[data-page="details"]
+.details-content #relatedGrid.related-track {
+  --related-visible: 3;
+  --related-gap: 16px;
+
+  display: grid;
+  grid-template-columns: none;
+  grid-auto-flow: column;
+
+  grid-auto-columns: calc(
+    (100% - (var(--related-visible) - 1) * var(--related-gap))
+    / var(--related-visible)
+  );
+
+  align-items: stretch;
+  gap: var(--related-gap);
+
+  min-width: 0;
+  margin: 0;
+  padding: 5px 0 12px;
+
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.scf-catalog #relatedGrid.related-track::-webkit-scrollbar {
+  display: none;
+}
+
+.scf-catalog #relatedGrid.related-track > .catalog-card {
+  min-width: 0;
+  scroll-snap-align: start;
+}
+
+.scf-catalog[data-page="details"]
+.details-content #relatedGrid .catalog-card > .catalog-photo {
+  aspect-ratio: 16 / 9;
+}
+
+.scf-catalog[data-page="details"]
+.details-content #relatedGrid .catalog-card-body {
+  padding: 12px;
+}
+
+.scf-catalog[data-page="details"]
+.details-content #relatedGrid .catalog-card h3 {
+  font-size: 15px;
+}
+
+/* Compact preview cards; full description stays on details page */
+
+.scf-catalog[data-page="details"]
+.details-content #relatedGrid .catalog-card-body > p {
+  display: none;
+}
+
+.scf-catalog[data-page="details"]
+.details-content #relatedGrid .catalog-button {
+  margin-top: 12px;
+  min-height: 35px;
+  padding: 8px 10px;
+  font-size: 11px;
+}
+
+/* =========================================
+   LEFT AND RIGHT ARROWS
+========================================= */
+
+.scf-catalog[data-page="details"] .related-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+  padding: 0;
+
+  background: #272829;
+  border: 1px solid #272829;
+  border-radius: 50%;
+
+  color: #ffffff;
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.scf-catalog[data-page="details"] .related-arrow svg {
+  width: 19px;
+  height: 19px;
+}
+
+.scf-catalog[data-page="details"]
+.related-arrow:not(:disabled):hover {
+  background: #414448;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(39, 40, 41, 0.16);
+}
+
+.scf-catalog[data-page="details"] .related-arrow:disabled {
+  background: #e3e6e9;
+  border-color: #e3e6e9;
+  color: #929ba5;
+  cursor: default;
+}
+
+/* =========================================
+   POSITION DOTS
+========================================= */
+
+.scf-catalog .related-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.scf-catalog .related-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 28px;
+  height: 28px;
+  padding: 0;
+
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.scf-catalog .related-dot::before {
+  content: "";
+
+  width: 8px;
+  height: 8px;
+
+  background: #bcc3cb;
+  border-radius: 50%;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.scf-catalog .related-dot[aria-current="true"]::before {
+  background: #272829;
+  transform: scale(1.15);
+}
+
+.scf-catalog .related-dot:hover::before {
+  background: #59626e;
+}
+
+.scf-catalog .related-sr-only {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* =========================================
+   RESPONSIVE CAROUSEL
+========================================= */
+
+@media (max-width: 1100px) {
+  .scf-catalog[data-page="details"]
+  .details-content #relatedGrid.related-track {
+    --related-visible: 2;
+  }
+}
+
+@media (max-width: 560px) {
+  .scf-catalog[data-page="details"]
+  .details-content #relatedGrid.related-track {
+    --related-visible: 1;
+  }
+
+  .scf-catalog[data-page="details"] .related-carousel {
+    grid-template-columns: 32px minmax(0, 1fr) 32px;
+    gap: 7px;
+  }
+
+  .scf-catalog[data-page="details"] .related-arrow {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scf-catalog .related-arrow,
+  .scf-catalog .related-dot::before {
+    transition: none;
+  }
+
+  .scf-catalog[data-page="details"]
+  .related-arrow:not(:disabled):hover {
+    transform: none;
+  }
+}
+
+/* =========================================
+   FULL-WIDTH RELATED PRODUCTS (desktop)
+========================================= */
+
+@media (min-width: 961px) {
+  /* Children of .details-content join the page grid directly.
+     The HTML is unchanged, so the existing selectors still match. */
+  .scf-catalog[data-page="details"] .details-content {
+    display: contents;
+  }
+
+  .scf-catalog[data-page="details"] .catalog-main.details-layout {
+    column-gap: 24px;
+    row-gap: 0;
+  }
+
+  /* Left column: sidebar spans the top three rows and stays in view */
+  .scf-catalog[data-page="details"] .details-layout > .details-sidebar {
+    grid-column: 1;
+    grid-row: 1 / span 3;
+  }
+
+  /* Right column: back link, status message, product panel */
+  .scf-catalog[data-page="details"] .details-content > .catalog-navigation {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .scf-catalog[data-page="details"] .details-content > #catalogStatus {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .scf-catalog[data-page="details"] .details-content > #productDetails {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  /* Related products use the whole width, so no gap on the left */
+  .scf-catalog[data-page="details"] .details-content > #relatedSection {
+    grid-column: 1 / -1;
+    grid-row: 4;
+    min-width: 0;
+  }
+}
+
+/* =========================================
+   BACK BUTTON ABOVE SIDEBAR, SIDEBAR LEVEL WITH PRODUCT BOX
+========================================= */
+
+@media (min-width: 961px) {
+  /* Let the back link and breadcrumb be placed in the page grid directly */
+  .scf-catalog[data-page="details"] .details-content > .catalog-navigation {
+    display: contents;
+  }
+
+  /* Row 1, left column: back button, above Browse Categories */
+  .scf-catalog[data-page="details"] .details-layout #backToProducts {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: start;
+    margin-bottom: 18px;
+  }
+
+  /* Row 1, right column: breadcrumb */
+  .scf-catalog[data-page="details"] .details-layout #productBreadcrumb {
+    grid-column: 2;
+    grid-row: 1;
+    align-self: start;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    max-width: 100%;
+    min-height: 38px;
+    margin-bottom: 18px;
+  }
+
+  /* Rows 2-3: sidebar now starts level with the product box */
+  .scf-catalog[data-page="details"] .details-layout > .details-sidebar {
+    grid-column: 1;
+    grid-row: 2 / span 2;
+  }
+}
+
+.scf-catalog[data-page="details"] .details-content .catalog-detail {
+  min-height: 425px;     /* change this number to make the box taller or shorter */
+}
+
+.scf-catalog[data-page="details"] .details-content .catalog-detail > .catalog-photo {
+  aspect-ratio: auto;    /* stop the ratio from deciding the height */
+  align-self: stretch;   /* photo fills the full height of the box */
+  min-height: 100%;
+}
+
+.scf-catalog[data-page="details"] .details-content .catalog-detail > .catalog-photo img {
+  object-fit: cover;     /* or contain to show the whole photo */
 }
