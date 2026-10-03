@@ -4,8 +4,28 @@
 
 <header class="admin-topbar">
 
-    <!-- PAGE TITLE -->
-    <h1 id="topbarPageTitle"></h1>
+    <!-- LEFT SIDE -->
+    <div class="topbar-left">
+
+        <!-- SHOW SIDEBAR BUTTON (visible only when the sidebar is hidden) -->
+        <button
+            type="button"
+            class="sidebar-open-btn"
+            id="sidebarOpenBtn"
+            aria-label="Show sidebar"
+            title="Show sidebar"
+        >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="2" y="4.5" width="20" height="15" rx="3"></rect>
+                <path d="M8 4.5v15"></path>
+                <path d="M16 8.8 12.8 12l3.2 3.2"></path>
+            </svg>
+        </button>
+
+        <!-- PAGE TITLE -->
+        <h1 id="topbarPageTitle"></h1>
+
+    </div>
 
 
     <!-- RIGHT SIDE -->

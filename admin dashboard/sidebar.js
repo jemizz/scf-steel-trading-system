@@ -13,12 +13,64 @@ try {
     // localStorage unavailable - ignore
 }
 
+// =========================
+// SMOOTH TOGGLE (FLIP technique)
+//
+// The layout (margin-left etc.) changes ONCE, instantly. Then every
+// moved element is animated with `transform` only, from where it
+// visually was to where it is now. Transforms run on the GPU, so
+// there is no per-frame layout work: no lag, no gaps, no desync,
+// and clicking fast simply reverses the motion from wherever it is.
+// =========================
+
+const SIDEBAR_ANIM_MS = 260;
+const SIDEBAR_ANIM_EASE = "cubic-bezier(0.4, 0, 0.2, 1)";
+
+// Elements that move when the sidebar toggles
+const SIDEBAR_MOVING_SELECTOR =
+    ".sidebar, .admin-content, .products-main, [data-sidebar-offset]";
+
+let sidebarAnimToken = 0;
+
+function getMovingElements() {
+
+    // top-level only: children move together with their parent
+    return Array.from(
+        document.querySelectorAll(SIDEBAR_MOVING_SELECTOR)
+    ).filter(el => {
+        const parent = el.parentElement;
+        return !(parent && parent.closest(SIDEBAR_MOVING_SELECTOR));
+    });
+
+}
+
 function setSidebarCollapsed(collapsed) {
 
-    document.documentElement.classList.toggle(
-        "sidebar-collapsed",
-        collapsed
-    );
+    const root = document.documentElement;
+
+    if (root.classList.contains("sidebar-collapsed") === collapsed) {
+        return;
+    }
+
+    const reduceMotion =
+        window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const elements = reduceMotion ? [] : getMovingElements();
+    const token = ++sidebarAnimToken;
+
+    // 1. FIRST - where each element is right now
+    //    (includes any animation that is still running)
+    const first = elements.map(el => el.getBoundingClientRect().left);
+
+    // stop running animations, so the layout position can be read
+    elements.forEach(el => {
+        el.style.transition = "none";
+        el.style.transform = "";
+    });
+
+    // 2. change the real layout (instant)
+    root.classList.toggle("sidebar-collapsed", collapsed);
 
     try {
         localStorage.setItem(
@@ -29,48 +81,82 @@ function setSidebarCollapsed(collapsed) {
         // ignore
     }
 
-}
-
-
-// =========================
-// FLOATING "SHOW SIDEBAR" BUTTON
-// (visible only when the sidebar is hidden)
-// =========================
-
-function createOpenButton() {
-
-    if (document.querySelector(".sidebar-open-btn")) {
+    if (!elements.length) {
         return;
     }
 
-    const openBtn = document.createElement("button");
+    // 3. LAST + INVERT - jump back to the old visual position
+    const moving = [];
 
-    openBtn.type = "button";
-    openBtn.className = "sidebar-open-btn";
-    openBtn.title = "Show sidebar";
-    openBtn.setAttribute("aria-label", "Show sidebar");
+    elements.forEach((el, i) => {
 
-    openBtn.innerHTML = `
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="2" y="4.5" width="20" height="15" rx="3"></rect>
-            <path d="M8 4.5v15"></path>
-            <path d="M16 8.8 12.8 12l3.2 3.2"></path>
-        </svg>
-    `;
+        const last = el.getBoundingClientRect().left;
+        const delta = first[i] - last;
 
-    openBtn.addEventListener("click", function () {
-        setSidebarCollapsed(false);
+        if (Math.abs(delta) < 0.5) {
+            return;
+        }
+
+        // the element's own transform (e.g. the hidden sidebar)
+        const cs = getComputedStyle(el).transform;
+        const baseX =
+            cs && cs !== "none" ? new DOMMatrix(cs).m41 : 0;
+
+        el.style.willChange = "transform";
+        el.style.transform = `translateX(${delta + baseX}px)`;
+
+        moving.push(el);
+
     });
 
-    document.body.appendChild(openBtn);
+    if (!moving.length) {
+        return;
+    }
+
+    root.classList.add("sidebar-animating");
+
+    void document.body.offsetWidth; // force reflow
+
+    // 4. PLAY - animate to the final position
+    moving.forEach(el => {
+        el.style.transition =
+            `transform ${SIDEBAR_ANIM_MS}ms ${SIDEBAR_ANIM_EASE}`;
+        el.style.transform = "";
+    });
+
+    setTimeout(function () {
+
+        if (token !== sidebarAnimToken) {
+            return; // a newer toggle took over
+        }
+
+        moving.forEach(el => {
+            el.style.transition = "";
+            el.style.willChange = "";
+        });
+
+        root.classList.remove("sidebar-animating");
+
+    }, SIDEBAR_ANIM_MS + 30);
 
 }
 
-if (document.body) {
-    createOpenButton();
-} else {
-    document.addEventListener("DOMContentLoaded", createOpenButton);
-}
+
+// =========================
+// "SHOW SIDEBAR" BUTTON (lives inside the topbar)
+// The button is in topbar.html (#sidebarOpenBtn). Event delegation
+// is used because the topbar is loaded later via fetch.
+// It is visible only while the sidebar is hidden (see CSS).
+// Because it is part of the topbar, it scrolls away with it.
+// =========================
+
+document.addEventListener("click", function (event) {
+
+    if (event.target.closest(".sidebar-open-btn")) {
+        setSidebarCollapsed(false);
+    }
+
+});
 
 
 // =========================
@@ -96,8 +182,7 @@ function markSidebarOffsets() {
         if (
             el.hasAttribute("data-sidebar-offset") ||
             el.closest("#sidebar") ||
-            el.closest(".sidebar") ||
-            el.classList.contains("sidebar-open-btn")
+            el.closest(".sidebar")
         ) {
             return;
         }

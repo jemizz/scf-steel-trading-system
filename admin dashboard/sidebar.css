@@ -2,10 +2,23 @@
    RESET
 ========================= */
 
+/* The sidebar / content slide animation is handled in sidebar.js
+   (transform only, GPU). Speed: SIDEBAR_ANIM_MS in sidebar.js. */
+
+/* while animating, the moving content may briefly stick out
+   on the right - hide it so no horizontal scrollbar flashes */
+html.sidebar-animating {
+    overflow-x: hidden;
+}
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+
+html {
+    background-color: #f5f6f7;
 }
 
 body {
@@ -38,9 +51,9 @@ body {
 
     border-right: 1px solid #353638;
 
-    z-index: 1000;
+    z-index: 1100; /* above #topbar (1000) so the topbar never paints over it */
 
-    transition: transform 0.3s ease;
+    /* no CSS transition here: sidebar.js animates it with transform */
 }
 
 
@@ -342,8 +355,6 @@ body {
     padding: 30px;
 
     background-color: #f5f6f7;
-
-    transition: margin-left 0.3s ease;
 }
 
 
@@ -400,24 +411,28 @@ body {
     color: #ffffff;
 }
 
-/* Floating button shown only when the sidebar is hidden */
+/* "Show sidebar" button inside the topbar.
+   Appears / disappears instantly together with the content. */
 .sidebar-open-btn {
-    position: fixed !important;
-    top: 14px !important;
-    left: 14px !important;
-    right: auto !important;
-    bottom: auto !important;
-    margin: 0 !important;
-    transform: none !important;
-    z-index: 3000;
+    flex-shrink: 0;
+    overflow: hidden;
+
+    width: 0;
+    min-width: 0;
+
+    margin-right: -12px; /* cancels the 12px gap of .topbar-left */
+
+    border-width: 0;
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 
     color: #272829;
     background-color: #ffffff;
     border-color: #e1e2e4;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
 
-    opacity: 0;
-    pointer-events: none;
+    transition: background-color 0.2s ease;
 }
 
 .sidebar-open-btn:hover {
@@ -435,13 +450,24 @@ html.sidebar-collapsed .sidebar {
     transform: translateX(-100%);
 }
 
-html.sidebar-collapsed .admin-content {
+/* Main content wrappers of each page.
+   Add the main class of any other page here (e.g. .dashboard-main). */
+html.sidebar-collapsed .admin-content,
+html.sidebar-collapsed {
     margin-left: 0;
 }
 
 html.sidebar-collapsed .sidebar-open-btn {
+    width: 32px;
+    margin-right: 0;
+
+    border-width: 1px;
+
     opacity: 1;
+    visibility: visible;
     pointer-events: auto;
+
+    transition: background-color 0.2s ease;
 }
 
 
@@ -450,14 +476,6 @@ html.sidebar-collapsed .sidebar-open-btn {
    (sidebar.js tags any element that is pushed
    right by the sidebar width, whatever its class)
 ========================= */
-
-[data-sidebar-offset] {
-    transition:
-        margin-left 0.3s ease,
-        padding-left 0.3s ease,
-        left 0.3s ease,
-        width 0.3s ease;
-}
 
 html.sidebar-collapsed [data-sidebar-offset~="margin"] {
     margin-left: 0 !important;
@@ -482,17 +500,6 @@ html.sidebar-collapsed [data-sidebar-offset~="width"] {
    name of your top bar if it is different. !!
 ========================= */
 
-.topbar,
-.top-bar,
-.admin-topbar,
-.admin-header,
-.page-header-bar {
-    transition:
-        left 0.3s ease,
-        margin-left 0.3s ease,
-        padding-left 0.3s ease;
-}
-
 html.sidebar-collapsed .topbar,
 html.sidebar-collapsed .top-bar,
 html.sidebar-collapsed .admin-topbar,
@@ -501,8 +508,9 @@ html.sidebar-collapsed .page-header-bar {
     left: 0;
     margin-left: 0;
 
-    /* keeps the page title clear of the floating button */
-    padding-left: 64px;
+    /* moves the "Show sidebar" button closer to the left edge
+       (change 14px to 0 for completely flush) */
+    padding-left: 14px;
 }
 
 

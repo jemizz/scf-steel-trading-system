@@ -37,10 +37,24 @@
 
 
 /* =========================
+   LEFT SIDE (show-sidebar button + page title)
+========================= */
+
+.topbar-left {
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+}
+
+
+/* =========================
    PAGE TITLE
 ========================= */
 
-.admin-topbar > h1 {
+.topbar-left > h1 {
     margin: 0;
 
     color: #272829;
@@ -836,7 +850,7 @@
     }
 
 
-    .admin-topbar > h1 {
+    .topbar-left > h1 {
         font-size: 16px;
     }
 
