@@ -25,13 +25,13 @@ body {
 
     width: 230px;
     height: 100vh;
-    height: 100dvh;                 /* tama ang taas sa mobile browsers */
+    height: 100dvh;
 
     display: flex;
     flex-direction: column;
 
-    overflow: hidden;               /* FIX: walang scroll sa mismong sidebar */
-    overscroll-behavior: contain;   /* FIX: hindi ipinapasa ang scroll sa page */
+    overflow: hidden;
+    overscroll-behavior: contain;
 
     background-color: #272829;
     color: #ffffff;
@@ -92,12 +92,13 @@ body {
 
 .sidebar-nav {
     flex: 1;
-    min-height: 0;                  /* FIX: kailangan para gumana ang overflow sa flex child */
+    min-height: 0;
 
-    padding: 12px 9px;
+    /* UPDATED: a bit more side padding so the highlight looks like your screenshot */
+    padding: 12px 14px;
 
     overflow-y: auto;
-    overscroll-behavior: contain;   /* FIX */
+    overscroll-behavior: contain;
 }
 
 .sidebar-link {
@@ -109,13 +110,17 @@ body {
 
     gap: 11px;
 
-    margin-bottom: 2px;
+    /* UPDATED spacing to match the “pill/boxed” highlight look */
+    margin-bottom: 6px;
     padding: 0 12px;
 
     color: #b9bbbe;
-    background-color: transparent;
 
-    border-radius: 5px;
+    /* IMPORTANT: keep border always present to avoid “jump” on hover */
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    background-color: transparent;
 
     font-size: 11px;
     font-weight: 400;
@@ -124,11 +129,39 @@ body {
 
     transition:
         background-color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
         color 0.2s ease;
 }
 
 
-/* Sidebar Icons */
+/* =========================
+   HOVER + ACTIVE (MATCHING YOUR PICTURE)
+   - gray rounded box behind the item
+   - subtle border + soft depth
+========================= */
+
+.sidebar-link:hover,
+.sidebar-link:focus-visible,
+.sidebar-link.active {
+    color: #ffffff;
+
+    /* gray highlight like the screenshot */
+    background-color: #3a3b3d;
+
+    /* subtle edge so it looks “boxed” */
+    border-color: rgba(255, 255, 255, 0.06);
+
+    /* soft depth (very subtle) */
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.04),
+        0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.sidebar-link:focus-visible {
+    outline: none;
+}
+
 
 /* =========================
    SIDEBAR ICONS
@@ -154,16 +187,12 @@ body {
         color 0.2s ease;
 }
 
-
 /* Slight icon movement on hover */
-
 .sidebar-link:hover svg {
     transform: translateX(1px);
 }
 
-
 /* Active icon */
-
 .sidebar-link.active svg {
     color: #ffffff;
 }
@@ -261,8 +290,6 @@ body {
     color: #ffffff;
 }
 
-
-/* Bottom Icons */
 
 /* =========================
    BOTTOM ICONS
