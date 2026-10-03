@@ -392,11 +392,21 @@ body {
     margin-left: auto;
     flex-shrink: 0;
 
-    color: #b9bbbe;
+    width: 34px;
+    height: 34px;
+
+    color: #ffffff;
+    background-color: #3a3b3d;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.sidebar-toggle svg {
+    width: 21px;
+    height: 21px;
 }
 
 .sidebar-toggle:hover {
-    background-color: #3a3b3d;
+    background-color: #4a4c4f;
     color: #ffffff;
 }
 
