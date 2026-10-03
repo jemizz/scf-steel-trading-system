@@ -54,7 +54,7 @@ $sql = "
         minimum_stock
     FROM products
     WHERE is_active = 1
-    ORDER BY catalog, name, id
+    ORDER BY id ASC
 ";
 
 $result = $conn->query($sql);
@@ -92,7 +92,7 @@ while ($row = $result->fetch_assoc()) {
     $id = (int) $row['id'];
 
     $items[] = [
-        'productId' => sprintf('PRD-%03d', $id),
+        'productId' => sprintf('P-%04d', $id),
         'dbId' => $id,
         'productName' => $row['name'],
         'spec' => implode(' · ', array_slice($specs, 0, 4)),

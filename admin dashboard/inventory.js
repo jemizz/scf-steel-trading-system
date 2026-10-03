@@ -70,7 +70,7 @@ function getStockStatus(item) {
         return "out-of-stock";
     }
 
-    if (stock <= minimum) {
+    if (stock < minimum) {
         return "low-stock";
     }
 
