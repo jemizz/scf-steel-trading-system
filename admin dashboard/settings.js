@@ -1064,23 +1064,94 @@
 
     // =========================
     // NOTIFICATIONS
+    // (saved in the database via settings.php;
+    //  localStorage is only a fast cache for topbar.js)
     // =========================
+
+    const NOTIF_PREFS_KEY = "scfNotificationPrefs";
+
+    // checkbox id -> preference key (same keys as settings.php)
+    const NOTIF_FIELDS = {
+      notifInquiries:   "inquiries",
+      notifLowStock:    "lowStock",
+      notifFabrication: "fabrication",
+      notifPoDelivery:  "poDelivery",
+      notifDailySales:  "dailySales",
+      notifPaymentDue:  "paymentDue"
+    };
+
+    const NOTIF_DEFAULTS = {
+      inquiries:   true,
+      lowStock:    false,
+      fabrication: false,
+      poDelivery:  false,
+      dailySales:  false,
+      paymentDue:  false
+    };
+
+    function readCachedPrefs() {
+      try {
+        const saved = JSON.parse(
+          localStorage.getItem(NOTIF_PREFS_KEY) || "{}"
+        );
+        return Object.assign({}, NOTIF_DEFAULTS, saved);
+      } catch (error) {
+        return Object.assign({}, NOTIF_DEFAULTS);
+      }
+    }
+
+    function cachePrefs(prefs) {
+      try {
+        localStorage.setItem(
+          NOTIF_PREFS_KEY,
+          JSON.stringify(prefs)
+        );
+      } catch (error) {
+        // ignore
+      }
+
+      // Tell the topbar (same page) to refresh right away.
+      window.dispatchEvent(
+        new CustomEvent("scf:notification-prefs-changed")
+      );
+    }
+
+    function applyPrefsToSwitches(prefs) {
+      Object.keys(NOTIF_FIELDS).forEach((id) => {
+        const input = document.getElementById(id);
+
+        if (input) {
+          input.checked = !!prefs[NOTIF_FIELDS[id]];
+        }
+      });
+    }
+
+    function collectPrefsFromSwitches() {
+      const prefs = {};
+
+      Object.keys(NOTIF_FIELDS).forEach((id) => {
+        const input = document.getElementById(id);
+
+        prefs[NOTIF_FIELDS[id]] =
+          input ? input.checked : false;
+      });
+
+      return prefs;
+    }
+
 
     const notificationPanel =
       panels.notification;
-
 
     const saveNotificationButton =
       document.getElementById(
         "saveNotificationSettings"
       );
 
-
     const notificationMessage =
       document.getElementById(
         "notificationMessage"
       );
-
 
     if (
       notificationPanel &&
@@ -1088,162 +1159,108 @@
       notificationMessage
     ) {
 
-      const notificationInputs =
-        notificationPanel.querySelectorAll(
-          'input[type="checkbox"]'
-        );
+      let switchesTouched = false;
+
+      // 1) Show the cached values right away
+      applyPrefsToSwitches(readCachedPrefs());
+
+      // 2) Then load the real values from the database
+      request(
+        "settings.php?action=get_notification_settings",
+        {
+          method: "GET",
+          cache: "no-store",
+          credentials: "same-origin",
+          headers: { "Accept": "application/json" }
+        }
+      )
+        .then((data) => {
+
+          if (!switchesTouched && data.settings) {
+            applyPrefsToSwitches(data.settings);
+          }
+
+          if (data.settings) {
+            cachePrefs(data.settings);
+          }
+
+        })
+        .catch((error) => {
+          console.error(
+            "Notification settings load error:",
+            error
+          );
+        });
 
 
-      notificationInputs.forEach(
-        (input) => {
+      // Clear the message when a switch changes
+      notificationPanel
+        .querySelectorAll('input[type="checkbox"]')
+        .forEach((input) => {
 
           input.addEventListener(
             "change",
             () => {
-
-              notificationMessage.textContent =
-                "";
-
+              switchesTouched = true;
+              notificationMessage.textContent = "";
             }
           );
 
-        }
-      );
-
-
-      saveNotificationButton.addEventListener(
-        "click",
-        () => {
-
-          showMessage(
-            notificationMessage,
-            "Notification settings saving is not connected yet."
-          );
-
-        }
-      );
-
-    }
-
-
-    const messageNotifList =
-      document.getElementById("messageNotifList");
-
-    const messageNotifCount =
-      document.getElementById("messageNotifCount");
-
-    const notificationTabButton =
-      content.querySelector(
-        '[data-settings-tab="notification"]'
-      );
-
-
-    function escapeText(value) {
-      const node = document.createElement("span");
-      node.textContent = value == null ? "" : String(value);
-      return node.innerHTML;
-    }
-
-
-    async function loadMessageNotifications() {
-
-      if (!messageNotifList || !messageNotifCount) {
-        return;
-      }
-
-      messageNotifCount.textContent = "Loading messages...";
-      messageNotifList.innerHTML = "";
-
-      try {
-
-        const response = await fetch("messages.php?action=list", {
-          method: "POST",
-          headers: {
-            "Accept": "application/json"
-          },
-          body: new URLSearchParams({ action: "list" })
         });
 
-        const raw = await response.text();
-        let data = null;
 
-        try {
-          data = raw ? JSON.parse(raw) : null;
-        } catch (parseError) {
-          throw new Error(
-            raw.replace(/\s+/g, " ").trim().slice(0, 180) ||
-            "messages.php did not return JSON."
-          );
+      // Save to the database
+      saveNotificationButton.addEventListener(
+        "click",
+        async () => {
+
+          const prefs = collectPrefsFromSwitches();
+
+          setDisabled(saveNotificationButton, true);
+
+          try {
+
+            const data = await request(
+              "settings.php?action=save_notification_settings",
+              {
+                method: "POST",
+                credentials: "same-origin",
+                headers: {
+                  "Content-Type": "application/json",
+                  "Accept": "application/json"
+                },
+                body: JSON.stringify(prefs)
+              }
+            );
+
+            cachePrefs(prefs);
+
+            showMessage(
+              notificationMessage,
+              data.message ||
+              "Notification settings saved.",
+              "success-message"
+            );
+
+          } catch (error) {
+
+            showMessage(
+              notificationMessage,
+              error.message ||
+              "Unable to save notification settings.",
+              "error-message"
+            );
+
+          } finally {
+
+            setDisabled(saveNotificationButton, false);
+
+          }
+
         }
-
-        if (!response.ok || !data.success) {
-          throw new Error((data && data.message) || "Unable to load messages.");
-        }
-
-        const notifications = Array.isArray(data.messages)
-          ? data.messages
-          : [];
-
-        const unread = notifications.filter(
-          (item) => String(item.status || "").toLowerCase() !== "read"
-        ).length;
-
-        messageNotifCount.textContent = unread > 0
-          ? unread + " unread message" + (unread === 1 ? "" : "s")
-          : notifications.length + " message" + (notifications.length === 1 ? "" : "s");
-
-        if (notificationTabButton) {
-          notificationTabButton.textContent = unread > 0
-            ? "Notification (" + unread + ")"
-            : "Notification";
-        }
-
-        if (notifications.length === 0) {
-          messageNotifList.innerHTML =
-            '<div class="message-notif-item"><p>No customer messages yet.</p></div>';
-          return;
-        }
-
-        messageNotifList.innerHTML = notifications.map((item) => {
-          const isUnread = String(item.status || "").toLowerCase() !== "read";
-          const unreadClass = isUnread ? " is-unread" : "";
-          const who = item.name || "Customer";
-          const contact = [item.phone, item.email].filter(Boolean).join(" · ");
-
-          return `
-            <article class="message-notif-item${unreadClass}">
-              <div class="message-notif-top">
-                <strong>${escapeText(who)}</strong>
-                <span class="message-notif-meta">${escapeText(isUnread ? "Unread" : "Read")}</span>
-              </div>
-              <div class="message-notif-meta">${escapeText(contact || "No contact")} · ${escapeText(item.created_at || "")}</div>
-              <p>${escapeText(item.message || "No message")}</p>
-            </article>
-          `;
-        }).join("");
-
-      } catch (error) {
-
-        messageNotifCount.textContent = "Unable to load messages.";
-        messageNotifList.innerHTML =
-          '<div class="message-notif-item"><p>' +
-          escapeText(error.message || "Unable to load messages.") +
-          "</p></div>";
-
-      }
+      );
 
     }
-
-
-    loadMessageNotifications();
-
-    tabButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        if (button.dataset.settingsTab === "notification") {
-          loadMessageNotifications();
-        }
-      });
-    });
 
 
     // =========================

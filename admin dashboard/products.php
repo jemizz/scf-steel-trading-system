@@ -102,6 +102,9 @@ const FIELD_LABELS = [
     'price_per_ft' => 'Price per Foot'
 ];
 
+// Maximum characters allowed for a product description
+const DESCRIPTION_LIMIT = 2000;
+
 
 // =========================
 // BASIC HELPERS
@@ -532,7 +535,11 @@ function map_row(array $row): array
 
         'name' => $row['name'],
         'spec' => spec_of($row),
-        'description' => $row['description'] ?? null,
+
+        // The description lives on the product's categories row
+        // (categories.description), shared by all of its variants.
+        'description' => $row['category_description'] ?? null,
+
         'image' => $row['category_image'] ?? null,
         'notes' => $row['notes'] ?? null,
 
@@ -564,7 +571,8 @@ $select = "
         p.*,
         c.name AS category_name,
         c.product_id,
-        c.image_path AS category_image
+        c.image_path AS category_image,
+        c.description AS category_description
     FROM products p
     LEFT JOIN categories c ON c.id = p.category_id
 ";
@@ -1005,6 +1013,7 @@ if ($method === 'POST' && isset($_GET['action'])) {
         if (!in_array($action, [
             'add-variant',
             'update-variant',
+            'update-description',
             'deactivate-group'
         ], true)) {
             throw new InvalidArgumentException(
@@ -1091,6 +1100,48 @@ if ($method === 'POST' && isset($_GET['action'])) {
         }
 
         [$condition, $parameters] = group_condition($record);
+
+
+        // -------------------------
+        // UPDATE PRODUCT DESCRIPTION
+        // -------------------------
+        // Stored on the product's categories row, so every
+        // variant of the product shares it.
+
+        if ($action === 'update-description') {
+            if (assigned_product_id($record) === null) {
+                throw new InvalidArgumentException(
+                    'This product has no numbered category yet, so it has no description slot.'
+                );
+            }
+
+            $description = limited_text(
+                $input['description'] ?? '',
+                DESCRIPTION_LIMIT,
+                'Description'
+            );
+
+            $update = $pdo->prepare(
+                'UPDATE categories
+                 SET description = ?
+                 WHERE id = ?'
+            );
+
+            $update->execute([
+                $description !== '' ? $description : null,
+                (int) $record['category_id']
+            ]);
+
+            $pdo->commit();
+
+            respond([
+                'ok' => true,
+                'description' => $description !== ''
+                    ? $description
+                    : null,
+                'message' => 'Description updated successfully.'
+            ]);
+        }
 
 
         // -------------------------

@@ -146,7 +146,7 @@ setTimeout(markSidebarOffsets, 600);
 // LOAD SIDEBAR
 // =========================
 
-fetch("sidebar.html?v=5", {
+fetch("sidebar.html?v=6", {
     cache: "no-store"
 })
     .then(response => {

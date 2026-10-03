@@ -135,6 +135,116 @@ if ($action === 'get_sidebar_admin') {
     );
 }
 
+// =========================
+// NOTIFICATION SETTINGS
+// =========================
+
+// JSON key => database column
+$notificationColumns = [
+    'inquiries'   => 'inquiries',
+    'lowStock'    => 'low_stock',
+    'fabrication' => 'fabrication',
+    'poDelivery'  => 'po_delivery',
+    'dailySales'  => 'daily_sales',
+    'paymentDue'  => 'payment_due'
+];
+
+// Customer inquiries are ON by default; the rest are OFF.
+$notificationDefaults = [
+    'inquiries'   => true,
+    'lowStock'    => false,
+    'fabrication' => false,
+    'poDelivery'  => false,
+    'dailySales'  => false,
+    'paymentDue'  => false
+];
+
+function ensure_notification_table(PDO $pdo): void
+{
+    $pdo->exec(
+        'CREATE TABLE IF NOT EXISTS notification_settings (
+            id          TINYINT UNSIGNED NOT NULL DEFAULT 1,
+            inquiries   TINYINT(1) NOT NULL DEFAULT 1,
+            low_stock   TINYINT(1) NOT NULL DEFAULT 0,
+            fabrication TINYINT(1) NOT NULL DEFAULT 0,
+            po_delivery TINYINT(1) NOT NULL DEFAULT 0,
+            daily_sales TINYINT(1) NOT NULL DEFAULT 0,
+            payment_due TINYINT(1) NOT NULL DEFAULT 0,
+            updated_at  TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP
+                                   ON UPDATE CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4'
+    );
+}
+
+if ($action === 'get_notification_settings') {
+
+    try {
+        ensure_notification_table($pdo);
+
+        // Single admin -> one settings row (id = 1)
+        $row = $pdo->query(
+            'SELECT * FROM notification_settings
+             WHERE id = 1
+             LIMIT 1'
+        )->fetch();
+    } catch (PDOException $e) {
+        respond(false, 'Unable to load notification settings.', [], 500);
+    }
+
+    $settings = [];
+
+    foreach ($notificationColumns as $key => $column) {
+        $settings[$key] = $row
+            ? ((int) $row[$column] === 1)
+            : $notificationDefaults[$key];
+    }
+
+    respond(true, '', ['settings' => $settings]);
+}
+
+if ($action === 'save_notification_settings') {
+
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        respond(false, 'Invalid request method.', [], 405);
+    }
+
+    $input = request_input();
+    $values = [];
+
+    foreach ($notificationColumns as $key => $column) {
+        $values[$column] = filter_var(
+            $input[$key] ?? $notificationDefaults[$key],
+            FILTER_VALIDATE_BOOLEAN
+        ) ? 1 : 0;
+    }
+
+    try {
+        ensure_notification_table($pdo);
+
+        $stmt = $pdo->prepare(
+            'INSERT INTO notification_settings
+                (id, inquiries, low_stock, fabrication,
+                 po_delivery, daily_sales, payment_due)
+             VALUES
+                (1, :inquiries, :low_stock, :fabrication,
+                 :po_delivery, :daily_sales, :payment_due)
+             ON DUPLICATE KEY UPDATE
+                inquiries   = VALUES(inquiries),
+                low_stock   = VALUES(low_stock),
+                fabrication = VALUES(fabrication),
+                po_delivery = VALUES(po_delivery),
+                daily_sales = VALUES(daily_sales),
+                payment_due = VALUES(payment_due)'
+        );
+        $stmt->execute($values);
+    } catch (PDOException $e) {
+        respond(false, 'Unable to save notification settings.', [], 500);
+    }
+
+    respond(true, 'Notification settings saved.');
+}
+
 if ($action === 'get_account') {
     try {
         $stmt = $pdo->prepare(

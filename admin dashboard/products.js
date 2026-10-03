@@ -12,6 +12,7 @@
 
     const PAGE_SIZE = 10;
     const VARIANT_PAGE_SIZE = 5;
+    const DESCRIPTION_MAX = 2000;
 
     const API_PATHS = [
         "api/products.php",
@@ -284,210 +285,219 @@
     // =========================
 
     document.body.insertAdjacentHTML(
-        "beforeend",
-        `
-            <dialog
-                id="productDetailsDialog"
-                class="scf-product-dialog"
-                aria-labelledby="productDetailsTitle"
+  "beforeend",
+  `
+    <dialog
+      id="productDetailsDialog"
+      class="scf-product-dialog"
+      aria-labelledby="productDetailsTitle"
+    >
+      <header class="scf-dialog-header">
+        <h2 id="productDetailsTitle">Product Details</h2>
+
+        <button
+          type="button"
+          class="scf-close"
+          data-close="productDetailsDialog"
+          aria-label="Close product details"
+        >
+          ×
+        </button>
+      </header>
+
+      <div class="scf-dialog-body">
+        <div class="scf-product-summary">
+          <img id="detailImage" alt="">
+
+          <div class="scf-product-meta">
+            <h3 id="detailName"></h3>
+            <p id="detailCategory"></p>
+
+            <span id="detailCount" class="scf-count"></span>
+
+            <div class="scf-image-actions">
+              <button
+                type="button"
+                id="changeImageBtn"
+                class="scf-secondary scf-image-btn"
+                hidden
+              >
+                Change Image
+              </button>
+
+              <input
+                type="file"
+                id="imageInput"
+                accept="image/png,image/jpeg,image/webp"
+                hidden
+              >
+            </div>
+          </div>
+
+          <!-- Description is now FULL WIDTH under the image+meta -->
+          <section
+            id="descriptionSection"
+            class="scf-description-section"
+            hidden
+          >
+            <h3 class="scf-section-title">Description</h3>
+
+            <p id="detailDescription" class="scf-description"></p>
+
+            <div
+              id="descriptionEditor"
+              class="scf-description-editor"
+              hidden
             >
-                <header class="scf-dialog-header">
-                    <h2 id="productDetailsTitle">
-                        Product Details
-                    </h2>
+              <textarea
+                id="descriptionInput"
+                rows="5"
+                maxlength="${DESCRIPTION_MAX}"
+                placeholder="Write a short description of this product..."
+                aria-label="Product description"
+              ></textarea>
 
-                    <button
-                        type="button"
-                        class="scf-close"
-                        data-close="productDetailsDialog"
-                        aria-label="Close product details"
-                    >
-                        ×
-                    </button>
-                </header>
+              <div class="scf-description-meta">
+                <span id="descriptionCount"></span>
 
-                <div class="scf-dialog-body">
-                    <div class="scf-product-summary">
-                        <img id="detailImage" alt="">
+                <span
+                  id="descriptionStatus"
+                  class="scf-description-status"
+                  aria-live="polite"
+                ></span>
 
-                        <div>
-                            <h3 id="detailName"></h3>
-                            <p id="detailCategory"></p>
+                <button
+                  type="button"
+                  id="saveDescriptionBtn"
+                  class="scf-primary"
+                  disabled
+                >
+                  Save Description
+                </button>
+              </div>
 
-                            <span
-                                id="detailCount"
-                                class="scf-count"
-                            ></span>
+              <p id="descriptionError" class="scf-error" role="alert"></p>
+            </div>
+          </section>
+        </div>
 
-                            <div class="scf-image-actions">
-                                <button
-                                    type="button"
-                                    id="changeImageBtn"
-                                    class="scf-secondary scf-image-btn"
-                                    hidden
-                                >
-                                    Change Image
-                                </button>
+        <h3 class="scf-section-title">Specifications &amp; Sizes</h3>
 
-                                <input
-                                    type="file"
-                                    id="imageInput"
-                                    accept="image/png,image/jpeg,image/webp"
-                                    hidden
-                                >
-                            </div>
-                        </div>
-                    </div>
+        <div class="scf-variant-tools">
+          <input
+            type="search"
+            id="variantSearch"
+            placeholder="Search item, dimensions, color or record ID..."
+            aria-label="Search specifications"
+          >
 
-                    <p
-                        id="detailDescription"
-                        class="scf-description"
-                    ></p>
+          <select id="variantColor" aria-label="Filter by color">
+            <option value="">All Colors</option>
+          </select>
+        </div>
 
-                    <h3 class="scf-section-title">
-                        Specifications &amp; Sizes
-                    </h3>
+        <p id="detailError" class="scf-error" role="alert"></p>
 
-                    <div class="scf-variant-tools">
-                        <input
-                            type="search"
-                            id="variantSearch"
-                            placeholder="Search item, dimensions, color or record ID..."
-                            aria-label="Search specifications"
-                        >
+        <div class="scf-variant-scroll">
+          <table class="scf-variant-table">
+            <thead id="variantHead"></thead>
+            <tbody id="variantBody"></tbody>
+          </table>
+        </div>
 
-                        <select
-                            id="variantColor"
-                            aria-label="Filter by color"
-                        >
-                            <option value="">All Colors</option>
-                        </select>
-                    </div>
+        <div class="scf-variant-footer">
+          <p id="variantCount" aria-live="polite"></p>
 
-                    <p
-                        id="detailError"
-                        class="scf-error"
-                        role="alert"
-                    ></p>
-
-                    <div class="scf-variant-scroll">
-                        <table class="scf-variant-table">
-                            <thead id="variantHead"></thead>
-                            <tbody id="variantBody"></tbody>
-                        </table>
-                    </div>
-
-                    <div class="scf-variant-footer">
-                        <p
-                            id="variantCount"
-                            aria-live="polite"
-                        ></p>
-
-                        <div class="pagination">
-                            <button
-                                type="button"
-                                id="variantPrevious"
-                                aria-label="Previous variants page"
-                            >
-                                ‹
-                            </button>
-
-                            <span id="variantPage">1</span>
-
-                            <button
-                                type="button"
-                                id="variantNext"
-                                aria-label="Next variants page"
-                            >
-                                ›
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <footer class="scf-dialog-footer">
-                    <button
-                        type="button"
-                        id="addVariantBtn"
-                        class="scf-primary"
-                        hidden
-                    >
-                        + Add Variant
-                    </button>
-
-                    <button
-                        type="button"
-                        class="scf-secondary"
-                        data-close="productDetailsDialog"
-                    >
-                        Close
-                    </button>
-                </footer>
-            </dialog>
-
-            <dialog
-                id="variantEditDialog"
-                class="scf-product-dialog scf-edit-dialog"
-                aria-labelledby="variantEditTitle"
+          <div class="pagination">
+            <button
+              type="button"
+              id="variantPrevious"
+              aria-label="Previous variants page"
             >
-                <form id="variantEditForm">
-                    <header class="scf-dialog-header">
-                        <h2 id="variantEditTitle">
-                            Edit Specification
-                        </h2>
+              ‹
+            </button>
 
-                        <button
-                            type="button"
-                            class="scf-close"
-                            data-close="variantEditDialog"
-                            aria-label="Close variant form"
-                        >
-                            ×
-                        </button>
-                    </header>
+            <span id="variantPage">1</span>
 
-                    <div class="scf-dialog-body">
-                        <p id="editRecordLabel"></p>
+            <button
+              type="button"
+              id="variantNext"
+              aria-label="Next variants page"
+            >
+              ›
+            </button>
+          </div>
+        </div>
+      </div>
 
-                        <p id="variantFormHint" hidden>
-                            Enter at least one specification.
-                            Price and unit are required.
-                        </p>
+      <footer class="scf-dialog-footer">
+        <button
+          type="button"
+          id="addVariantBtn"
+          class="scf-primary"
+          hidden
+        >
+          + Add Variant
+        </button>
 
-                        <div
-                            id="variantFields"
-                            class="scf-edit-grid"
-                        ></div>
+        <button
+          type="button"
+          class="scf-secondary"
+          data-close="productDetailsDialog"
+        >
+          Close
+        </button>
+      </footer>
+    </dialog>
 
-                        <p
-                            id="editError"
-                            class="scf-error"
-                            role="alert"
-                        ></p>
-                    </div>
+    <dialog
+      id="variantEditDialog"
+      class="scf-product-dialog scf-edit-dialog"
+      aria-labelledby="variantEditTitle"
+    >
+      <form id="variantEditForm">
+        <header class="scf-dialog-header">
+          <h2 id="variantEditTitle">Edit Specification</h2>
 
-                    <footer class="scf-dialog-footer">
-                        <button
-                            type="button"
-                            class="scf-secondary"
-                            data-close="variantEditDialog"
-                        >
-                            Cancel
-                        </button>
+          <button
+            type="button"
+            class="scf-close"
+            data-close="variantEditDialog"
+            aria-label="Close variant form"
+          >
+            ×
+          </button>
+        </header>
 
-                        <button
-                            type="submit"
-                            class="scf-primary"
-                            id="saveVariant"
-                        >
-                            Save Changes
-                        </button>
-                    </footer>
-                </form>
-            </dialog>
-        `
-    );
+        <div class="scf-dialog-body">
+          <p id="editRecordLabel"></p>
 
+          <p id="variantFormHint" hidden>
+            Enter at least one specification. Price and unit are required.
+          </p>
+
+          <div id="variantFields" class="scf-edit-grid"></div>
+
+          <p id="editError" class="scf-error" role="alert"></p>
+        </div>
+
+        <footer class="scf-dialog-footer">
+          <button
+            type="button"
+            class="scf-secondary"
+            data-close="variantEditDialog"
+          >
+            Cancel
+          </button>
+
+          <button type="submit" class="scf-primary" id="saveVariant">
+            Save Changes
+          </button>
+        </footer>
+      </form>
+    </dialog>
+  `
+);
     const details = byId("productDetailsDialog");
     const editor = byId("variantEditDialog");
 
@@ -804,10 +814,80 @@
 
 
     // =========================
+    // PRODUCT DESCRIPTION
+    // =========================
+    // The description is stored in categories.description and is
+    // shared by every variant of the product.
+    //
+    // - View mode (eye icon):  read-only text, hidden when empty.
+    // - Manage mode (pencil):  editable textarea + Save button.
+
+    function updateDescriptionControls() {
+        if (!selected) return;
+
+        const input = byId("descriptionInput");
+        const status = byId("descriptionStatus");
+
+        const saved = String(selected.description || "").trim();
+        const dirty = input.value.trim() !== saved;
+
+        byId("descriptionCount").textContent =
+            input.value.length + " / " + DESCRIPTION_MAX;
+
+        byId("saveDescriptionBtn").disabled = !dirty || busy;
+
+        if (dirty) {
+            status.textContent = "Unsaved changes";
+        } else if (status.textContent === "Unsaved changes") {
+            status.textContent = "";
+        }
+    }
+
+    function renderDescription(reset = true) {
+        if (!selected) return;
+
+        const section = byId("descriptionSection");
+        const view = byId("detailDescription");
+        const box = byId("descriptionEditor");
+        const input = byId("descriptionInput");
+
+        const text = selected.description || "";
+        const numbered = Number(selected.product_id) > 0;
+
+        // Manage mode: editable, but only when the product has a
+        // numbered category (otherwise it has no description slot).
+        if (manage && numbered) {
+            section.hidden = false;
+            view.hidden = true;
+            box.hidden = false;
+
+            // Keep unsaved typing when the list refreshes
+            // (e.g. after editing a variant).
+            if (reset) {
+                input.value = text;
+
+                byId("descriptionError").textContent = "";
+                byId("descriptionStatus").textContent = "";
+            }
+
+            updateDescriptionControls();
+            return;
+        }
+
+        // View mode: read-only text.
+        box.hidden = true;
+        view.hidden = false;
+        view.textContent = text;
+
+        section.hidden = !text;
+    }
+
+
+    // =========================
     // PRODUCT DETAILS
     // =========================
 
-    function populateDetails() {
+    function populateDetails(resetDescription = true) {
         if (!selected) return;
 
         byId("productDetailsTitle").textContent =
@@ -825,8 +905,7 @@
             selected.variants.length +
             (selected.variants.length === 1 ? " variant" : " variants");
 
-        byId("detailDescription").textContent =
-            selected.description || "";
+        renderDescription(resetDescription);
 
         const image = byId("detailImage");
 
@@ -1048,7 +1127,8 @@
         );
 
         if (selected) {
-            populateDetails();
+            // Do not overwrite a description the person is still typing.
+            populateDetails(false);
         } else {
             details.close();
         }
@@ -1270,6 +1350,62 @@
         if (busy || !manage || !selected) return;
 
         openEditor();
+    });
+
+
+    // =========================
+    // SAVE DESCRIPTION
+    // =========================
+
+    byId("descriptionInput").addEventListener("input", () => {
+        byId("descriptionError").textContent = "";
+        updateDescriptionControls();
+    });
+
+    byId("saveDescriptionBtn").addEventListener("click", async () => {
+        if (busy || !manage || !selected) return;
+
+        const input = byId("descriptionInput");
+        const button = byId("saveDescriptionBtn");
+        const error = byId("descriptionError");
+        const text = input.value.trim();
+
+        let saved = false;
+
+        error.textContent = "";
+
+        busy = true;
+        button.disabled = true;
+        button.textContent = "Saving...";
+
+        try {
+            await postAction("update-description", {
+                id: selected.id,
+                name: selected.name,
+                category_id: selected.category_id,
+                description: text
+            });
+
+            // `selected` is the same object stored in `products`,
+            // so the list stays in sync without a reload.
+            selected.description = text || null;
+            input.value = text;
+
+            saved = true;
+
+        } catch (saveError) {
+            error.textContent = saveError.message;
+
+        } finally {
+            busy = false;
+            button.textContent = "Save Description";
+
+            updateDescriptionControls();
+
+            if (saved) {
+                byId("descriptionStatus").textContent = "Saved";
+            }
+        }
     });
 
 
