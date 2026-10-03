@@ -1,484 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
 
-    <title>Products - SCF Steel Trading</title>
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
 
-    <!-- Fonts -->
+  <title>Products - SCF Steel Trading</title>
+
+  <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap" rel="stylesheet">
 
-    <!-- Page CSS -->
-    <link rel="stylesheet" href="products.css">
+  <link rel="stylesheet" href="./navbar.css">
+  <link rel="stylesheet" href="./footer.css">
 
-    <!-- Shared CSS -->
-    <link rel="stylesheet" href="navbar.css">
-    <link rel="stylesheet" href="footer.css">
+  <link
+    rel="stylesheet"
+    href="./products.css?v=20261003-3"
+  >
+
+  <script
+    src="./products.js?v=20261003-3"
+    defer
+  ></script>
 </head>
 
-<body>
-
-    <!-- Navbar -->
-    <div id="navbar"></div>
-
-
-    <!-- Hero Section -->
-    <section class="hero">
-
-        <div class="hero-overlay"></div>
-
-        <div class="container hero-content">
-
-            <h1>Our Products</h1>
-
-            <p>
-                Browse our available steel, roofing, hardware items,
-                and construction materials.
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- Filters -->
-    <section class="filters">
-
-        <div class="container filters-inner">
-
-            <!-- Category Buttons -->
-            <div class="pill-group" aria-label="Product Categories">
-
-                <button class="pill active" type="button" data-filter="all">
-                    All
-                </button>
-
-                <button class="pill" type="button" data-filter="steel">
-                    Steel Products
-                </button>
-
-                <button class="pill" type="button" data-filter="roofing">
-                    Roofing Materials
-                </button>
-
-                <button class="pill" type="button" data-filter="hardware">
-                    Hardware Items
-                </button>
-
-                <!-- NEW: Stainless Products -->
-                <button class="pill" type="button" data-filter="stainless">
-                    Stainless Products
-                </button>
-
-            </div>
-
-
-            <!-- Search -->
-            <div class="search">
-
-                <input
-                    id="productSearch"
-                    type="search"
-                    placeholder="Search Products"
-                    aria-label="Search products"
-                >
-
-                <button type="button" aria-label="Search" id="searchBtn">
-                    🔍
-                </button>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- Products -->
-    <main class="products">
-
-        <div class="container">
-
-            <div class="grid">
-
-                <!-- Product 1 -->
-                <article class="card" data-category="steel">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
-                        alt="Steel bars stacked"
-                    >
-
-                    <div class="card-body">
-
-                        <div class="meta">
-                            Steel Products
-                        </div>
-
-                        <h3>Flat Bar (10mm)</h3>
-
-                        <p>
-                            Flat bar for general fabrication work.
-                        </p>
-
-                        <a class="btn" href="productview.html">
-                            View Details
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Product 2 -->
-                <article class="card" data-category="steel">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
-                        alt="Steel bars stacked"
-                    >
-
-                    <div class="card-body">
-
-                        <div class="meta">
-                            Steel Products
-                        </div>
-
-                        <h3>Flat Bar (10mm)</h3>
-
-                        <p>
-                            Flat bar for general fabrication work.
-                        </p>
-
-                        <a class="btn" href="productview.html">
-                            View Details
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Product 3 -->
-                <article class="card" data-category="steel">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
-                        alt="Steel bars stacked"
-                    >
-
-                    <div class="card-body">
-
-                        <div class="meta">
-                            Steel Products
-                        </div>
-
-                        <h3>Flat Bar (10mm)</h3>
-
-                        <p>
-                            Flat bar for general fabrication work.
-                        </p>
-
-                        <a class="btn" href="productview.html">
-                            View Details
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Product 4 -->
-                <article class="card" data-category="steel">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
-                        alt="Steel bars stacked"
-                    >
-
-                    <div class="card-body">
-
-                        <div class="meta">
-                            Steel Products
-                        </div>
-
-                        <h3>Flat Bar (10mm)</h3>
-
-                        <p>
-                            Flat bar for general fabrication work.
-                        </p>
-
-                        <a class="btn" href="productview.html">
-                            View Details
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Product 5 -->
-                <article class="card" data-category="steel">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
-                        alt="Steel bars stacked"
-                    >
-
-                    <div class="card-body">
-
-                        <div class="meta">
-                            Steel Products
-                        </div>
-
-                        <h3>Flat Bar (10mm)</h3>
-
-                        <p>
-                            Flat bar for general fabrication work.
-                        </p>
-
-                        <a class="btn" href="productview.html">
-                            View Details
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Product 6 -->
-                <article class="card" data-category="steel">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
-                        alt="Steel bars stacked"
-                    >
-
-                    <div class="card-body">
-
-                        <div class="meta">
-                            Steel Products
-                        </div>
-
-                        <h3>Flat Bar (10mm)</h3>
-
-                        <p>
-                            Flat bar for general fabrication work.
-                        </p>
-
-                        <a class="btn" href="productview.html">
-                            View Details
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Product 7 -->
-                <article class="card" data-category="steel">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
-                        alt="Steel bars stacked"
-                    >
-
-                    <div class="card-body">
-
-                        <div class="meta">
-                            Steel Products
-                        </div>
-
-                        <h3>Flat Bar (10mm)</h3>
-
-                        <p>
-                            Flat bar for general fabrication work.
-                        </p>
-
-                        <a class="btn" href="productview.html">
-                            View Details
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Product 8 -->
-                <article class="card" data-category="steel">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
-                        alt="Steel bars stacked"
-                    >
-
-                    <div class="card-body">
-
-                        <div class="meta">
-                            Steel Products
-                        </div>
-
-                        <h3>Flat Bar (10mm)</h3>
-
-                        <p>
-                            Flat bar for general fabrication work.
-                        </p>
-
-                        <a class="btn" href="productview.html">
-                            View Details
-                        </a>
-
-                    </div>
-
-                </article>
-
-
-                <!-- Product 9 -->
-                <article class="card" data-category="steel">
-
-                    <img
-                        src="https://images.unsplash.com/photo-1582321107318-6a0b61a2b8a6?auto=format&fit=crop&w=1200&q=60"
-                        alt="Steel bars stacked"
-                    >
-
-                    <div class="card-body">
-
-                        <div class="meta">
-                            Steel Products
-                        </div>
-
-                        <h3>Flat Bar (10mm)</h3>
-
-                        <p>
-                            Flat bar for general fabrication work.
-                        </p>
-
-                        <a class="btn" href="productview.html">
-                            View Details
-                        </a>
-
-                    </div>
-
-                </article>
-
-            </div>
-
-
-            <!-- Pagination -->
-            <div class="pagination" aria-label="Pagination">
-
-                <button class="page active" type="button">
-                    1
-                </button>
-
-                <button class="page" type="button">
-                    2
-                </button>
-
-                <button class="page" type="button">
-                    3
-                </button>
-
-                <button class="page" type="button">
-                    4
-                </button>
-
-                <button class="page next" type="button">
-                    Next &gt;
-                </button>
-
-            </div>
-
-        </div>
-
-    </main>
-
-
-    <!-- Footer -->
-    <div id="footer"></div>
-
-
-    <!-- Shared JavaScript -->
-    <script src="navbar.js"></script>
-    <script src="footer.js"></script>
-
-    <!-- Filters/Search (so footer links like products.html?category=stainless will work) -->
-    <script>
-        (() => {
-            "use strict";
-
-            const pills = Array.from(document.querySelectorAll(".pill-group .pill"));
-            const cards = Array.from(document.querySelectorAll(".products .grid .card"));
-            const searchInput = document.getElementById("productSearch");
-            const searchBtn = document.getElementById("searchBtn");
-
-            let activeFilter = "all";
-
-            function setActivePill(filter) {
-                pills.forEach(p => p.classList.remove("active"));
-                const btn = pills.find(p => (p.dataset.filter || "all") === filter);
-                if (btn) btn.classList.add("active");
-            }
-
-            function applyFilters() {
-                const q = (searchInput?.value || "").trim().toLowerCase();
-
-                cards.forEach(card => {
-                    const cat = (card.dataset.category || "").toLowerCase();
-                    const text = card.textContent.toLowerCase();
-
-                    const matchCategory = (activeFilter === "all") || (cat === activeFilter);
-                    const matchSearch = !q || text.includes(q);
-
-                    card.style.display = (matchCategory && matchSearch) ? "" : "none";
-                });
-            }
-
-            // Pill click
-            pills.forEach(btn => {
-                btn.addEventListener("click", () => {
-                    activeFilter = btn.dataset.filter || "all";
-                    setActivePill(activeFilter);
-                    applyFilters();
-                });
-            });
-
-            // Search typing
-            if (searchInput) {
-                searchInput.addEventListener("input", applyFilters);
-            }
-
-            // Search button
-            if (searchBtn) {
-                searchBtn.addEventListener("click", applyFilters);
-            }
-
-            // Read URL params: ?category=steel|roofing|hardware|stainless and ?q=...
-            const params = new URLSearchParams(window.location.search);
-            const urlCategory = (params.get("category") || "").toLowerCase();
-            const urlQ = params.get("q") || "";
-
-            const validCategories = new Set(["all", "steel", "roofing", "hardware", "stainless"]);
-
-            if (searchInput && urlQ) searchInput.value = urlQ;
-
-            if (validCategories.has(urlCategory) && urlCategory) {
-                activeFilter = urlCategory;
-            } else {
-                activeFilter = "all";
-            }
-
-            setActivePill(activeFilter);
-            applyFilters();
-        })();
-
-    </script>
-
-<script src="products.js"></script>
+<body class="scf-catalog" data-page="catalog">
+
+  <!-- NAVBAR -->
+  <div id="navbar"></div>
+
+  <!-- HERO -->
+  <header class="catalog-hero">
+    <div class="catalog-container">
+
+      <h1>Our Products</h1>
+
+      <p>
+        Steel, roofing and hardware for your next project.
+      </p>
+
+    </div>
+  </header>
+
+  <!-- PRODUCT CATALOG -->
+  <main class="catalog-container catalog-main">
+
+    <!-- CATEGORY FILTERS AND SEARCH -->
+    <div class="catalog-toolbar">
+
+      <div
+        class="catalog-filters"
+        role="group"
+        aria-label="Product categories"
+      >
+        <button
+          type="button"
+          data-filter="all"
+          aria-pressed="true"
+        >
+          All
+        </button>
+
+        <button
+          type="button"
+          data-filter="steel"
+          aria-pressed="false"
+        >
+          Steel Products
+        </button>
+
+        <button
+          type="button"
+          data-filter="roofing"
+          aria-pressed="false"
+        >
+          Roofing Materials
+        </button>
+
+        <button
+          type="button"
+          data-filter="hardware"
+          aria-pressed="false"
+        >
+          Hardware Items
+        </button>
+
+        <button
+          type="button"
+          data-filter="stainless"
+          aria-pressed="false"
+        >
+          Stainless Products
+        </button>
+      </div>
+
+      <!-- SINGLE SEARCH FORM -->
+      <form
+        id="catalogSearch"
+        class="catalog-search"
+        role="search"
+      >
+        <input
+          id="productSearch"
+          type="search"
+          placeholder="Search products..."
+          aria-label="Search products"
+        >
+
+        <button
+          type="submit"
+          aria-label="Search"
+        >
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <circle
+              cx="10.5"
+              cy="10.5"
+              r="6.5"
+            ></circle>
+
+            <path d="m16 16 4.5 4.5"></path>
+          </svg>
+        </button>
+      </form>
+
+    </div>
+
+    <!-- HEADING AND RESULT COUNT -->
+    <div class="catalog-heading">
+
+      <p
+        id="productCount"
+        aria-live="polite"
+        aria-atomic="true"
+      ></p>
+
+    </div>
+
+    <!-- LOADING / EMPTY / ERROR MESSAGE -->
+    <p
+      id="catalogStatus"
+      class="catalog-status"
+      role="status"
+    >
+      Loading products...
+    </p>
+
+    <!-- PRODUCTS LOADED FROM DATABASE -->
+    <div
+      id="productGrid"
+      class="catalog-grid"
+    ></div>
+
+    <!-- PAGINATION -->
+    <nav
+      id="catalogPagination"
+      class="catalog-pagination"
+      aria-label="Product pages"
+    ></nav>
+
+    <noscript>
+      Please enable JavaScript to browse the product catalog.
+    </noscript>
+
+  </main>
+
+  <!-- FOOTER -->
+  <div id="footer"></div>
+
+  <script src="./navbar.js"></script>
+  <script src="./footer.js"></script>
 
 </body>
-
 </html>
