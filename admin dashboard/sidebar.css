@@ -39,6 +39,8 @@ body {
     border-right: 1px solid #353638;
 
     z-index: 1000;
+
+    transition: transform 0.3s ease;
 }
 
 
@@ -94,7 +96,6 @@ body {
     flex: 1;
     min-height: 0;
 
-    /* UPDATED: a bit more side padding so the highlight looks like your screenshot */
     padding: 12px 14px;
 
     overflow-y: auto;
@@ -110,13 +111,12 @@ body {
 
     gap: 11px;
 
-    /* UPDATED spacing to match the “pill/boxed” highlight look */
     margin-bottom: 6px;
     padding: 0 12px;
 
     color: #b9bbbe;
 
-    /* IMPORTANT: keep border always present to avoid “jump” on hover */
+    /* keep border always present to avoid "jump" on hover */
     border: 1px solid transparent;
     border-radius: 8px;
 
@@ -136,9 +136,7 @@ body {
 
 
 /* =========================
-   HOVER + ACTIVE (MATCHING YOUR PICTURE)
-   - gray rounded box behind the item
-   - subtle border + soft depth
+   HOVER + ACTIVE
 ========================= */
 
 .sidebar-link:hover,
@@ -146,13 +144,10 @@ body {
 .sidebar-link.active {
     color: #ffffff;
 
-    /* gray highlight like the screenshot */
     background-color: #3a3b3d;
 
-    /* subtle edge so it looks “boxed” */
     border-color: rgba(255, 255, 255, 0.06);
 
-    /* soft depth (very subtle) */
     box-shadow:
         inset 0 1px 0 rgba(255, 255, 255, 0.04),
         0 1px 2px rgba(0, 0, 0, 0.25);
@@ -187,12 +182,10 @@ body {
         color 0.2s ease;
 }
 
-/* Slight icon movement on hover */
 .sidebar-link:hover svg {
     transform: translateX(1px);
 }
 
-/* Active icon */
 .sidebar-link.active svg {
     color: #ffffff;
 }
@@ -349,6 +342,167 @@ body {
     padding: 30px;
 
     background-color: #f5f6f7;
+
+    transition: margin-left 0.3s ease;
+}
+
+
+/* =========================
+   SIDEBAR TOGGLE BUTTONS
+========================= */
+
+.sidebar-toggle,
+.sidebar-open-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 32px;
+    height: 32px;
+
+    padding: 0;
+
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    background: transparent;
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.sidebar-toggle svg,
+.sidebar-open-btn svg {
+    width: 20px;
+    height: 20px;
+
+    fill: none;
+    stroke: currentColor;
+
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Close button inside the sidebar header */
+.sidebar-toggle {
+    margin-left: auto;
+    flex-shrink: 0;
+
+    color: #b9bbbe;
+}
+
+.sidebar-toggle:hover {
+    background-color: #3a3b3d;
+    color: #ffffff;
+}
+
+/* Floating button shown only when the sidebar is hidden */
+.sidebar-open-btn {
+    position: fixed !important;
+    top: 14px !important;
+    left: 14px !important;
+    right: auto !important;
+    bottom: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+    z-index: 3000;
+
+    color: #272829;
+    background-color: #ffffff;
+    border-color: #e1e2e4;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+
+    opacity: 0;
+    pointer-events: none;
+}
+
+.sidebar-open-btn:hover {
+    background-color: #f0f1f2;
+}
+
+
+/* =========================
+   COLLAPSED STATE
+   (class is set on <html> so it applies
+   instantly on page load, with no flicker)
+========================= */
+
+html.sidebar-collapsed .sidebar {
+    transform: translateX(-100%);
+}
+
+html.sidebar-collapsed .admin-content {
+    margin-left: 0;
+}
+
+html.sidebar-collapsed .sidebar-open-btn {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+/* =========================
+   AUTO-DETECTED OFFSET ELEMENTS
+   (sidebar.js tags any element that is pushed
+   right by the sidebar width, whatever its class)
+========================= */
+
+[data-sidebar-offset] {
+    transition:
+        margin-left 0.3s ease,
+        padding-left 0.3s ease,
+        left 0.3s ease,
+        width 0.3s ease;
+}
+
+html.sidebar-collapsed [data-sidebar-offset~="margin"] {
+    margin-left: 0 !important;
+}
+
+html.sidebar-collapsed [data-sidebar-offset~="left"] {
+    left: 0 !important;
+}
+
+html.sidebar-collapsed [data-sidebar-offset~="padding"] {
+    padding-left: 0 !important;
+}
+
+html.sidebar-collapsed [data-sidebar-offset~="width"] {
+    width: 100% !important;
+}
+
+
+/* =========================
+   TOP BAR (Products / Quick Access / time)
+   !! Replace these selectors with the real class
+   name of your top bar if it is different. !!
+========================= */
+
+.topbar,
+.top-bar,
+.admin-topbar,
+.admin-header,
+.page-header-bar {
+    transition:
+        left 0.3s ease,
+        margin-left 0.3s ease,
+        padding-left 0.3s ease;
+}
+
+html.sidebar-collapsed .topbar,
+html.sidebar-collapsed .top-bar,
+html.sidebar-collapsed .admin-topbar,
+html.sidebar-collapsed .admin-header,
+html.sidebar-collapsed .page-header-bar {
+    left: 0;
+    margin-left: 0;
+
+    /* keeps the page title clear of the floating button */
+    padding-left: 64px;
 }
 
 
