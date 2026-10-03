@@ -1,65 +1,61 @@
 // =========================
 // DATE AND TIME
+// Safe if topbar elements are not on this page.
 // =========================
 
 function updateDateTime() {
+    const dateEl = document.getElementById("currentDate");
+    const timeEl = document.getElementById("currentTime");
+
+    if (!dateEl && !timeEl) {
+        return;
+    }
 
     const now = new Date();
 
-    const date = now.toLocaleDateString("en-US", {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-    });
+    if (dateEl) {
+        dateEl.textContent = now.toLocaleDateString("en-US", {
+            weekday: "short",
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+        });
+    }
 
-    const time = now.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true
-    });
-
-
-    document.getElementById("currentDate").textContent = date;
-
-    document.getElementById("currentTime").textContent = time;
+    if (timeEl) {
+        timeEl.textContent = now.toLocaleTimeString("en-US", {
+            hour: "numeric",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true
+        });
+    }
 }
 
-
 updateDateTime();
-
 setInterval(updateDateTime, 1000);
 
 
 // =========================
 // INVENTORY DATA
+// Comes from inventory.php / products table.
 // =========================
 
-// This is empty for now.
-// Later, this data will come from the database.
-
 let inventory = [];
+
+const PAGE_SIZE = 10;
+let currentPage = 1;
 
 
 // =========================
 // ELEMENTS
 // =========================
 
-const inventoryTableBody =
-    document.getElementById("inventoryTableBody");
-
-const inventoryEmptyState =
-    document.getElementById("inventoryEmptyState");
-
-const inventorySearch =
-    document.getElementById("inventorySearch");
-
-const categoryFilter =
-    document.getElementById("categoryFilter");
-
-const statusFilter =
-    document.getElementById("statusFilter");
+const inventoryTableBody = document.getElementById("inventoryTableBody");
+const inventoryEmptyState = document.getElementById("inventoryEmptyState");
+const inventorySearch = document.getElementById("inventorySearch");
+const categoryFilter = document.getElementById("categoryFilter");
+const statusFilter = document.getElementById("statusFilter");
 
 
 // =========================
@@ -67,13 +63,19 @@ const statusFilter =
 // =========================
 
 function getStockStatus(item) {
+    const stock = Number(item.stock) || 0;
+    const minimum = Number(item.minimumStock) || 0;
 
-    if (item.stock <= 0) {
+    if (stock <= 0) {
         return "out-of-stock";
     }
 
-    if (item.stock <= item.minimumStock) {
+    if (stock <= minimum) {
         return "low-stock";
+    }
+
+    if (stock <= Math.ceil(minimum * 1.5)) {
+        return "under-monitor";
     }
 
     return "in-stock";
@@ -81,194 +83,149 @@ function getStockStatus(item) {
 
 
 function createStatusBadge(status) {
+    const labels = {
+        "in-stock": ["status-in-stock", "In Stock"],
+        "under-monitor": ["status-under-monitor", "Under Monitor"],
+        "low-stock": ["status-low-stock", "Low Stock"],
+        "out-of-stock": ["status-out-of-stock", "Out of Stock"]
+    };
 
-    if (status === "in-stock") {
+    const [className, label] = labels[status] || labels["out-of-stock"];
 
-        return `
-            <span class="stock-status status-in-stock">
-                In Stock
-            </span>
-        `;
-
-    }
-
-
-    if (status === "low-stock") {
-
-        return `
-            <span class="stock-status status-low-stock">
-                Low Stock
-            </span>
-        `;
-
-    }
-
-
-    return `
-        <span class="stock-status status-out-of-stock">
-            Out of Stock
-        </span>
-    `;
-
+    return `<span class="stock-status ${className}">${label}</span>`;
 }
 
 
-// =========================
-// ACTION BUTTON
-// =========================
+function escapeHtml(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+}
+
 
 function createActions(productId) {
-
     return `
         <div class="inventory-actions">
-
             <button
                 type="button"
                 class="inventory-action-btn"
                 title="View Inventory"
-                data-id="${productId}"
+                data-id="${escapeHtml(productId)}"
             >
-
                 <svg viewBox="0 0 24 24">
                     <path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6S2 12 2 12"></path>
                     <circle cx="12" cy="12" r="3"></circle>
                 </svg>
-
             </button>
-
         </div>
     `;
-
 }
 
 
 // =========================
-// DISPLAY INVENTORY
+// DISPLAY
 // =========================
 
 function displayInventory(items) {
+    const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+
+    if (currentPage > totalPages) {
+        currentPage = totalPages;
+    }
+
+    const start = (currentPage - 1) * PAGE_SIZE;
+    const pageItems = items.slice(start, start + PAGE_SIZE);
 
     inventoryTableBody.innerHTML = "";
 
+    document.getElementById("totalInventoryCount").textContent = inventory.length;
+    document.getElementById("visibleInventoryCount").textContent = items.length;
 
-    document.getElementById("totalInventoryCount").textContent =
-        inventory.length;
+    const rangeEl = document.getElementById("inventoryRange");
 
-    document.getElementById("visibleInventoryCount").textContent =
-        items.length;
-
-
-    if (items.length === 0) {
-
-        inventoryEmptyState.style.display = "flex";
-
-    } else {
-
-        inventoryEmptyState.style.display = "none";
-
+    if (rangeEl) {
+        rangeEl.textContent = items.length === 0
+            ? "0"
+            : (start + 1) + "-" + Math.min(start + PAGE_SIZE, items.length);
     }
 
+    if (items.length === 0) {
+        inventoryEmptyState.style.display = "flex";
+    } else {
+        inventoryEmptyState.style.display = "none";
+    }
 
-    items.forEach(item => {
-
-        const status =
-            getStockStatus(item);
-
-
-        const row =
-            document.createElement("tr");
-
+    pageItems.forEach(item => {
+        const row = document.createElement("tr");
+        const spec = item.spec
+            ? `<span class="product-spec">${escapeHtml(item.spec)}</span>`
+            : "";
 
         row.innerHTML = `
-
+            <td>${escapeHtml(item.productId)}</td>
             <td>
-                ${item.productId}
+                <span class="product-name">${escapeHtml(item.productName)}</span>
+                ${spec}
             </td>
-
-
-            <td>
-                ${item.productName}
-            </td>
-
-
-            <td>
-                ${item.category}
-            </td>
-
-
-            <td>
-                <span class="stock-quantity">
-                    ${item.stock}
-                </span>
-            </td>
-
-            <td>
-                ${item.minimumStock}
-            </td>
-
-
-            <td>
-                ${createStatusBadge(status)}
-            </td>
-
-
-            <td>
-                ${createActions(item.productId)}
-            </td>
-
+            <td>${escapeHtml(item.category)}</td>
+            <td><span class="stock-quantity">${escapeHtml(item.stock)}</span></td>
+            <td>${escapeHtml(item.minimumStock)}</td>
+            <td>${createStatusBadge(getStockStatus(item))}</td>
+            <td>${createActions(item.productId)}</td>
         `;
 
-
         inventoryTableBody.appendChild(row);
-
     });
 
+    const pageLabel = document.getElementById("inventoryPageLabel");
+    const prevBtn = document.getElementById("inventoryPrev");
+    const nextBtn = document.getElementById("inventoryNext");
+
+    if (pageLabel) {
+        pageLabel.textContent = String(currentPage);
+    }
+
+    if (prevBtn) {
+        prevBtn.disabled = currentPage <= 1 || items.length === 0;
+    }
+
+    if (nextBtn) {
+        nextBtn.disabled = currentPage >= totalPages || items.length === 0;
+    }
 
     updateSummary();
-
 }
 
 
-// =========================
-// SUMMARY
-// =========================
-
 function updateSummary() {
+    const count = status => inventory.filter(item => getStockStatus(item) === status).length;
 
-    const total =
-        inventory.length;
+    document.getElementById("inStockItems").textContent = count("in-stock");
+    document.getElementById("underMonitorItems").textContent = count("under-monitor");
+    document.getElementById("lowStockItems").textContent = count("low-stock");
+    document.getElementById("outOfStockItems").textContent = count("out-of-stock");
 
+    const totalEl = document.getElementById("totalItems");
 
-    const inStock =
-        inventory.filter(item =>
-            getStockStatus(item) === "in-stock"
-        ).length;
-
-
-    const lowStock =
-        inventory.filter(item =>
-            getStockStatus(item) === "low-stock"
-        ).length;
+    if (totalEl) {
+        totalEl.textContent = inventory.length;
+    }
+}
 
 
-    const outOfStock =
-        inventory.filter(item =>
-            getStockStatus(item) === "out-of-stock"
-        ).length;
+function setEmptyMessage(title, copy) {
+    const heading = inventoryEmptyState.querySelector("h3");
+    const text = inventoryEmptyState.querySelector("p");
 
+    if (heading) {
+        heading.textContent = title;
+    }
 
-    document.getElementById("totalItems").textContent =
-        total;
-
-    document.getElementById("inStockItems").textContent =
-        inStock;
-
-    document.getElementById("lowStockItems").textContent =
-        lowStock;
-
-    document.getElementById("outOfStockItems").textContent =
-        outOfStock;
-
+    if (text) {
+        text.textContent = copy;
+    }
 }
 
 
@@ -277,102 +234,108 @@ function updateSummary() {
 // =========================
 
 function filterInventory() {
+    const search = inventorySearch.value.toLowerCase().trim();
+    const category = categoryFilter.value;
+    const status = statusFilter.value;
 
-    const search =
-        inventorySearch.value
-            .toLowerCase()
-            .trim();
+    return inventory.filter(item => {
+        const haystack = [
+            item.productId,
+            item.dbId,
+            item.productName,
+            item.spec,
+            item.category
+        ].join(" ").toLowerCase();
 
+        const matchesSearch = search === "" || haystack.includes(search);
+        const matchesCategory = category === "" || item.category === category;
+        const matchesStatus = status === "" || getStockStatus(item) === status;
 
-    const category =
-        categoryFilter.value;
-
-
-    const status =
-        statusFilter.value;
-
-
-    const filtered =
-        inventory.filter(item => {
-
-            const itemStatus =
-                getStockStatus(item);
-
-
-            const matchesSearch =
-                item.productId
-                    .toLowerCase()
-                    .includes(search)
-
-                ||
-
-                item.productName
-                    .toLowerCase()
-                    .includes(search)
-
-                ||
-
-                item.category
-                    .toLowerCase()
-                    .includes(search);
-
-
-            const matchesCategory =
-                category === "" ||
-                item.category === category;
-
-
-            const matchesStatus =
-                status === "" ||
-                itemStatus === status;
-
-
-            return (
-                matchesSearch &&
-                matchesCategory &&
-                matchesStatus
-            );
-
-        });
-
-
-    displayInventory(filtered);
-
+        return matchesSearch && matchesCategory && matchesStatus;
+    });
 }
 
 
-// =========================
-// EVENTS
-// =========================
+function applyFilters() {
+    currentPage = 1;
 
-inventorySearch.addEventListener(
-    "input",
-    filterInventory
-);
+    const items = filterInventory();
+    const hasQuery =
+        inventorySearch.value.trim() !== "" ||
+        categoryFilter.value !== "" ||
+        statusFilter.value !== "";
+
+    if (items.length === 0 && hasQuery) {
+        setEmptyMessage(
+            "No matching inventory",
+            "Walang tumugmang record sa search o filter."
+        );
+    } else if (items.length === 0) {
+        setEmptyMessage(
+            "No inventory records yet",
+            "Inventory records will appear here once products are added to the system."
+        );
+    }
+
+    displayInventory(items);
+}
 
 
-categoryFilter.addEventListener(
-    "change",
-    filterInventory
-);
+inventorySearch.addEventListener("input", applyFilters);
+categoryFilter.addEventListener("change", applyFilters);
+statusFilter.addEventListener("change", applyFilters);
 
-
-statusFilter.addEventListener(
-    "change",
-    filterInventory
-);
-
-
-// =========================
-// INITIAL LOAD
-// =========================
-
-displayInventory(inventory);
-
-// Give the stock forms access to the inventory array.
-StockMovements.setInventory(inventory);
-
-// Refresh the existing table and summary after an adjustment.
-document.addEventListener("stock:updated", function () {
-    filterInventory();
+document.getElementById("inventoryPrev")?.addEventListener("click", function () {
+    if (currentPage > 1) {
+        currentPage -= 1;
+        displayInventory(filterInventory());
+    }
 });
+
+document.getElementById("inventoryNext")?.addEventListener("click", function () {
+    currentPage += 1;
+    displayInventory(filterInventory());
+});
+
+
+// =========================
+// LOAD FROM DATABASE
+// Calls inventory.php and fills the table.
+// =========================
+
+async function loadInventory() {
+    try {
+        const response = await fetch("inventory.php");
+
+        const raw = await response.text();
+
+        let data;
+        try {
+            data = JSON.parse(raw);
+        } catch {
+            throw new Error("Hindi valid ang server response: " + raw.slice(0, 200));
+        }
+
+        if (!data.ok) {
+            throw new Error(data.error || "Unknown server error");
+        }
+
+        inventory = data.items || [];
+
+        currentPage = 1;
+        applyFilters();
+    } catch (err) {
+        console.error("Inventory load failed:", err);
+
+        inventory = [];
+        applyFilters();
+
+        setEmptyMessage(
+            "Failed to load inventory",
+            "May problema sa pagkuha ng data. I-check ang console (F12) para sa details."
+        );
+    }
+}
+
+// Go!
+loadInventory();

@@ -932,3 +932,26 @@ body {
     }
 
 }
+
+/* =========================
+   PRODUCT NAME
+========================= */
+
+.product-name {
+    display: block;
+
+    color: #272829;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.product-spec {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #8a8e92;
+
+    font-size: 9px;
+}

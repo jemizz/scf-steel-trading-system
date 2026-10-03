@@ -238,10 +238,10 @@
 
                         <select id="categoryFilter">
                             <option value="">All Categories</option>
-                            <option value="steel-products">Steel Products</option>
-                            <option value="roofing-materials">Roofing Materials</option>
-                            <option value="stainless-materials">Stainless Materials</option>
-                            <option value="hardware-items">Hardware Items</option>
+                            <option value="Steel Products">Steel Products</option>
+                            <option value="Roofing Materials">Roofing Materials</option>
+                            <option value="Stainless Materials">Stainless Materials</option>
+                            <option value="Hardware Items">Hardware Items</option>
                         </select>
 
                         <select id="statusFilter">
@@ -311,22 +311,23 @@
 
                     <p>
                         Showing
-                        <strong id="visibleInventoryCount">0</strong>
+                        <strong id="inventoryRange">0</strong>
                         of
-                        <strong id="totalInventoryCount">0</strong>
-                        items
+                        <strong id="visibleInventoryCount">0</strong>
+                        matching
+                        (<strong id="totalInventoryCount">0</strong> total)
                     </p>
 
 
                     <div class="pagination">
 
-                        <button type="button" disabled>
+                        <button type="button" id="inventoryPrev" disabled>
                             ‹
                         </button>
 
-                        <span>1</span>
+                        <span id="inventoryPageLabel">1</span>
 
-                        <button type="button" disabled>
+                        <button type="button" id="inventoryNext" disabled>
                             ›
                         </button>
 
