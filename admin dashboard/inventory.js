@@ -268,7 +268,7 @@ function applyFilters() {
     if (items.length === 0 && hasQuery) {
         setEmptyMessage(
             "No matching inventory",
-            "Walang tumugmang record sa search o filter."
+            "No records match your search or filters."
         );
     } else if (items.length === 0) {
         setEmptyMessage(
@@ -313,7 +313,7 @@ async function loadInventory() {
         try {
             data = JSON.parse(raw);
         } catch {
-            throw new Error("Hindi valid ang server response: " + raw.slice(0, 200));
+            throw new Error("Invalid server response: " + raw.slice(0, 200));
         }
 
         if (!data.ok) {
@@ -332,7 +332,7 @@ async function loadInventory() {
 
         setEmptyMessage(
             "Failed to load inventory",
-            "May problema sa pagkuha ng data. I-check ang console (F12) para sa details."
+            "There was a problem loading the data. Check the console (F12) for details."
         );
     }
 }
