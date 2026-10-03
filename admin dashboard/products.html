@@ -259,5 +259,145 @@
     <script src="add-product.js"></script>
     <script src="stock-movements.js"></script>
     <script src="products.js"></script>
+
+    <!-- INPUT VALIDATION + REMOVE GRADE (applies to dynamically created modals too) -->
+    <script>
+        (function () {
+            // ---- sanitizers ----
+            function sanitizeNumeric(value) {
+                // digits + single dot (for decimals)
+                return value
+                    .replace(/[^0-9.]/g, "")
+                    .replace(/(\..*)\./g, "$1");
+            }
+
+            function sanitizeLettersOnly(value) {
+                // letters + spaces + hyphen only
+                return value.replace(/[^a-zA-Z\s-]/g, "");
+            }
+
+            function sanitizeBrand(value) {
+                // letters + numbers + spaces + hyphen only (no other special chars)
+                return value.replace(/[^a-zA-Z0-9\s-]/g, "");
+            }
+
+            // detect field type using name/id/placeholder/aria-label/label text
+            function fieldHint(el) {
+                const parts = [];
+                if (el.name) parts.push(el.name);
+                if (el.id) parts.push(el.id);
+                if (el.placeholder) parts.push(el.placeholder);
+                const aria = el.getAttribute("aria-label");
+                if (aria) parts.push(aria);
+
+                const label =
+                    el.closest("label") ||
+                    el.closest(".form-group, .field, .input-group, .form-item, .row, .col")?.querySelector("label");
+
+                if (label && label.textContent) parts.push(label.textContent);
+
+                return parts.join(" ").toLowerCase();
+            }
+
+            function removeGradeFields(root) {
+                // remove inputs/selects/textareas that look like "Grade"
+                const controls = root.querySelectorAll("input, select, textarea");
+                controls.forEach((el) => {
+                    const hint = fieldHint(el);
+                    if (/\bgrade\b/.test(hint)) {
+                        const wrapper =
+                            el.closest(".form-group, .field, .input-group, .form-item") ||
+                            el.closest("div") ||
+                            el.parentElement;
+
+                        if (wrapper) wrapper.remove();
+                    }
+                });
+
+                // also remove standalone labels that say Grade (if any remain)
+                root.querySelectorAll("label").forEach((lbl) => {
+                    const t = (lbl.textContent || "").trim().toLowerCase();
+                    if (t === "grade" || t.startsWith("grade ")) {
+                        const wrapper =
+                            lbl.closest(".form-group, .field, .input-group, .form-item") ||
+                            lbl.closest("div") ||
+                            lbl.parentElement;
+                        if (wrapper) wrapper.remove();
+                    }
+                });
+            }
+
+            function applyRulesToInputs(root) {
+                const inputs = root.querySelectorAll("input, textarea");
+
+                inputs.forEach((el) => {
+                    // skip if already processed
+                    if (el.dataset.sanitizerAttached === "1") return;
+
+                    const hint = fieldHint(el);
+
+                    // Weight/Kilos: no special characters (numeric only)
+                    if (/\bweight\b/.test(hint) || /\bkilo\b/.test(hint) || /\bkilos\b/.test(hint)) {
+                        el.dataset.sanitizerAttached = "1";
+                        el.setAttribute("inputmode", "decimal");
+                        el.setAttribute("autocomplete", "off");
+                        el.addEventListener("input", () => { el.value = sanitizeNumeric(el.value); });
+                        el.addEventListener("paste", () => setTimeout(() => { el.value = sanitizeNumeric(el.value); }, 0));
+                        return;
+                    }
+
+                    // Gauge: won't accept letters (numeric only)
+                    if (/\bgauge\b/.test(hint)) {
+                        el.dataset.sanitizerAttached = "1";
+                        el.setAttribute("inputmode", "decimal");
+                        el.setAttribute("autocomplete", "off");
+                        el.addEventListener("input", () => { el.value = sanitizeNumeric(el.value); });
+                        el.addEventListener("paste", () => setTimeout(() => { el.value = sanitizeNumeric(el.value); }, 0));
+                        return;
+                    }
+
+                    // Color: won't accept numbers and special characters (letters only)
+                    if (/\bcolor\b/.test(hint) || /\bcolour\b/.test(hint)) {
+                        el.dataset.sanitizerAttached = "1";
+                        el.setAttribute("autocomplete", "off");
+                        el.addEventListener("input", () => { el.value = sanitizeLettersOnly(el.value); });
+                        el.addEventListener("paste", () => setTimeout(() => { el.value = sanitizeLettersOnly(el.value); }, 0));
+                        return;
+                    }
+
+                    // Brand: won't accept special characters (letters/numbers/spaces/hyphen only)
+                    if (/\bbrand\b/.test(hint)) {
+                        el.dataset.sanitizerAttached = "1";
+                        el.setAttribute("autocomplete", "off");
+                        el.addEventListener("input", () => { el.value = sanitizeBrand(el.value); });
+                        el.addEventListener("paste", () => setTimeout(() => { el.value = sanitizeBrand(el.value); }, 0));
+                        return;
+                    }
+                });
+            }
+
+            function applyAll(root = document) {
+                removeGradeFields(root);
+                applyRulesToInputs(root);
+            }
+
+            // Run once on page load
+            applyAll(document);
+
+            // Observe dynamically inserted modals/forms
+            const observer = new MutationObserver((mutations) => {
+                for (const m of mutations) {
+                    for (const node of m.addedNodes) {
+                        if (node.nodeType === 1) {
+                            // element node
+                            applyAll(node);
+                        }
+                    }
+                }
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true });
+        })();
+    </script>
 </body>
 </html>
