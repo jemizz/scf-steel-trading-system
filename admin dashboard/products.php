@@ -73,7 +73,6 @@ const TEXT_LIMITS = [
     'kilos' => 30,
     'gauge' => 20,
     'color' => 30,
-    'grade' => 20,
     'variant' => 60,
     'brand' => 60,
     'price_unit' => 20
@@ -219,7 +218,6 @@ function spec_of(array $row): string
         'thickness',
         'gauge',
         'kilos',
-        'grade',
         'color',
         'variant',
         'brand'

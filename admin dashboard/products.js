@@ -402,7 +402,6 @@
         ["kilos", "Weight / Kilos", 30],
         ["gauge", "Gauge", 20],
         ["color", "Color", 30],
-        ["grade", "Grade", 20],
         ["variant", "Variant / Type", 60],
         ["brand", "Brand", 60],
         ["price_unit", "Unit", 20],
