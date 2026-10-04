@@ -147,7 +147,7 @@
 
                     <div class="inventory-placeholder">
 
-                        <div class="donut-placeholder">
+                        <div class="donut-placeholder" id="inventoryDonut">
                             <div class="donut-center"></div>
                         </div>
 
@@ -155,7 +155,16 @@
                         <div class="inventory-legend">
 
                             <div>
-                                <span class="legend-dot in-stock"></span>
+                                <span class="legend-dot" style="display:block;width:6px;height:6px;border-radius:50%;background-color:#3b73d1;"></span>
+                                Under Monitor
+
+                                <strong id="underMonitorCount">
+                                    0
+                                </strong>
+                            </div>
+
+                            <div>
+                                <span class="legend-dot" style="display:block;width:6px;height:6px;border-radius:50%;background-color:#25b88a;"></span>
                                 In Stock
 
                                 <strong id="inStockCount">
@@ -164,7 +173,7 @@
                             </div>
 
                             <div>
-                                <span class="legend-dot low-stock"></span>
+                                <span class="legend-dot" style="display:block;width:6px;height:6px;border-radius:50%;background-color:#f0a323;"></span>
                                 Low Stock
 
                                 <strong id="lowStockCount">
@@ -173,7 +182,7 @@
                             </div>
 
                             <div>
-                                <span class="legend-dot out-stock"></span>
+                                <span class="legend-dot" style="display:block;width:6px;height:6px;border-radius:50%;background-color:#e75d5d;"></span>
                                 Out of Stock
 
                                 <strong id="outStockCount">

@@ -275,15 +275,19 @@ body {
     border-radius: 50%;
 }
 
-.in-stock {
+.legend-dot.legend-under-monitor {
+    background-color: #3b73d1;
+}
+
+.legend-dot.legend-in-stock {
     background-color: #25b88a;
 }
 
-.low-stock {
+.legend-dot.legend-low-stock {
     background-color: #f0a323;
 }
 
-.out-stock {
+.legend-dot.legend-out-stock {
     background-color: #e75d5d;
 }
 
